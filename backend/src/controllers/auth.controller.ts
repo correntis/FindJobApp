@@ -19,7 +19,9 @@ export class AuthController {
 
   @Post("sign-in")
   @HttpCode(HttpStatus.OK)
-  async register(@Body() registerUserDto: RegisterUserDto): Promise<User> {
+  async register(
+    @Body() registerUserDto: RegisterUserDto
+  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
     return await this.authService.register(registerUserDto);
   }
 
@@ -37,11 +39,5 @@ export class AuthController {
     @Body() refreshDto: { refreshToken: string }
   ): Promise<{ accessToken: string }> {
     return await this.authService.refreshToken(refreshDto.refreshToken);
-  }
-
-  @Get("test")
-  @UseGuards(JwtAuthGuard)
-  async test() {
-    return "hello workd";
   }
 }
