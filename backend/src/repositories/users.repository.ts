@@ -12,6 +12,13 @@ export class UsersRepository {
     return user.save();
   }
 
+  async update(
+    userId: string,
+    userData: Partial<User>
+  ): Promise<UserDocument | null> {
+    return this.userModel.findByIdAndUpdate(userId, userData, { new: true }).exec();
+  }
+
   async findByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email }).exec();
   }
