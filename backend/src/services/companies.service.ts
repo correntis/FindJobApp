@@ -1,19 +1,19 @@
-import { CreateCompanyDto } from "src/Dto/company/create-company.dto";
+import { CreateCompanyDto } from "src/dto/company/create-company.dto";
 import { Company } from "./../schemas/company.schema";
 import { Injectable } from "@nestjs/common";
 import { AlreadyExistException } from "src/exceptions/already-exist.exception";
 import { NotFoundException } from "src/exceptions/not-found.exception";
 import { CompaniesRepository } from "src/repositories/companies.repository";
 import { CompanyDocument } from "src/schemas/company.schema";
-import { UpdateCompanyDto } from "src/Dto/company/update-company.dto";
+import { UpdateCompanyDto } from "src/dto/company/update-company.dto";
 
 @Injectable()
 export class CompaniesService {
   constructor(private readonly companiesRepository: CompaniesRepository) {}
 
   async create(companyData: CreateCompanyDto): Promise<CompanyDocument> {
-    const existingCompany = await this.companiesRepository.findByName(
-      companyData.name
+    const existingCompany = await this.companiesRepository.findByUser(
+      companyData.userId
     );
 
     if (existingCompany) {

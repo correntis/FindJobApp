@@ -23,7 +23,7 @@ export class CompaniesRepository {
       .exec();
   }
 
-  async delete(companyId: string): Promise<CompanyDocument | null>{
+  async delete(companyId: string): Promise<CompanyDocument | null> {
     return this.companyModel.findByIdAndDelete(companyId);
   }
 
@@ -33,5 +33,9 @@ export class CompaniesRepository {
 
   async findByName(companyName: string): Promise<CompanyDocument | null> {
     return this.companyModel.findOne({ name: companyName }).exec();
+  }
+
+  async findByUser(userId: string): Promise<CompanyDocument | null> {
+    return this.companyModel.findOne({ userId }).exec();
   }
 }

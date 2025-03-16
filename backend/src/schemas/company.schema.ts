@@ -6,7 +6,7 @@ export class Company {
   @Prop({ required: true, unique: true })
   userId: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop()

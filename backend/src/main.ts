@@ -10,9 +10,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle("cats example")
-    .setDescription("desct")
+    .setTitle("My API")
+    .setDescription("API Documentation")
     .setVersion("1.0")
+    .addBearerAuth()
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);

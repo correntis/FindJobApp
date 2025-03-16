@@ -8,6 +8,8 @@ import { UsersModule } from "./modules/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./modules/auth.module";
 import { CompaniesModule } from "./modules/companies.module";
+import { VacanciesModule } from "./modules/vacancies.module";
+import { ResumesModule } from "./modules/resumes.module";
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { CompaniesModule } from "./modules/companies.module";
     AuthModule,
     UsersModule,
     CompaniesModule,
+    VacanciesModule,
+    ResumesModule
   ],
   controllers: [AppController],
   providers: [AppService],

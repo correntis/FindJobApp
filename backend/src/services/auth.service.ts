@@ -6,9 +6,9 @@ import { User, UserDocument } from "src/schemas/user.schema";
 import { NotFoundException } from "src/exceptions/not-found.exception";
 import { InvalidPasswordException } from "src/exceptions/invalid-password.exception";
 import * as bcrypt from "bcrypt";
-import { LoginUserDto } from "src/Dto/user/login-user.dto";
+import { LoginUserDto } from "src/dto/user/login-user.dto";
 import { AlreadyExistException } from "src/exceptions/already-exist.exception";
-import { RegisterUserDto } from "src/Dto/user/register-user.dto";
+import { RegisterUserDto } from "src/dto/user/register-user.dto";
 import { randomBytes } from "crypto";
 import { JwtStrategy } from "src/jwt/jwt.strategy";
 
