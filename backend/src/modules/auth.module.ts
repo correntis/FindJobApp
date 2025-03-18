@@ -6,6 +6,7 @@ import { RedisService } from "src/services/redis.service";
 import { AuthController } from "src/controllers/auth.controller";
 import { JwtStrategy } from "src/jwt/jwt.strategy";
 import { UsersModule } from "./users.module";
+import { TelegramModule } from "./telegram.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from "./users.module";
     }),
     PassportModule.register({ defaultStrategy: "jwt" }),
     forwardRef(() => UsersModule),
+    TelegramModule
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, RedisService],

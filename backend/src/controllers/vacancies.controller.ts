@@ -9,7 +9,9 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger";
 import { CreateVacancyDto } from "src/dto/vacancy/create-vacancy.dto";
+import { SearchVacancyDto } from "src/dto/vacancy/search-vacancy.dto";
 import { UpdateVacancyDto } from "src/dto/vacancy/update-vacancy.dto";
+import { VacancyDocument } from "src/schemas/vacancy.schema";
 import { VacanciesService } from "src/services/vacancies.service";
 
 @Controller("vacancies")
@@ -84,5 +86,13 @@ export class VacanciesController {
   })
   async getById(@Param("vacancyId") vacancyId: string) {
     return this.vacanciesService.getById(vacancyId);
+  }
+
+  @Post("search")
+  @ApiOperation({ summary: "Search vacancies with filters & pagination" })
+  @ApiBody({type: SearchVacancyDto})
+  @ApiResponse({ status: HttpStatus.OK, description: "Filtered vacancies list" })
+  async searchVacancies(@Body() searchDto: SearchVacancyDto): Promise<VacancyDocument[]> {
+    return this.vacanciesService.search(searchDto);
   }
 }

@@ -9,6 +9,9 @@ export class User {
   @Prop()
   telegram: string;
 
+  @Prop()
+  telegramLink: string;
+
   @Prop({ required: true })
   passwordHash: string;
 
@@ -32,4 +35,7 @@ UserSchema.set('toJSON', {
   virtuals: true,
 });
 
-export type UserDocument = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<User> & {
+  createdAt: Date;
+  updatedAt: Date;
+};

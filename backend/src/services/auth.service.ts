@@ -11,19 +11,22 @@ import { AlreadyExistException } from "src/exceptions/already-exist.exception";
 import { RegisterUserDto } from "src/dto/user/register-user.dto";
 import { randomBytes } from "crypto";
 import { JwtStrategy } from "src/jwt/jwt.strategy";
+import { TelegramService } from "./telegram.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly redisService: RedisService,
-    private readonly usersRepository: UsersRepository
+    private readonly usersRepository: UsersRepository,
+    private readonly telegramService: TelegramService
   ) {}
 
   async register(registerUserDto: RegisterUserDto): Promise<{
     user: UserDocument;
     accessToken: string;
     refreshToken: string;
+    telegramLink: string;
   }> {
     const user = await this.usersRepository.findByEmail(registerUserDto.email);
 
@@ -47,7 +50,11 @@ export class AuthService {
       role: registeredUser.role,
     });
 
-    return { user: registeredUser, accessToken, refreshToken };
+    const telegramLink = this.telegramService.getTelegramLinkForUser(registeredUser.id);
+
+    const registeredUserWithLink = await this.usersRepository.update(registeredUser.id, {telegramLink});
+
+    return { user: registeredUserWithLink || registeredUser, accessToken, refreshToken, telegramLink };
   }
 
   async login(loginUserDto: LoginUserDto): Promise<{
@@ -77,6 +84,10 @@ export class AuthService {
     });
 
     return { user, accessToken, refreshToken };
+  }
+
+  async connectTelegram(userId: string, message: string){
+    this.telegramService.sendNotificationToUser(userId, message);
   }
 
   async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {

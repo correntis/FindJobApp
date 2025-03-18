@@ -10,7 +10,7 @@ import { Company } from "src/schemas/company.schema";
 @Injectable()
 export class VacanciesService {
   constructor(
-    private readonly vacanciesRepositoty: VacanciesRepository,
+    private readonly vacanciesRepository: VacanciesRepository,
     private readonly companiesRepository: CompaniesRepository
   ) {}
 
@@ -23,39 +23,43 @@ export class VacanciesService {
       throw new NotFoundException(Company);
     }
 
-    return this.vacanciesRepositoty.create(createVacancyDto);
+    return this.vacanciesRepository.create(createVacancyDto);
   }
 
   async update(
     vacancyId: string,
     updateVacancyDto: UpdateVacancyDto
   ): Promise<VacancyDocument | null> {
-    const vacancy = await this.vacanciesRepositoty.findById(vacancyId);
+    const vacancy = await this.vacanciesRepository.findById(vacancyId);
 
     if (!vacancy) {
       throw new NotFoundException(Vacancy);
     }
 
-    return this.vacanciesRepositoty.update(vacancyId, updateVacancyDto);
+    return this.vacanciesRepository.update(vacancyId, updateVacancyDto);
   }
 
   async archive(vacancyId: string): Promise<VacancyDocument | null> {
-    const vacancy = await this.vacanciesRepositoty.findById(vacancyId);
+    const vacancy = await this.vacanciesRepository.findById(vacancyId);
 
     if (!vacancy) {
       throw new NotFoundException(Vacancy);
     }
 
-    return this.vacanciesRepositoty.archive(vacancyId);
+    return this.vacanciesRepository.archive(vacancyId);
   }
 
   async getById(vacancyId: string): Promise<VacancyDocument | null> {
-    const vacancy = await this.vacanciesRepositoty.findById(vacancyId);
+    const vacancy = await this.vacanciesRepository.findById(vacancyId);
 
     if (!vacancy) {
       throw new NotFoundException(Vacancy);
     }
 
     return vacancy;
+  }
+
+  async search(filters: any): Promise<VacancyDocument[]> {
+    return this.vacanciesRepository.search(filters);
   }
 }

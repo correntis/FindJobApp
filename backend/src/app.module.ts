@@ -10,18 +10,23 @@ import { AuthModule } from "./modules/auth.module";
 import { CompaniesModule } from "./modules/companies.module";
 import { VacanciesModule } from "./modules/vacancies.module";
 import { ResumesModule } from "./modules/resumes.module";
+import { ApplicationsModule } from "./modules/application.module";
+import { TelegramModule } from "./modules/telegram.module";
+import { Constants } from "./config/constants";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(config().mongoUri),
+    MongooseModule.forRoot(Constants.mongoUri),
+    TelegramModule,
     AuthModule,
     UsersModule,
     CompaniesModule,
     VacanciesModule,
-    ResumesModule
+    ResumesModule,
+    ApplicationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

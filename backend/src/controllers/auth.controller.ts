@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -22,8 +23,17 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async register(
     @Body() registerUserDto: RegisterUserDto
-  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
+  ): Promise<{ user: User; accessToken: string; refreshToken: string; telegramLink: string }> {
     return await this.authService.register(registerUserDto);
+  }
+
+  @Post("telegram/:userId/:message")
+  @ApiOperation({ summary: "Connect telegram link" })
+  @ApiParam({ name: "userId", example: "67cc65984fbf60c02a6c91cb", description: "User id" })
+  @ApiParam({ name: "message", example: "67cc65984fbf60c02a6c91cb", description: "message" })
+  @HttpCode(HttpStatus.OK)
+  async connectTelegram(@Param('userId') userId: string, @Param('message') message: string) {
+    return await this.authService.connectTelegram(userId, message);
   }
 
   @Post("login")
@@ -44,7 +54,7 @@ export class AuthController {
     return await this.authService.login(loginUserDto);
   }
 
-  @Post("refresh")
+  @Get("refresh/:refreshToken")
   @ApiOperation({ summary: "Refresh access token" })
   @ApiParam({
     name: "refreshToken",

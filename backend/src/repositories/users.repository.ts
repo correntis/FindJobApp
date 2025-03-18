@@ -16,7 +16,9 @@ export class UsersRepository {
     userId: string,
     userData: Partial<User>
   ): Promise<UserDocument | null> {
-    return this.userModel.findByIdAndUpdate(userId, userData, { new: true }).exec();
+    return this.userModel
+      .findByIdAndUpdate(userId, userData, { new: true })
+      .exec();
   }
 
   async findByEmail(email: string): Promise<UserDocument | null> {
@@ -29,5 +31,9 @@ export class UsersRepository {
 
   async findAll(): Promise<UserDocument[]> {
     return this.userModel.find().exec();
+  }
+
+  async getByChatId(chatId: string): Promise<UserDocument[]> {
+    return this.userModel.find({ telegram: chatId }).exec();
   }
 }

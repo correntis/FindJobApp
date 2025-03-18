@@ -11,6 +11,7 @@ import { RedisService } from "src/services/redis.service";
 import { User, UserSchema } from "src/schemas/user.schema";
 import { JwtStrategy } from "src/jwt/jwt.strategy";
 import { AuthModule } from "./auth.module";
+import { TelegramService } from "src/services/telegram.service";
 
 @Module({
   imports: [

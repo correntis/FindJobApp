@@ -20,12 +20,6 @@ export class RegisterUserDto {
   email: string;
 
   @ApiProperty({
-    description: "Телеграмм пользователя",
-    example: "@username",
-  })
-  telegram: string;
-
-  @ApiProperty({
     description: "Пароль пользователя",
     example: "string",
   })
