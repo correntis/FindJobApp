@@ -1,0 +1,185 @@
+<div class="responsive-container pt-2 pb-3">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-0">
+    <!-- Боковая панель с фильтрами -->
+    <aside class="lg:col-span-1">
+      <div class="sticky top-[110px] pb-6 max-h-[calc(100vh-80px)] overflow-y-auto pr-1 hide-scrollbar filters-scroll-container">
+        <form [formGroup]="form" class="custom-card overflow-visible">
+          <div class="custom-card-header pb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+              <mat-icon class="mr-2 text-primary">filter_list</mat-icon>
+              Filters
+            </h2>
+          </div>
+          
+          <div class="custom-card-content space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+              <div class="custom-form-field">
+                <label class="custom-label" for="minSalary">Min. Salary</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                  <input 
+                    id="minSalary"
+                    class="custom-input pl-8" 
+                    type="number" 
+                    formControlName="minSalary" 
+                    placeholder="From">
+                </div>
+              </div>
+              
+              <div class="custom-form-field">
+                <label class="custom-label" for="maxSalary">Max. Salary</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                  <input 
+                    id="maxSalary"
+                    class="custom-input pl-8" 
+                    type="number" 
+                    formControlName="maxSalary" 
+                    placeholder="To">
+                </div>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+              <div class="custom-form-field">
+                <label class="custom-label" for="minExperience">Min. Experience (years)</label>
+                <input 
+                  id="minExperience"
+                  class="custom-input" 
+                  type="number" 
+                  formControlName="minExperience" 
+                  placeholder="From">
+              </div>
+              
+              <div class="custom-form-field">
+                <label class="custom-label" for="maxExperience">Max. Experience (years)</label>
+                <input 
+                  id="maxExperience"
+                  class="custom-input" 
+                  type="number" 
+                  formControlName="maxExperience" 
+                  placeholder="To">
+              </div>
+            </div>
+            
+            <div class="custom-form-field">
+              <label class="custom-label" for="empl_type">Employment Type</label>
+              <select class="custom-select" id="empl_type" formControlName="empl_type">
+                <option value="">All types</option>
+                <option *ngFor="let type of employmentTypes" [value]="type">
+                  {{ type }}
+                </option>
+              </select>
+            </div>
+
+            <div class="custom-form-field">
+              <label class="custom-label" for="skills">Skills</label>
+              <div class="border border-gray-300 rounded-lg p-3 bg-gray-50">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span *ngFor="let skill of form.controls['skills'].value" class="badge badge-primary flex items-center">
+                    {{skill}}
+                    <button 
+                      type="button"
+                      class="ml-1 text-primary/80 hover:text-primary"
+                      (click)="removeSkill(skill)">
+                      <mat-icon class="text-sm">cancel</mat-icon>
+                    </button>
+                  </span>
+                </div>
+                
+                <div class="flex">
+                  <input 
+                    id="skills"
+                    class="custom-input mb-0" 
+                    placeholder="Add skill..."
+                    [matChipInputFor]="skillsGrid"
+                    (matChipInputTokenEnd)="addSkill($event)">
+                  <mat-chip-grid #skillsGrid class="hidden"></mat-chip-grid>
+                </div>
+              </div>
+            </div>
+
+            <div class="custom-form-field">
+              <label class="custom-label" for="languages">Languages</label>
+              <div class="border border-gray-300 rounded-lg p-3 bg-gray-50">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span *ngFor="let language of form.controls['languages'].value" class="badge badge-success flex items-center">
+                    {{language}}
+                    <button 
+                      type="button"
+                      class="ml-1 text-green-700 hover:text-green-900"
+                      (click)="removeLanguage(language)">
+                      <mat-icon class="text-sm">cancel</mat-icon>
+                    </button>
+                  </span>
+                </div>
+                
+                <div class="flex">
+                  <input 
+                    id="languages"
+                    class="custom-input mb-0" 
+                    placeholder="Add language..."
+                    [matChipInputFor]="languagesGrid"
+                    (matChipInputTokenEnd)="addLanguage($event)">
+                  <mat-chip-grid #languagesGrid class="hidden"></mat-chip-grid>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center" *ngIf="showArchivedOption || currentUser?.role === 'User'">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" formControlName="is_archived" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <span class="ms-3 text-sm font-medium text-gray-700">
+                  {{ currentUser?.role === 'Company' ? 'Show archived vacancies' : 'Include vacancies I applied to' }}
+                </span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </aside>
+
+    <!-- Список вакансий -->
+    <div class="lg:col-span-3">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Find Your Perfect Job</h1>
+        <p class="text-gray-600">Explore opportunities that match your skills and experience</p>
+      </div>
+      
+      <div *ngIf="loading && vacancies.length === 0" class="flex justify-center py-16">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+      
+      <div *ngIf="vacancies.length === 0 && !loading" class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="bg-gray-100 rounded-full p-6 mb-6">
+          <mat-icon class="text-5xl text-gray-400">work_off</mat-icon>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No vacancies found</h3>
+        <p class="text-gray-500 max-w-lg">Try changing your filter parameters or check back later when new vacancies are posted</p>
+      </div>
+      
+      <div class="grid grid-cols-1 gap-6">
+        <app-compact-vacancy
+          *ngFor="let vacancy of vacancies"
+          class="w-full custom-card hover:translate-y-[-4px] transition-transform duration-300"
+          [vacancy]="vacancy"
+        ></app-compact-vacancy>
+
+        <div *ngIf="loading && vacancies.length > 0" class="flex justify-center py-4">
+          <mat-spinner diameter="30"></mat-spinner>
+        </div>
+
+        <div *ngIf="hasMore && !loading" class="flex justify-center my-5">
+          <button
+            class="btn btn-primary btn-lg flex items-center"
+            (click)="searchVacancies()"
+          >
+            <mat-icon class="mr-2">refresh</mat-icon>
+            Load more
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

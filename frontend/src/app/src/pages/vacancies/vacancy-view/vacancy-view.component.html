@@ -1,0 +1,189 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="border-b border-gray-200 pb-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-3xl font-bold text-gray-800">{{ vacancy?.title }}</h1>
+        <span
+          *ngIf="vacancy?.is_archived"
+          class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm"
+        >
+          Archived
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4 text-gray-600">
+        <div
+          (click)="goToCompany()"
+          class="flex items-center hover:scale-[1.01] hover:text-black hover:cursor-pointer"
+        >
+          <mat-icon class="mr-2 text-gray-500">business</mat-icon>
+          <span class="font-medium"
+            >{{ company?.name }} - {{ company?.city }} -
+            {{ company?.email }}</span
+          >
+        </div>
+        <div class="flex items-center">
+          <mat-icon class="mr-2 text-gray-500">schedule</mat-icon>
+          <span>{{ vacancy?.created_at | date : "mediumDate" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-blue-50 p-4 rounded-lg">
+        <h3 class="text-sm font-semibold text-blue-800 mb-2">Salary Range</h3>
+        <div class="text-2xl font-bold text-blue-600">
+          {{ vacancy?.salary?.min | currency }} -
+          {{ vacancy?.salary?.max | currency }}
+        </div>
+      </div>
+
+      <div class="bg-purple-50 p-4 rounded-lg">
+        <h3 class="text-sm font-semibold text-purple-800 mb-2">
+          Experience Level
+        </h3>
+        <div class="text-2xl font-bold text-purple-600">
+          {{ vacancy?.experience_level?.min }} -
+          {{ vacancy?.experience_level?.max }} years
+        </div>
+      </div>
+    </div>
+
+    <!-- Employment Type -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Employment Type</h3>
+      <div class="bg-gray-100 px-4 py-2 rounded-lg inline-block">
+        {{ vacancy?.empl_type }}
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Required Skills</h3>
+      <div class="flex flex-wrap gap-2">
+        <mat-chip
+          *ngFor="let skill of vacancy?.skills"
+          class="!bg-emerald-100 !text-emerald-800 !rounded-full"
+        >
+          {{ skill }}
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- Languages -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">
+        Language Requirements
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          *ngFor="let lang of vacancy?.languages"
+          class="bg-gray-50 p-4 rounded-lg"
+        >
+          <div class="font-medium text-gray-700">{{ lang.name }}</div>
+          <div class="text-sm text-gray-500">{{ lang.level }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Requirements -->
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Requirements</h3>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li *ngFor="let req of vacancy?.requirements">{{ req }}</li>
+      </ul>
+    </div>
+
+    <!-- Application Button -->
+    <div class="border-t border-gray-200 pt-6">
+      <div class="flex flex-col gap-4">
+        <!-- For company owners -->
+        <div *ngIf="isCompanyOwner" class="flex flex-wrap gap-4">
+          <button
+            mat-raised-button
+            color="primary"
+            class="!px-6 !py-2"
+            routerLink="/profile/company"
+          >
+            <mat-icon class="mr-2">keyboard_backspace</mat-icon>
+            Back to Profile
+          </button>
+          
+          <button
+            *ngIf="vacancy?.is_archived"
+            mat-raised-button
+            color="accent"
+            class="!px-6 !py-2"
+            (click)="unarchiveVacancy()"
+          >
+            <mat-icon class="mr-2">unarchive</mat-icon>
+            Unarchive Vacancy
+          </button>
+          
+          <button
+            mat-raised-button
+            class="!px-6 !py-2"
+            routerLink="/vacancies/{{vacancy?.id}}/applications"
+          >
+            <mat-icon class="mr-2">people</mat-icon>
+            View Applications
+          </button>
+          
+          <button
+            mat-raised-button
+            class="!px-6 !py-2"
+            routerLink="/vacancies/edit/{{vacancy?.id}}"
+          >
+            <mat-icon class="mr-2">edit</mat-icon>
+            Edit Vacancy
+          </button>
+        </div>
+        
+        <!-- For job seekers (users) -->
+        <div *ngIf="user?.role === 'User'" class="w-full">
+          <button
+            *ngIf="!this.application && !vacancy?.is_archived"
+            mat-raised-button
+            color="primary"
+            class="!px-8 !py-3 !text-lg w-full"
+            (click)="applyForVacancy()"
+          >
+            <mat-icon class="mr-2">check</mat-icon>
+            Apply Now
+          </button>
+
+          <div
+            *ngIf="this.application"
+            class="bg-green-100 w-full p-4 rounded-lg flex items-center"
+          >
+            <mat-icon class="text-green-600">check_circle</mat-icon>
+            <span class="ml-3 text-lg text-green-800 font-medium"
+              >Application Submitted</span
+            >
+          </div>
+
+          <div
+            *ngIf="vacancy?.is_archived && !this.application"
+            class="bg-red-100 w-full p-4 rounded-lg flex items-center"
+          >
+            <mat-icon class="text-red-600">archive</mat-icon>
+            <span class="ml-3 text-lg text-red-800 font-medium"
+              >This vacancy is archived and not accepting applications</span
+            >
+          </div>
+        </div>
+        
+        <!-- For non-authenticated users or companies viewing other vacancies -->
+        <div
+          *ngIf="!user || (user?.role !== 'User' && !isCompanyOwner)"
+          class="bg-gray-100 w-full p-4 rounded-lg flex items-center"
+        >
+          <mat-icon class="text-gray-600">info</mat-icon>
+          <span class="ml-3 text-lg text-gray-800 font-medium"
+            >Sign in as a user to apply for this vacancy</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -24,4 +24,9 @@ export class CompaniesService {
     const endpoint = endpoints.companies.getById(companyId);
     return this.httpClient.get<Company>(endpoint);
   }
+
+  getByUserId(userId: string): Observable<Company> {
+    const endpoint = endpoints.companies.getByUserId(userId);
+    return this.httpClient.get<Company>(endpoint);
+  }
 }

@@ -25,22 +25,26 @@ const companiesEndpoints = {
   add: () => `${apiPath.companies}`,
   updateById: (companyId: string) => `${apiPath.companies}/${companyId}`,
   getById: (companyId: string) => `${apiPath.companies}/${companyId}`,
+  getByUserId: (userId: string) => `${apiPath.companies}/users/${userId}`,
 };
 
 const vacanciesEndpoints = {
   add: () => `${apiPath.vacancies}`,
   updateById: (vacancyId: string) => `${apiPath.vacancies}/${vacancyId}`,
   getById: (vacancyId: string) => `${apiPath.vacancies}/${vacancyId}`,
+  getByCompanyId: (companyId: string) =>
+    `${apiPath.vacancies}/companies/${companyId}`,
   archiveById: (vacancyId: string) =>
     `${apiPath.vacancies}/${vacancyId}/archive`,
-  search: () => `${apiPath.vacancies}`,
+  search: () => `${apiPath.vacancies}/search`,
 };
 
 const resumesEndpoints = {
   add: () => `${apiPath.resumes}`,
-  updateById: (resumeId: string) => `${apiPath}/${resumeId}`,
-  deleteById: (resumeId: string) => `${apiPath}/${resumeId}`,
-  getById: (resumeId: string) => `${apiPath}/${resumeId}`,
+  updateById: (resumeId: string) => `${apiPath.resumes}/${resumeId}`,
+  deleteById: (resumeId: string) => `${apiPath.resumes}/${resumeId}`,
+  getById: (resumeId: string) => `${apiPath.resumes}/${resumeId}`,
+  getByUserId: (userId: string) => `${apiPath.resumes}/users/${userId}`,
 };
 
 const applicationsEndpoints = {
@@ -52,6 +56,8 @@ const applicationsEndpoints = {
   getByUserId: (userId: string) => `${apiPath.applications}/users/${userId}`,
   getByVacancyId: (vacancyId: string) =>
     `${apiPath.applications}/vacancies/${vacancyId}`,
+  getByUserAndVacancy: (vacancyId: string, userId: string) =>
+    `${apiPath.applications}/vacancies/${vacancyId}/users/${userId}`,
 };
 
 export const endpoints = {

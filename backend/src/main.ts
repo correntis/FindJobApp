@@ -9,15 +9,31 @@ config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: "*",
+    methods: "*",
+    allowedHeaders: "*",
+    exposedHeaders: "Authorization", 
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle("My API")
     .setDescription("API Documentation")
     .setVersion("1.0")
-    .addBearerAuth()
+    .addBearerAuth(
+      { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+      "bearer"
+    )
+    .addSecurityRequirements("bearer")
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, documentFactory);
+  SwaggerModule.setup("api", app, documentFactory, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   app.useGlobalFilters(new GlobalExceptionsFilter());
   await app.listen(process.env.PORT ?? 3000);

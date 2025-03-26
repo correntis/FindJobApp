@@ -7,7 +7,6 @@ export interface SearchVacancyDto {
   skills: string[];
   languages: string[];
   tags: string[];
-  companyId: string;
   is_archived: boolean;
   page: number;
   limit: number;

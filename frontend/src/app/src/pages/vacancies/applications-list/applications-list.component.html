@@ -1,0 +1,94 @@
+<div class="max-w-6xl mx-auto p-6">
+  <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="border-b border-gray-200 pb-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-3xl font-bold text-gray-800">Applications for Vacancy</h1>
+        <button mat-button class="!px-4 !py-2 bg-gray-100 hover:bg-gray-200" 
+                routerLink="/profile/company">
+          <mat-icon class="mr-2">arrow_back</mat-icon>
+          Back to Profile
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+      <div class="flex flex-col items-center">
+        <mat-spinner diameter="50" class="mb-4"></mat-spinner>
+        <p class="text-gray-500">Loading applications...</p>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && applications.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+      <div class="bg-gray-100 rounded-full p-6 mb-6">
+        <mat-icon class="text-5xl text-gray-400">folder_open</mat-icon>
+      </div>
+      <p class="text-gray-500 mb-6 max-w-md">No applications have been submitted for this vacancy yet.</p>
+    </div>
+
+    <div *ngIf="!isLoading && applications.length > 0" class="overflow-x-auto">
+      <table mat-table [dataSource]="applications" class="w-full">
+        <!-- Date Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Date Applied</th>
+          <td mat-cell *matCellDef="let application">
+            {{application.appliedAt | date:'mediumDate'}}
+          </td>
+        </ng-container>
+
+        <!-- User Column -->
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef>Applicant</th>
+          <td mat-cell *matCellDef="let application">
+            <div class="flex items-center">
+              <div class="bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div>
+                <div class="font-medium">User ID: {{application.userId}}</div>
+                <div class="text-sm text-gray-500">Applied {{application.appliedAt | date}}</div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let application">
+            <div [ngClass]="{
+              'bg-blue-100 text-blue-800': application.status === applicationStatus.Unread,
+              'bg-green-100 text-green-800': application.status === applicationStatus.Accepted,
+              'bg-red-100 text-red-800': application.status === applicationStatus.Rejected
+            }" class="px-3 py-1 rounded-full text-sm inline-block">
+              {{application.status}}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let application">
+            <div class="flex gap-2">
+              <button mat-icon-button 
+                      [disabled]="application.status === applicationStatus.Accepted"
+                      (click)="updateStatus(application.id, applicationStatus.Accepted)" 
+                      class="text-green-600">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button 
+                      [disabled]="application.status === applicationStatus.Rejected"
+                      (click)="updateStatus(application.id, applicationStatus.Rejected)" 
+                      class="text-red-600">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,109 @@
+<header
+  class="fixed top-0 z-50 w-full bg-gradient-to-r from-primary-800 to-primary-700 transition-all duration-300"
+  [ngClass]="{'header-shadow': isScrolled}"
+>
+  <div class="responsive-container flex items-center justify-between h-16">
+    <!-- Logo -->
+    <div class="logo text-2xl font-bold text-white transition-transform duration-300 hover:scale-105">
+      <a routerLink="/vacancies" class="flex items-center">
+        <span class="text-white bg-primary-600 p-1.5 rounded-lg mr-2">
+          <mat-icon>work_outline</mat-icon>
+        </span>
+        <span>FindJob</span>
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex items-center gap-2">
+      <div class="hidden md:flex">
+        <div
+          *ngFor="let route of getHeaderLinksRoutes(); let i = index"
+          class="relative px-3 py-2 mx-1"
+        >
+          <div *ngIf="route.condition" 
+               class="group text-gray-100 hover:text-white transition-colors duration-200 cursor-pointer"
+               [ngClass]="{'active-link': isRouteActive(route.path)}"
+               (click)="goToRoute(route.path)">
+            <span class="relative z-10">{{ route.name }}</span>
+            <span *ngIf="!isRouteActive(route.path)" class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile menu for authenticated users -->
+      <div *ngIf="isAuthenticated" class="ml-2">
+        <button 
+          mat-mini-fab 
+          [matMenuTriggerFor]="menu"
+          class="bg-primary-600 hover:bg-primary-500 transition-colors duration-300 header-button"
+        >
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu" class="mt-2 user-menu">
+          <div class="user-menu-header">
+            <p class="text-sm text-gray-600">Welcome</p>
+            <p class="font-medium">{{ getUserName() }}</p>
+          </div>
+          <button mat-menu-item (click)="goToProfile()" class="flex items-center">
+            <mat-icon class="text-primary mr-2">person</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" class="flex items-center">
+            <mat-icon class="text-red-500 mr-2">logout</mat-icon>
+            <span class="text-red-500">Sign Out</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Buttons for non-authenticated users -->
+      <div *ngIf="!isAuthenticated" class="flex items-center gap-2">
+        <button 
+          mat-stroked-button 
+          class="border border-white/50 text-white hover:bg-white/10 transition-colors duration-300 header-button"
+          (click)="goToRoute('sign-in')"
+        >
+          Sign In
+        </button>
+        <button 
+          mat-flat-button 
+          class="bg-accent hover:bg-accent-600 text-white transition-colors duration-300 header-button"
+          (click)="goToRoute('sign-up')"
+        >
+          Sign Up
+        </button>
+      </div>
+
+      <!-- Mobile menu (optional) -->
+      <button 
+        *ngIf="getHeaderLinksRoutes().length > 0"
+        mat-icon-button 
+        class="md:hidden text-white"
+        (click)="toggleMobileMenu()"
+      >
+        <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </nav>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div 
+    *ngIf="isMobileMenuOpen"
+    class="md:hidden bg-primary-700 shadow-lg transform transition-all duration-300"
+    [ngClass]="{'mobile-menu-enter-active': isMobileMenuOpen, 'mobile-menu-exit-active': !isMobileMenuOpen}"
+  >
+    <div class="responsive-container py-2 space-y-1">
+      <div
+        *ngFor="let route of getHeaderLinksRoutes()"
+        class="py-3 px-4 text-gray-100 hover:bg-primary-600 rounded-lg transition-colors duration-200"
+        [ngClass]="{'bg-primary-600': isRouteActive(route.path)}"
+        (click)="goToRoute(route.path); toggleMobileMenu()"
+      >
+        <div *ngIf="route.condition">
+          {{ route.name }}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

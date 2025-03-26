@@ -37,4 +37,15 @@ export class ApplicationsService {
     const endpoint = endpoints.applications.getByVacancyId(vacancyId);
     return this.httpClient.get<Application[]>(endpoint);
   }
+
+  getByVacancyAndUser(
+    vacancyId: string,
+    userId: string
+  ): Observable<Application> {
+    const endpoint = endpoints.applications.getByUserAndVacancy(
+      vacancyId,
+      userId
+    );
+    return this.httpClient.get<Application>(endpoint);
+  }
 }

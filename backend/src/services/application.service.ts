@@ -5,7 +5,10 @@ import { UsersRepository } from "src/repositories/users.repository";
 import { VacanciesRepository } from "src/repositories/vacancies.repository";
 import { CreateApplicationDto } from "src/dto/application/create-application.dto";
 import { UpdateApplicationDto } from "src/dto/application/update-application.dto";
-import { Application, ApplicationDocument } from "src/schemas/application.schema";
+import {
+  Application,
+  ApplicationDocument,
+} from "src/schemas/application.schema";
 import { User } from "src/schemas/user.schema";
 import { Vacancy } from "src/schemas/vacancy.schema";
 
@@ -17,13 +20,19 @@ export class ApplicationsService {
     private readonly vacanciesRepository: VacanciesRepository
   ) {}
 
-  async create(createApplicationDto: CreateApplicationDto): Promise<ApplicationDocument> {
-    const user = await this.usersRepository.findById(createApplicationDto.userId);
+  async create(
+    createApplicationDto: CreateApplicationDto
+  ): Promise<ApplicationDocument> {
+    const user = await this.usersRepository.findById(
+      createApplicationDto.userId
+    );
     if (!user) {
       throw new NotFoundException(User);
     }
 
-    const vacancy = await this.vacanciesRepository.findById(createApplicationDto.vacancyId);
+    const vacancy = await this.vacanciesRepository.findById(
+      createApplicationDto.vacancyId
+    );
     if (!vacancy) {
       throw new NotFoundException(Vacancy);
     }
@@ -31,17 +40,25 @@ export class ApplicationsService {
     return this.applicationsRepository.create(createApplicationDto);
   }
 
-  async update(applicationId: string, updateApplicationDto: UpdateApplicationDto): Promise<ApplicationDocument | null> {
-    const application = await this.applicationsRepository.findById(applicationId);
+  async update(
+    applicationId: string,
+    updateApplicationDto: UpdateApplicationDto
+  ): Promise<ApplicationDocument | null> {
+    const application =
+      await this.applicationsRepository.findById(applicationId);
     if (!application) {
       throw new NotFoundException(Application);
     }
 
-    return this.applicationsRepository.update(applicationId, updateApplicationDto);
+    return this.applicationsRepository.update(
+      applicationId,
+      updateApplicationDto
+    );
   }
 
   async getById(applicationId: string): Promise<ApplicationDocument | null> {
-    const application = await this.applicationsRepository.findById(applicationId);
+    const application =
+      await this.applicationsRepository.findById(applicationId);
     if (!application) {
       throw new NotFoundException(Application);
     }
@@ -57,8 +74,25 @@ export class ApplicationsService {
     return this.applicationsRepository.findByVacancyId(vacancyId);
   }
 
+  async getByVacancyAndUser(
+    vacancyId: string,
+    userId: string
+  ): Promise<ApplicationDocument> {
+    const application = await this.applicationsRepository.findByVacancyAndUser(
+      vacancyId,
+      userId
+    );
+
+    if (!application) {
+      throw new NotFoundException(Application);
+    }
+
+    return application;
+  }
+
   async delete(applicationId: string): Promise<ApplicationDocument | null> {
-    const application = await this.applicationsRepository.findById(applicationId);
+    const application =
+      await this.applicationsRepository.findById(applicationId);
     if (!application) {
       throw new NotFoundException(Application);
     }

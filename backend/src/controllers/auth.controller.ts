@@ -50,7 +50,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() loginUserDto: LoginUserDto
-  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
+  ): Promise<{ user: User; accessToken: string; refreshToken: string; telegramLink: string }> {
     return await this.authService.login(loginUserDto);
   }
 

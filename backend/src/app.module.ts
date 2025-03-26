@@ -12,14 +12,14 @@ import { VacanciesModule } from "./modules/vacancies.module";
 import { ResumesModule } from "./modules/resumes.module";
 import { ApplicationsModule } from "./modules/application.module";
 import { TelegramModule } from "./modules/telegram.module";
-import { Constants } from "./config/constants";
+import { constants } from "./config/constants";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(Constants.mongoUri),
+    MongooseModule.forRoot(constants.mongoUri),
     TelegramModule,
     AuthModule,
     UsersModule,

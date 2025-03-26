@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthUser } from '../models/auth-user.model';
 import { endpoints } from '../../config/api.config';
+import { RegisterUserDto } from '../dto/auth/register-user.dto';
+import { LoginUserDto } from '../dto/auth/login-user.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -11,21 +13,24 @@ import { endpoints } from '../../config/api.config';
 export class AuthService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  register(user: Partial<User>): Observable<AuthUser> {
+  register(registerUserDto: RegisterUserDto): Observable<AuthUser> {
     const endpoint = endpoints.auth.register();
-    return this.httpClient.post<AuthUser>(endpoint, user);
+    return this.httpClient.post<AuthUser>(endpoint, registerUserDto);
   }
 
-  login(email: string, password: string): Observable<AuthUser> {
+  login(loginUserDto: LoginUserDto): Observable<AuthUser> {
     const endpoint = endpoints.auth.login();
-    return this.httpClient.post<AuthUser>(endpoint, {
-      email,
-      password,
-    });
+    return this.httpClient.post<AuthUser>(endpoint, loginUserDto);
   }
 
-  refreshToken(refreshToken: string) : Observable<string> {
+  refreshToken(refreshToken: string): Observable<{ accessToken: string}> {
     const endpoint = endpoints.auth.refreshToken(refreshToken);
-    return this.httpClient.get<string>(endpoint);
+    return this.httpClient.get<{accessToken: string}>(endpoint);
+  }
+
+  logout(): Observable<void> {
+    // В будущем можно добавить запрос на сервер для выхода
+    // сейчас просто возвращаем Observable
+    return of(void 0);
   }
 }

@@ -58,4 +58,11 @@ export class CompaniesService {
 
     return company;
   }
+
+  async getByUserId(userId: string): Promise<CompanyDocument | null> {
+    console.log(`Getting company for user with ID: ${userId}`);
+    const company = await this.companiesRepository.findByUser(userId);
+    console.log('Company found:', company ? true : false);
+    return company;
+  }
 }

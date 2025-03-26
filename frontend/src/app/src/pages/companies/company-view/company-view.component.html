@@ -1,0 +1,121 @@
+<div class="max-w-7xl mx-auto p-6">
+  <div *ngIf="isLoading" class="text-center p-12">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && company">
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex-1">
+          <h1 class="text-3xl font-bold text-gray-800 mb-4">
+            {{ company.name }}
+          </h1>
+          <div class="text-lg text-gray-600 mb-4">
+            {{ company.description }}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-gray-500">business</mat-icon>
+              {{ company.industry }}
+            </div>
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-gray-500">location_on</mat-icon>
+              {{ company.city }}, {{ company.street }}
+            </div>
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-gray-500">call</mat-icon>
+              {{ company.phone }}
+            </div>
+            <div class="flex items-center gap-2">
+              <mat-icon class="text-gray-500">email</mat-icon>
+              {{ company.email }}
+            </div>
+            <div class="flex items-center gap-2" *ngIf="company.webSite">
+              <mat-icon class="text-gray-500">public</mat-icon>
+              <a
+                [href]="company.webSite"
+                target="_blank"
+                class="text-blue-600 hover:underline"
+              >
+                {{ company.webSite }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Open Positions</h2>
+
+    <div *ngIf="vacanciesLoading" class="text-center p-6">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!vacanciesLoading">
+      <div
+        *ngIf="vacancies.length === 0"
+        class="bg-gray-50 p-6 rounded-lg text-gray-500"
+      >
+        No open positions available
+      </div>
+
+      <div class="grid gap-6">
+        <div
+          *ngFor="let vacancy of vacancies"
+          class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
+        >
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800">
+                {{ vacancy.title }}
+                <span
+                  *ngIf="vacancy.is_archived"
+                  class="text-sm text-red-500 ml-2"
+                  >(Archived)</span
+                >
+              </h3>
+              <div class="text-gray-600 mt-1">
+                {{ vacancy.empl_type }} • {{ vacancy.experience_level.min }}-{{
+                  vacancy.experience_level.max
+                }}
+                years experience
+              </div>
+            </div>
+            <a
+              mat-raised-button
+              color="primary"
+              [routerLink]="['/vacancy', vacancy.id]"
+              class="!ml-4"
+            >
+              View Details
+            </a>
+          </div>
+
+          <div class="flex flex-wrap gap-4 text-sm">
+            <div class="bg-blue-50 px-3 py-1.5 rounded-lg">
+              <span class="font-medium text-blue-700">Salary:</span>
+              <span class="text-blue-600 ml-2">
+                {{ vacancy.salary.min | currency }} -
+                {{ vacancy.salary.max | currency }}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <mat-chip
+                *ngFor="let skill of vacancy.skills"
+                class="!bg-gray-100 !text-gray-700 !rounded-full !text-sm"
+              >
+                {{ skill }}
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !company" class="text-center text-red-500 p-12">
+    Company not found
+  </div>
+</div>

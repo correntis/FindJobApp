@@ -1,0 +1,416 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="glass-effect w-full max-w-xl rounded-xl shadow-xl p-8 backdrop-blur-sm">
+    <div class="flex justify-center mb-6">
+      <div class="bg-white p-3 rounded-full shadow-md">
+        <mat-icon class="text-primary text-4xl">{{ isLogin ? 'login' : 'person_add' }}</mat-icon>
+      </div>
+    </div>
+    
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
+      {{ isLogin ? "Вход в систему" : "Создание аккаунта" }}
+    </h2>
+
+    <form
+      *ngIf="isLogin"
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+      class="space-y-5"
+    >
+      <div class="custom-form-field">
+        <label class="custom-label" for="login-email">Email</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">email</mat-icon>
+          </span>
+          <input
+            id="login-email"
+            class="custom-input pl-10"
+            [ngClass]="{'error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}" 
+            formControlName="email"
+            type="email"
+            placeholder="Введите ваш email"
+            required
+            aria-describedby="emailError"
+          />
+        </div>
+        <p class="custom-error" *ngIf="loginForm.get('email')?.errors && loginForm.get('email')?.touched">
+          <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
+            Email обязателен
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('email')?.hasError('email')">
+            Неверный формат email
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('email')?.hasError('emailNotFound')">
+            Пользователь с таким email не существует
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="login-password">Пароль</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">lock</mat-icon>
+          </span>
+          <input
+            id="login-password"
+            class="custom-input pl-10 pr-10"
+            [ngClass]="{'error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Введите ваш пароль"
+            required
+            minlength="6"
+            aria-describedby="passwordError"
+          />
+          <button 
+            type="button"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+            (click)="togglePasswordVisibility()">
+            <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </div>
+        <p class="custom-error" *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched">
+          <ng-container *ngIf="loginForm.get('password')?.hasError('required')">
+            Пароль обязателен
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('password')?.hasError('minlength')">
+            Минимум 6 символов
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('password')?.hasError('pattern')">
+            Пароль должен содержать одну заглавную букву, цифру и специальный символ (!%&)
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('password')?.hasError('invalidPassword')">
+            Неверный пароль
+          </ng-container>
+        </p>
+      </div>
+
+      <button
+        class="btn btn-primary w-full py-3 mt-6"
+        type="submit"
+      >
+        Войти
+      </button>
+    </form>
+
+    <!-- Форма регистрации шаг 1 -->
+    <form
+      *ngIf="!isLogin && step === 1"
+      [formGroup]="registrationForm"
+      (ngSubmit)="register()"
+      class="space-y-5"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="custom-form-field">
+          <label class="custom-label" for="reg-firstName">Имя</label>
+          <input
+            id="reg-firstName"
+            class="custom-input"
+            [ngClass]="{'error': registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched}"
+            formControlName="firstName"
+            type="text"
+            placeholder="Введите ваше имя"
+            required
+          />
+          <p class="custom-error" *ngIf="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched">
+            Имя обязательно
+          </p>
+        </div>
+
+        <div class="custom-form-field">
+          <label class="custom-label" for="reg-lastName">Фамилия</label>
+          <input
+            id="reg-lastName"
+            class="custom-input"
+            [ngClass]="{'error': registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched}"
+            formControlName="lastName"
+            type="text"
+            placeholder="Введите вашу фамилию"
+            required
+          />
+          <p class="custom-error" *ngIf="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched">
+            Фамилия обязательна
+          </p>
+        </div>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="reg-email">Email</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">email</mat-icon>
+          </span>
+          <input
+            id="reg-email"
+            class="custom-input pl-10"
+            [ngClass]="{'error': registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched}"
+            formControlName="email"
+            type="email"
+            placeholder="Введите ваш email"
+            required
+          />
+        </div>
+        <p class="custom-error" *ngIf="registrationForm.get('email')?.errors && registrationForm.get('email')?.touched">
+          <ng-container *ngIf="registrationForm.get('email')?.hasError('required')">
+            Email обязателен
+          </ng-container>
+          <ng-container *ngIf="registrationForm.get('email')?.hasError('email')">
+            Неверный формат email
+          </ng-container>
+          <ng-container *ngIf="registrationForm.get('email')?.hasError('existingEmail')">
+            Пользователь с таким email уже существует
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="reg-password">Пароль</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">lock</mat-icon>
+          </span>
+          <input
+            id="reg-password"
+            class="custom-input pl-10 pr-10"
+            [ngClass]="{'error': registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched}"
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Создайте пароль"
+            required
+            minlength="6"
+          />
+          <button 
+            type="button"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+            (click)="togglePasswordVisibility()">
+            <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </div>
+        <p class="custom-error" *ngIf="registrationForm.get('password')?.errors && registrationForm.get('password')?.touched">
+          <ng-container *ngIf="registrationForm.get('password')?.hasError('required')">
+            Пароль обязателен
+          </ng-container>
+          <ng-container *ngIf="registrationForm.get('password')?.hasError('minlength')">
+            Минимум 6 символов
+          </ng-container>
+          <ng-container *ngIf="registrationForm.get('password')?.hasError('pattern')">
+            Пароль должен содержать одну заглавную букву, цифру и специальный символ (!%&)
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="confirmPassword">Подтверждение пароля</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">lock_outline</mat-icon>
+          </span>
+          <input
+            id="confirmPassword"
+            class="custom-input pl-10 pr-10"
+            [ngClass]="{'error': registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched}"
+            formControlName="confirmPassword"
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            placeholder="Подтвердите пароль"
+            required
+          />
+          <button 
+            type="button"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+            (click)="toggleConfirmPasswordVisibility()">
+            <mat-icon>{{ hideConfirmPassword ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </div>
+        <p class="custom-error" *ngIf="registrationForm.get('confirmPassword')?.errors && registrationForm.get('confirmPassword')?.touched">
+          <ng-container *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
+            Подтверждение пароля обязательно
+          </ng-container>
+          <ng-container *ngIf="registrationForm.get('confirmPassword')?.hasError('mustMatch')">
+            Пароли должны совпадать
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <label class="custom-label block mb-3">Выберите вашу роль:</label>
+        <div class="space-y-3 bg-white p-4 rounded-lg shadow-sm">
+          <div *ngFor="let role of appRoles" 
+               class="flex items-start p-3 rounded-lg transition-colors cursor-pointer"
+               [ngClass]="{'bg-primary/10 border border-primary/30': registrationForm.get('choosedRole')?.value === role.roleName,
+                          'hover:bg-gray-50 border border-transparent': registrationForm.get('choosedRole')?.value !== role.roleName}"
+               (click)="registrationForm.get('choosedRole')?.setValue(role.roleName)">
+            <input type="radio" 
+                  [value]="role.roleName" 
+                  formControlName="choosedRole"
+                  class="mt-1 mr-3">
+            <div>
+              <span class="font-medium block mb-1">{{ role.roleName === 'User' ? 'Соискатель' : 'Работодатель' }}</span>
+              <span class="text-sm text-gray-600">{{ role.text }}</span>
+            </div>
+          </div>
+        </div>
+        <p class="custom-error" *ngIf="registrationForm.get('choosedRole')?.hasError('required') && registrationForm.get('choosedRole')?.touched">
+          Выбор роли обязателен
+        </p>
+      </div>
+
+      <button
+        class="btn btn-primary w-full py-3 mt-6"
+        type="submit"
+      >
+        Зарегистрироваться
+      </button>
+    </form>
+
+    <!-- Данные о компании (Шаг 2) -->
+    <form
+      *ngIf="!isLogin && step === 2"
+      [formGroup]="companyForm"
+      (ngSubmit)="register()"
+      class="space-y-5"
+    >
+      <div class="flex items-center justify-center mb-5">
+        <div class="bg-primary/10 p-3 rounded-full">
+          <mat-icon class="text-primary text-xl">business</mat-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-3">Информация о компании</h3>
+      </div>
+      
+      <div class="custom-form-field">
+        <label class="custom-label" for="companyName">Название компании</label>
+        <input
+          id="companyName"
+          class="custom-input"
+          [ngClass]="{'error': companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched}"
+          formControlName="companyName"
+          type="text"
+          placeholder="Введите название компании"
+          required
+        />
+        <p class="custom-error" *ngIf="companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched">
+          Название компании обязательно
+        </p>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="companyIndustry">Отрасль</label>
+        <input
+          id="companyIndustry"
+          class="custom-input"
+          [ngClass]="{'error': companyForm.get('companyIndustry')?.invalid && companyForm.get('companyIndustry')?.touched}"
+          formControlName="companyIndustry"
+          type="text"
+          placeholder="Например: IT, Финансы, Медицина"
+          required
+        />
+        <p class="custom-error" *ngIf="companyForm.get('companyIndustry')?.invalid && companyForm.get('companyIndustry')?.touched">
+          Отрасль компании обязательна
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="custom-form-field">
+          <label class="custom-label" for="companyEmail">Email компании</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+              <mat-icon class="text-lg">email</mat-icon>
+            </span>
+            <input
+              id="companyEmail"
+              class="custom-input pl-10"
+              [ngClass]="{'error': companyForm.get('companyEmail')?.invalid && companyForm.get('companyEmail')?.touched}"
+              formControlName="companyEmail"
+              type="email"
+              placeholder="Email для связи"
+            />
+          </div>
+          <p class="custom-error" *ngIf="companyForm.get('companyEmail')?.errors && companyForm.get('companyEmail')?.touched">
+            <ng-container *ngIf="companyForm.get('companyEmail')?.hasError('email')">
+              Неверный формат email
+            </ng-container>
+          </p>
+        </div>
+
+        <div class="custom-form-field">
+          <label class="custom-label" for="companyPhone">Телефон компании</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+              <mat-icon class="text-lg">phone</mat-icon>
+            </span>
+            <input
+              id="companyPhone"
+              class="custom-input pl-10"
+              [ngClass]="{'error': companyForm.get('companyPhone')?.invalid && companyForm.get('companyPhone')?.touched}"
+              formControlName="companyPhone"
+              type="tel"
+              placeholder="Телефон для связи"
+            />
+          </div>
+          <p class="custom-error" *ngIf="companyForm.get('companyPhone')?.errors && companyForm.get('companyPhone')?.touched">
+            <ng-container *ngIf="companyForm.get('companyPhone')?.hasError('pattern')">
+              Неверный формат телефона
+            </ng-container>
+          </p>
+        </div>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="companyCity">Город</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <mat-icon class="text-lg">location_city</mat-icon>
+          </span>
+          <input
+            id="companyCity"
+            class="custom-input pl-10"
+            formControlName="companyCity"
+            type="text"
+            placeholder="Город расположения компании"
+          />
+        </div>
+      </div>
+
+      <div class="custom-form-field">
+        <label class="custom-label" for="companyDescription">Описание компании</label>
+        <textarea
+          id="companyDescription"
+          class="custom-input min-h-[120px]"
+          formControlName="companyDescription"
+          placeholder="Краткое описание компании, сфера деятельности"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-4 mt-6">
+        <button
+          type="button"
+          class="btn btn-secondary flex-grow md:flex-grow-0"
+          (click)="backToFirstStep()"
+        >
+          <mat-icon class="mr-2">arrow_back</mat-icon>
+          Назад
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary flex-grow"
+        >
+          Завершить регистрацию
+          <mat-icon class="ml-2">check_circle</mat-icon>
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-6 text-center border-t border-gray-200 pt-6">
+      <p class="text-gray-600">
+        {{ isLogin ? "Еще нет аккаунта?" : "Уже есть аккаунт?" }}
+        <a
+          (click)="toggleForm()"
+          class="text-primary cursor-pointer hover:underline font-medium ml-1"
+        >
+          {{ isLogin ? "Зарегистрироваться" : "Войти" }}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

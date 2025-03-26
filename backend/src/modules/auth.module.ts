@@ -13,7 +13,6 @@ import { TelegramModule } from "./telegram.module";
     JwtModule.register({
       global: true,
       secret: "test",
-      signOptions: { expiresIn: "24h" },
     }),
     PassportModule.register({ defaultStrategy: "jwt" }),
     forwardRef(() => UsersModule),

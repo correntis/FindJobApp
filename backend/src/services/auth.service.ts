@@ -12,6 +12,7 @@ import { RegisterUserDto } from "src/dto/user/register-user.dto";
 import { randomBytes } from "crypto";
 import { JwtStrategy } from "src/jwt/jwt.strategy";
 import { TelegramService } from "./telegram.service";
+import { constants } from "src/config/constants";
 
 @Injectable()
 export class AuthService {
@@ -61,6 +62,7 @@ export class AuthService {
     user: UserDocument;
     accessToken: string;
     refreshToken: string;
+    telegramLink: string;
   }> {
     const user = await this.usersRepository.findByEmail(loginUserDto.email);
     if (!user) {
@@ -82,8 +84,16 @@ export class AuthService {
       id: user.id.toString(),
       role: user.role,
     });
+    
+    let telegramLink = user.telegramLink;
+    
+    // Если telegramLink отсутствует, создаем и сохраняем его
+    if (!telegramLink) {
+      telegramLink = this.telegramService.getTelegramLinkForUser(user.id);
+      await this.usersRepository.update(user.id, { telegramLink });
+    }
 
-    return { user, accessToken, refreshToken };
+    return { user, accessToken, refreshToken, telegramLink };
   }
 
   async connectTelegram(userId: string, message: string){
@@ -122,7 +132,7 @@ export class AuthService {
     await this.redisService.set(
       refreshToken,
       JSON.stringify(user),
-      60 * 60 * 24 * 7
+      constants.refreshTokenLifeTime,
     );
   }
 
@@ -130,7 +140,7 @@ export class AuthService {
     const payload = { userId, role };
 
     return this.jwtService.sign(payload, {
-      expiresIn: "180m",
+      expiresIn: constants.accessTokenLifeTime,
     });
   }
 

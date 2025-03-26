@@ -29,4 +29,9 @@ export class ResumesService {
     const endpoint = endpoints.resumes.getById(resumeId);
     return this.httpClient.get<Resume>(endpoint);
   }
+
+  getByUserId(userId: string): Observable<Resume> {
+    const endpoint = endpoints.resumes.getByUserId(userId);
+    return this.httpClient.get<Resume>(endpoint);
+  }
 }

@@ -14,4 +14,5 @@ export interface Vacancy {
   salary: Salary;
   experience_level: ExperienceLevel;
   languages: Language[];
+  created_at: Date;
 }

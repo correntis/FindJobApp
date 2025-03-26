@@ -1,0 +1,243 @@
+<div class="responsive-container pt-2 pb-4">
+  <div *ngIf="loading" class="flex justify-center items-center min-h-[60vh]">
+    <div class="flex flex-col items-center">
+      <mat-spinner diameter="50" class="mb-4"></mat-spinner>
+      <p class="text-gray-500">Loading...</p>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && company">
+    <div class="custom-card">
+      <div class="custom-card-header">
+        <h2 class="custom-card-title">Create New Vacancy</h2>
+      </div>
+      <div class="custom-card-content">
+        <form [formGroup]="vacancyForm" class="space-y-6">
+          <!-- Basic Information -->
+          <div class="form-section">
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Basic Information</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="custom-form-field md:col-span-2">
+                <label class="custom-label" for="title">Vacancy Title</label>
+                <input id="title" class="custom-input" 
+                  [ngClass]="{'error': vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched}"
+                  type="text" formControlName="title" placeholder="e.g. Senior Software Engineer">
+                <p class="custom-error" *ngIf="vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched">
+                  Vacancy title is required
+                </p>
+              </div>
+
+              <div class="custom-form-field">
+                <label class="custom-label" for="empl_type">Employment Type</label>
+                <select id="empl_type" class="custom-select" formControlName="empl_type">
+                  <option *ngFor="let type of employmentTypes" [value]="type">{{ type }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Salary and Experience -->
+          <div class="form-section">
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Salary and Experience</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div formGroupName="salary">
+                <h4 class="text-md font-medium mb-2 text-gray-700">Salary Range ($)</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="custom-form-field">
+                    <label class="custom-label" for="salary-min">Minimum</label>
+                    <input id="salary-min" class="custom-input" 
+                      [ngClass]="{'error': vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched}"
+                      type="number" formControlName="min" min="0">
+                    <p class="custom-error" *ngIf="vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched">
+                      Valid minimum salary is required
+                    </p>
+                  </div>
+                  <div class="custom-form-field">
+                    <label class="custom-label" for="salary-max">Maximum</label>
+                    <input id="salary-max" class="custom-input" 
+                      [ngClass]="{'error': vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched}"
+                      type="number" formControlName="max" min="0">
+                    <p class="custom-error" *ngIf="vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched">
+                      Valid maximum salary is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div formGroupName="experience_level">
+                <h4 class="text-md font-medium mb-2 text-gray-700">Experience Range (years)</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="custom-form-field">
+                    <label class="custom-label" for="exp-min">Minimum</label>
+                    <input id="exp-min" class="custom-input" 
+                      [ngClass]="{'error': vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched}"
+                      type="number" formControlName="min" min="0">
+                    <p class="custom-error" *ngIf="vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched">
+                      Valid minimum experience is required
+                    </p>
+                  </div>
+                  <div class="custom-form-field">
+                    <label class="custom-label" for="exp-max">Maximum</label>
+                    <input id="exp-max" class="custom-input" 
+                      [ngClass]="{'error': vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched}"
+                      type="number" formControlName="max" min="0">
+                    <p class="custom-error" *ngIf="vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched">
+                      Valid maximum experience is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Requirements -->
+          <div class="form-section">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-800">Requirements</h3>
+              <button type="button" class="btn-sm btn-primary flex items-center" (click)="addRequirement()">
+                <mat-icon class="text-sm mr-1">add</mat-icon>
+                Add
+              </button>
+            </div>
+            
+            <div formArrayName="requirements" class="space-y-3">
+              <div *ngFor="let requirement of requirementsArray.controls; let i = index" class="flex items-center gap-2">
+                <div class="flex-grow custom-form-field">
+                  <input [formControlName]="i" class="custom-input" 
+                    [ngClass]="{'error': requirement.invalid && requirement.touched}"
+                    type="text" placeholder="e.g. 3+ years of JavaScript experience">
+                  <p class="custom-error" *ngIf="requirement.invalid && requirement.touched">
+                    Requirement is required
+                  </p>
+                </div>
+                <button type="button" 
+                  class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
+                  (click)="removeRequirement(i)" 
+                  [disabled]="requirementsArray.length <= 1">
+                  <mat-icon class="text-lg">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="form-section">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-800">Skills</h3>
+              <button type="button" class="btn-sm btn-primary flex items-center" (click)="addSkill()">
+                <mat-icon class="text-sm mr-1">add</mat-icon>
+                Add
+              </button>
+            </div>
+            
+            <div formArrayName="skills" class="space-y-3">
+              <div *ngFor="let skill of skillsArray.controls; let i = index" class="flex items-center gap-2">
+                <div class="flex-grow custom-form-field">
+                  <input [formControlName]="i" class="custom-input" 
+                    [ngClass]="{'error': skill.invalid && skill.touched}"
+                    type="text" placeholder="e.g. JavaScript">
+                  <p class="custom-error" *ngIf="skill.invalid && skill.touched">
+                    Skill is required
+                  </p>
+                </div>
+                <button type="button" 
+                  class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
+                  (click)="removeSkill(i)" 
+                  [disabled]="skillsArray.length <= 1">
+                  <mat-icon class="text-lg">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-section">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-800">Tags</h3>
+              <button type="button" class="btn-sm btn-primary flex items-center" (click)="addTag()">
+                <mat-icon class="text-sm mr-1">add</mat-icon>
+                Add
+              </button>
+            </div>
+            
+            <div formArrayName="tags" class="space-y-3">
+              <div *ngFor="let tag of tagsArray.controls; let i = index" class="flex items-center gap-2">
+                <div class="flex-grow custom-form-field">
+                  <input [formControlName]="i" class="custom-input" 
+                    [ngClass]="{'error': tag.invalid && tag.touched}"
+                    type="text" placeholder="e.g. Remote">
+                  <p class="custom-error" *ngIf="tag.invalid && tag.touched">
+                    Tag is required
+                  </p>
+                </div>
+                <button type="button" 
+                  class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
+                  (click)="removeTag(i)" 
+                  [disabled]="tagsArray.length <= 1">
+                  <mat-icon class="text-lg">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-section">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium text-gray-800">Languages</h3>
+              <button type="button" class="btn-sm btn-primary flex items-center" (click)="addLanguage()">
+                <mat-icon class="text-sm mr-1">add</mat-icon>
+                Add
+              </button>
+            </div>
+            
+            <div formArrayName="languages" class="space-y-3">
+              <div *ngFor="let language of languagesArray.controls; let i = index" [formGroupName]="i" class="flex items-center gap-2">
+                <div class="flex-grow grid grid-cols-2 gap-4">
+                  <div class="custom-form-field">
+                    <input formControlName="name" class="custom-input" 
+                      [ngClass]="{'error': language.get('name')?.invalid && language.get('name')?.touched}"
+                      type="text" placeholder="e.g. English">
+                    <p class="custom-error" *ngIf="language.get('name')?.invalid && language.get('name')?.touched">
+                      Language name is required
+                    </p>
+                  </div>
+                  <div class="custom-form-field">
+                    <select formControlName="level" class="custom-select">
+                      <option value="A1">A1 (Beginner)</option>
+                      <option value="A2">A2 (Elementary)</option>
+                      <option value="B1">B1 (Intermediate)</option>
+                      <option value="B2">B2 (Upper Intermediate)</option>
+                      <option value="C1">C1 (Advanced)</option>
+                      <option value="C2">C2 (Proficient)</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="button" 
+                  class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
+                  (click)="removeLanguage(i)">
+                  <mat-icon class="text-lg">delete</mat-icon>
+                </button>
+              </div>
+              
+              <div *ngIf="languagesArray.length === 0" class="text-center py-4 border border-dashed border-gray-300 rounded-lg">
+                <p class="text-gray-500">No languages added. Click "Add" to add a language requirement.</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="custom-card-footer">
+        <button class="btn btn-secondary mr-3" (click)="cancel()">Cancel</button>
+        <button 
+          id="test-create-btn"
+          class="btn btn-primary flex items-center" 
+          (click)="saveVacancy()">
+          <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
+          <span>Create Vacancy</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

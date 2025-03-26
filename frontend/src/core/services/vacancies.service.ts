@@ -1,3 +1,4 @@
+import { User } from './../models/user.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -29,6 +30,11 @@ export class VacanciesService {
   getById(vacancyId: string): Observable<Vacancy> {
     const endpoint = endpoints.vacancies.getById(vacancyId);
     return this.httpClient.get<Vacancy>(endpoint);
+  }
+
+  getAllByCompanyId(companyId: string): Observable<Vacancy[]> {
+    const endpoint = endpoints.vacancies.getByCompanyId(companyId);
+    return this.httpClient.get<Vacancy[]>(endpoint);
   }
 
   search(searchDto: Partial<SearchVacancyDto>): Observable<Vacancy[]> {

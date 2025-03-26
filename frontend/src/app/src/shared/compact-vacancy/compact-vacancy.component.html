@@ -1,0 +1,104 @@
+<div class="custom-card p-0 h-full flex flex-col" [ngClass]="{'opacity-70 bg-gray-50': vacancy?.is_archived}">
+  <!-- Vacancy header with archive indicator -->
+  <div class="p-5 border-b border-gray-100">
+    <div class="flex justify-between items-start">
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-1">{{ vacancy?.title }}</h3>
+        <p class="text-gray-600 font-medium">{{ company?.name }}</p>
+      </div>
+      <div *ngIf="vacancy?.is_archived" class="ml-2 badge badge-error flex items-center">
+        <mat-icon class="text-sm mr-1">archive</mat-icon>
+        Archived
+      </div>
+    </div>
+  </div>
+
+  <!-- Main information -->
+  <div class="p-5 flex-grow flex flex-col gap-4">
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Work experience -->
+      <div class="bg-gray-50 p-3 rounded-lg flex items-center">
+        <div class="bg-primary/10 rounded-full p-2 mr-3">
+          <mat-icon class="text-primary">work</mat-icon>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase">Experience</p>
+          <p class="font-medium" *ngIf="vacancy?.experience_level?.min || vacancy?.experience_level?.max; else noExperience">
+            <ng-container *ngIf="vacancy?.experience_level?.min">from {{ vacancy?.experience_level?.min }}</ng-container>
+            <ng-container *ngIf="vacancy?.experience_level?.min && vacancy?.experience_level?.max"> - </ng-container>
+            <ng-container *ngIf="vacancy?.experience_level?.max">to {{ vacancy?.experience_level?.max }}</ng-container>
+            years
+          </p>
+          <ng-template #noExperience>
+            <p class="font-medium">Not specified</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Employment type -->
+      <div class="bg-gray-50 p-3 rounded-lg flex items-center">
+        <div class="bg-green-100 rounded-full p-2 mr-3">
+          <mat-icon class="text-green-600">schedule</mat-icon>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase">Employment type</p>
+          <p class="font-medium">{{ vacancy?.empl_type || 'Not specified' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Salary -->
+    <div *ngIf="vacancy?.salary" class="bg-gray-50 p-4 rounded-lg">
+      <div class="flex items-center mb-2">
+        <div class="bg-blue-100 rounded-full p-2 mr-3">
+          <mat-icon class="text-blue-600">payments</mat-icon>
+        </div>
+        <p class="text-sm text-gray-600 font-medium">Salary</p>
+      </div>
+      <p class="font-bold text-xl text-gray-800">
+        <ng-container *ngIf="vacancy?.salary?.min">from {{ vacancy?.salary?.min | number:'1.0-0' }}</ng-container>
+        <ng-container *ngIf="vacancy?.salary?.min && vacancy?.salary?.max"> - </ng-container>
+        <ng-container *ngIf="vacancy?.salary?.max">to {{ vacancy?.salary?.max | number:'1.0-0' }}</ng-container>
+        <span class="text-gray-600 ml-1">$</span>
+      </p>
+    </div>
+
+    <!-- Creation date -->
+    <div class="flex items-center text-gray-600">
+      <mat-icon class="text-sm mr-1">calendar_today</mat-icon>
+      <span class="text-sm">Posted: {{ vacancy?.created_at | date:'longDate' }}</span>
+    </div>
+
+    <!-- Skills -->
+    <div *ngIf="vacancy?.skills?.length" class="mt-2">
+      <p class="text-sm font-medium text-gray-700 mb-2">Required skills</p>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let skill of vacancy?.skills" class="badge badge-primary">
+          {{ skill }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div *ngIf="vacancy?.tags?.length" class="mt-2">
+      <p class="text-sm font-medium text-gray-700 mb-2">Tags</p>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let tech of vacancy?.tags" class="badge badge-neutral">
+          {{ tech }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action button -->
+  <div class="p-5 border-t border-gray-100 bg-gray-50">
+    <button
+      type="button"
+      class="btn btn-primary w-full"
+      (click)="redirectToVacancyPage()"
+    >
+      View Details
+      <mat-icon class="ml-1">arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>

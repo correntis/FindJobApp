@@ -1,8 +1,7 @@
 import { Vacancy, VacancyDocument } from "./../schemas/vacancy.schema";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException, ForbiddenException } from "@nestjs/common";
 import { CreateVacancyDto } from "src/dto/vacancy/create-vacancy.dto";
 import { UpdateVacancyDto } from "src/dto/vacancy/update-vacancy.dto";
-import { NotFoundException } from "src/exceptions/not-found.exception";
 import { CompaniesRepository } from "src/repositories/companies.repository";
 import { VacanciesRepository } from "src/repositories/vacancies.repository";
 import { Company } from "src/schemas/company.schema";
@@ -39,14 +38,28 @@ export class VacanciesService {
     return this.vacanciesRepository.update(vacancyId, updateVacancyDto);
   }
 
-  async archive(vacancyId: string): Promise<VacancyDocument | null> {
+  async archive(vacancyId: string, userId: string): Promise<VacancyDocument | null> {
     const vacancy = await this.vacanciesRepository.findById(vacancyId);
 
     if (!vacancy) {
-      throw new NotFoundException(Vacancy);
+      throw new NotFoundException('Vacancy not found');
     }
 
-    return this.vacanciesRepository.archive(vacancyId);
+    // Получаем компанию, которой принадлежит вакансия
+    const company = await this.companiesRepository.findById(vacancy.companyId);
+    
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+
+    // Проверяем, принадлежит ли компания текущему пользователю
+    if (company.userId !== userId) {
+      throw new ForbiddenException('You can only archive your own vacancies');
+    }
+
+    // Инвертируем текущее состояние архивации
+    const isCurrentlyArchived = vacancy.is_archived || false;
+    return this.vacanciesRepository.toggleArchive(vacancyId, !isCurrentlyArchived);
   }
 
   async getById(vacancyId: string): Promise<VacancyDocument | null> {
@@ -57,6 +70,11 @@ export class VacanciesService {
     }
 
     return vacancy;
+  }
+
+  
+  async getAllByCompany(companyId: string): Promise<VacancyDocument[]> {
+    return this.vacanciesRepository.findAllByCompany(companyId);
   }
 
   async search(filters: any): Promise<VacancyDocument[]> {
