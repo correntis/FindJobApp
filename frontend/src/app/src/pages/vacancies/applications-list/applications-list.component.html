@@ -44,10 +44,32 @@
                 <mat-icon>person</mat-icon>
               </div>
               <div>
-                <div class="font-medium">User ID: {{application.userId}}</div>
+                <div class="font-medium">{{ getFullName(application.user) }}</div>
+                <div class="text-sm text-gray-500">{{ application.user?.email || 'Email not available' }}</div>
                 <div class="text-sm text-gray-500">Applied {{application.appliedAt | date}}</div>
               </div>
             </div>
+          </td>
+        </ng-container>
+
+        <!-- Resume Column -->
+        <ng-container matColumnDef="resume">
+          <th mat-header-cell *matHeaderCellDef>Resume</th>
+          <td mat-cell *matCellDef="let application">
+            <button 
+              *ngIf="application.hasResume" 
+              mat-raised-button 
+              color="primary" 
+              class="!px-4"
+              (click)="viewResume(application.resumeId!)"
+            >
+              <mat-icon class="mr-1">description</mat-icon>
+              View Resume
+            </button>
+            <span *ngIf="!application.hasResume" class="text-gray-500">
+              <mat-icon class="align-middle mr-1 text-gray-400">info</mat-icon>
+              No resume available
+            </span>
           </td>
         </ng-container>
 
@@ -56,11 +78,23 @@
           <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let application">
             <div [ngClass]="{
-              'bg-blue-100 text-blue-800': application.status === applicationStatus.Unread,
-              'bg-green-100 text-green-800': application.status === applicationStatus.Accepted,
+              'bg-blue-100 text-blue-800': application.status === applicationStatus.Pending,
+              'bg-green-100 text-green-800': application.status === applicationStatus.Applied,
               'bg-red-100 text-red-800': application.status === applicationStatus.Rejected
             }" class="px-3 py-1 rounded-full text-sm inline-block">
               {{application.status}}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Reply Message Column -->
+        <ng-container matColumnDef="replyMessage">
+          <th mat-header-cell *matHeaderCellDef>Reply Message</th>
+          <td mat-cell *matCellDef="let application">
+            <div class="flex items-center">
+              <span class="text-gray-600 truncate max-w-xs" [title]="application.replyMessage">
+                {{ application.replyMessage || 'No message' }}
+              </span>
             </div>
           </td>
         </ng-container>
@@ -69,19 +103,32 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let application">
-            <div class="flex gap-2">
+            <div class="flex gap-2" *ngIf="application.status === applicationStatus.Pending">
               <button mat-icon-button 
-                      [disabled]="application.status === applicationStatus.Accepted"
-                      (click)="updateStatus(application.id, applicationStatus.Accepted)" 
-                      class="text-green-600">
+                      (click)="updateStatus(application.id, applicationStatus.Applied)" 
+                      class="text-green-600"
+                      matTooltip="Accept application">
                 <mat-icon>check_circle</mat-icon>
               </button>
               <button mat-icon-button 
-                      [disabled]="application.status === applicationStatus.Rejected"
                       (click)="updateStatus(application.id, applicationStatus.Rejected)" 
-                      class="text-red-600">
+                      class="text-red-600"
+                      matTooltip="Reject application">
                 <mat-icon>cancel</mat-icon>
               </button>
+            </div>
+            <div *ngIf="application.status !== applicationStatus.Pending" 
+                 [ngClass]="{
+                   'text-green-600': application.status === applicationStatus.Applied,
+                   'text-red-600': application.status === applicationStatus.Rejected
+                 }"
+                 class="flex items-center">
+              <mat-icon class="mr-2">
+                {{ application.status === applicationStatus.Applied ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+              <span class="text-sm">
+                {{ application.status === applicationStatus.Applied ? 'Accepted' : 'Rejected' }}
+              </span>
             </div>
           </td>
         </ng-container>

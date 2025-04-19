@@ -96,10 +96,6 @@ body {
     @apply bg-success-color text-white border-transparent hover:bg-green-600 focus:ring-green-500;
   }
 
-  .btn-error {
-    @apply bg-error-color text-white border-transparent hover:bg-red-600 focus:ring-red-500;
-  }
-
   .btn-sm {
     @apply px-4 py-2 text-sm;
   }
@@ -408,9 +404,30 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.4);
 }
 
-.mat-mdc-dialog-container .mdc-dialog__surface {
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 0.75rem !important;
+}
+
+.mat-mdc-dialog-surface {
   border-radius: 0.75rem !important;
+  overflow: hidden !important;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.mat-mdc-dialog-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-dialog-content {
+  color: var(--text-secondary) !important;
+}
+
+.mat-mdc-dialog-actions {
+  padding: 1rem !important;
+  border-top: 1px solid var(--border-color) !important;
+  background-color: #f9fafb !important;
 }
 
 .skeleton-loader {
@@ -458,4 +475,27 @@ html {
   overscroll-behavior: contain;
   -ms-overflow-style: none;
   scrollbar-width: thin;
+}
+
+/* Dialog styles */
+.custom-dialog-container .mat-mdc-dialog-surface {
+  border-radius: 0.75rem !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-container {
+  padding: 0 !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-actions {
+  margin: 0 !important;
+  padding: 1rem !important;
+  border-top: 1px solid var(--border-color) !important;
+  background-color: #f9fafb !important;
 }

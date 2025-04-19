@@ -163,7 +163,6 @@ export class UserProfileComponent implements OnInit {
   }
   
   connectTelegram(): void {
-    console.log(this.user);
     if (!this.user?.telegramLink) return;
     
     window.open(this.user.telegramLink, '_blank');

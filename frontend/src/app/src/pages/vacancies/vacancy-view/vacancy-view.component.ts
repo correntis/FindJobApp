@@ -1,5 +1,4 @@
 import { UserStateService } from './../../../../../core/services/user-state.service';
-// vacancy-view.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';

@@ -1,10 +1,9 @@
-import { UserDocument } from "src/schemas/user.schema";
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import { Ctx, InjectBot, On, Start, Update } from "nestjs-telegraf";
 import { UsersRepository } from "src/repositories/users.repository";
 import { Context, Markup, Telegraf } from "telegraf";
-import { Console } from "console";
 import { MessagesTemplates } from "src/telegram/message-templates";
+import { VacanciesRepository } from "src/repositories/vacancies.repository";
 
 @Update()
 @Injectable()
@@ -49,7 +48,7 @@ export class TelegramService {
 
       if (isChatExist && isChatExist.length > 0) {
         await ctx.reply(
-          "Этот чат уже используется для другого аккаунта в приложении. Вы можете продолжить работу со старым аккаунтом",
+          "This chat is already used for another account in the application. You can continue working with the old account",
           Markup.keyboard([[this.profileMessage]]).resize()
         );
 
@@ -66,7 +65,7 @@ export class TelegramService {
           });
 
           await ctx.reply(
-            "Привет! Добро пожаловать в наш сервис!\nЯ буду присылать тебе уведомления о новых событиях!😊",
+            "Hello! Welcome to our service!\nI will send you notifications about new events!😊",
             Markup.keyboard([[this.profileMessage]]).resize()
           );
 
@@ -76,7 +75,7 @@ export class TelegramService {
     }
 
     await ctx.reply(
-      "Команда /start работает только при переходе по вашей личной ссылке"
+      "The /start command only works when accessed through your personal link"
     );
   }
 
@@ -94,14 +93,13 @@ export class TelegramService {
       if (text === "📝 My Profile") {
         if (ctx.chat?.id) {
           var user = await this.getProfile(ctx.chat.id.toString());
+
           await ctx.reply(MessagesTemplates.profile(user), {
             parse_mode: "Markdown",
           });
         }
         return;
       }
-
-      console.log(ctx.message.text);
 
       await ctx.reply(
         "Я создан лишь для отправки уведомлений!\nЯ не умею распозновать команды 😓"

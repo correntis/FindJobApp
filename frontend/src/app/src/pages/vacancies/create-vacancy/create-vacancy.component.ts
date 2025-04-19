@@ -1,25 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CompaniesService } from '../../../../../core/services/companies.service';
 import { UserStateService } from '../../../../../core/services/user-state.service';
 import { VacanciesService } from '../../../../../core/services/vacancies.service';
 import { Vacancy } from '../../../../../core/models/vacancy.model';
 import { Company } from '../../../../../core/models/company.model';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-create-vacancy',
@@ -33,46 +27,34 @@ import { FormControl } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatSliderModule,
-    MatChipsModule,
-    MatTooltipModule,
     MatProgressSpinnerModule
   ],
   templateUrl: './create-vacancy.component.html',
   styleUrl: './create-vacancy.component.css'
 })
 export class CreateVacancyComponent implements OnInit {
-  vacancyForm!: FormGroup;
+  vacancyForm: FormGroup;
   company: Company | null = null;
   loading = true;
   saving = false;
   employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote'];
-  
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  isEditMode = false;
+  vacancyId: string | null = null;
   
   constructor(
     private fb: FormBuilder,
     private vacanciesService: VacanciesService,
     private companiesService: CompaniesService,
     private userStateService: UserStateService, 
-    private router: Router
-  ) { 
-    console.log('CreateVacancyComponent constructor called');
-  }
-
-  ngOnInit(): void {
-    console.log('CreateVacancyComponent ngOnInit called');
-    this.initForm();
-    this.loadCompanyData();
-  }
-
-  initForm(): void {
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.vacancyForm = this.fb.group({
       title: ['', Validators.required],
       empl_type: ['Full-time', Validators.required],
-      requirements: this.fb.array([this.fb.control('', Validators.required)]),
-      skills: this.fb.array([this.fb.control('', Validators.required)]),
-      tags: this.fb.array([this.fb.control('', Validators.required)]),
+      requirements: this.fb.array([]),
+      skills: this.fb.array([]),
+      tags: this.fb.array([]),
       salary: this.fb.group({
         min: [0, [Validators.required, Validators.min(0)]],
         max: [0, [Validators.required, Validators.min(0)]]
@@ -83,6 +65,142 @@ export class CreateVacancyComponent implements OnInit {
       }),
       languages: this.fb.array([])
     });
+  }
+
+  ngOnInit(): void {
+    this.loadCompanyData();
+    
+    this.vacancyId = this.route.snapshot.paramMap.get('vacancyId');
+    if (this.vacancyId) {
+      this.isEditMode = true;
+      this.loadVacancyData(this.vacancyId);
+    }
+  }
+
+  private loadVacancyData(vacancyId: string): void {
+    this.loading = true;
+    this.vacanciesService.getById(vacancyId).subscribe({
+      next: (vacancy) => {
+        this.patchFormWithVacancy(vacancy);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading vacancy:', error);
+        this.loading = false;
+        alert('Failed to load vacancy data. Please try again.');
+      }
+    });
+  }
+
+  private patchFormWithVacancy(vacancy: Vacancy) {
+    this.clearFormArrays();
+    
+    this.vacancyForm.patchValue({
+      title: vacancy.title,
+      empl_type: vacancy.empl_type,
+      salary: {
+        min: vacancy.salary?.min || 0,
+        max: vacancy.salary?.max || 0
+      },
+      experience_level: {
+        min: vacancy.experience_level?.min || 0,
+        max: vacancy.experience_level?.max || 0
+      }
+    });
+
+    if (vacancy.requirements) {
+      vacancy.requirements.forEach(req => {
+        this.requirementsArray.push(this.fb.control(req));
+      });
+    }
+
+    if (vacancy.skills) {
+      vacancy.skills.forEach(skill => {
+        this.skillsArray.push(this.fb.control(skill));
+      });
+    }
+
+    if (vacancy.tags) {
+      vacancy.tags.forEach(tag => {
+        this.tagsArray.push(this.fb.control(tag));
+      });
+    }
+
+    if (vacancy.languages) {
+      vacancy.languages.forEach(lang => {
+        const languageGroup = this.fb.group({
+          name: [lang.name, Validators.required],
+          level: [lang.level, Validators.required]
+        });
+        this.languagesArray.push(languageGroup);
+      });
+    }
+  }
+
+  private clearFormArrays(): void {
+    this.requirementsArray.clear();
+    this.skillsArray.clear();
+    this.tagsArray.clear();
+    this.languagesArray.clear();
+  }
+
+  get requirementsArray(): FormArray {
+    return this.vacancyForm.get('requirements') as FormArray;
+  }
+
+  get skillsArray(): FormArray {
+    return this.vacancyForm.get('skills') as FormArray;
+  }
+
+  get tagsArray(): FormArray {
+    return this.vacancyForm.get('tags') as FormArray;
+  }
+
+  get languagesArray(): FormArray {
+    return this.vacancyForm.get('languages') as FormArray;
+  }
+
+  addRequirement(): void {
+    this.requirementsArray.push(this.fb.control('', Validators.required));
+  }
+
+  addSkill(): void {
+    this.skillsArray.push(this.fb.control('', Validators.required));
+  }
+
+  addTag(): void {
+    this.tagsArray.push(this.fb.control('', Validators.required));
+  }
+
+  addLanguage(): void {
+    this.languagesArray.push(this.fb.group({
+      name: ['', Validators.required],
+      level: ['', Validators.required]
+    }));
+  }
+
+  removeRequirement(index: number): void {
+    if (this.requirementsArray.length > 1) {
+      this.requirementsArray.removeAt(index);
+    }
+  }
+
+  removeSkill(index: number): void {
+    if (this.skillsArray.length > 1) {
+      this.skillsArray.removeAt(index);
+    }
+  }
+
+  removeTag(index: number): void {
+    if (this.tagsArray.length > 1) {
+      this.tagsArray.removeAt(index);
+    }
+  }
+
+  removeLanguage(index: number): void {
+    if (this.languagesArray.length > 1) {
+      this.languagesArray.removeAt(index);
+    }
   }
 
   loadCompanyData(): void {
@@ -107,65 +225,6 @@ export class CreateVacancyComponent implements OnInit {
     });
   }
 
-  get requirementsArray(): FormArray {
-    return this.vacancyForm.get('requirements') as FormArray;
-  }
-
-  get skillsArray(): FormArray {
-    return this.vacancyForm.get('skills') as FormArray;
-  }
-
-  get tagsArray(): FormArray {
-    return this.vacancyForm.get('tags') as FormArray;
-  }
-  
-  get languagesArray(): FormArray {
-    return this.vacancyForm.get('languages') as FormArray;
-  }
-
-  addRequirement(): void {
-    this.requirementsArray.push(this.fb.control('', Validators.required));
-  }
-
-  removeRequirement(index: number): void {
-    if (this.requirementsArray.length > 1) {
-      this.requirementsArray.removeAt(index);
-    }
-  }
-
-  addSkill(): void {
-    this.skillsArray.push(this.fb.control('', Validators.required));
-  }
-
-  removeSkill(index: number): void {
-    if (this.skillsArray.length > 1) {
-      this.skillsArray.removeAt(index);
-    }
-  }
-
-  addTag(): void {
-    this.tagsArray.push(this.fb.control('', Validators.required));
-  }
-
-  removeTag(index: number): void {
-    if (this.tagsArray.length > 1) {
-      this.tagsArray.removeAt(index);
-    }
-  }
-
-  addLanguage(): void {
-    this.languagesArray.push(
-      this.fb.group({
-        name: ['', Validators.required],
-        level: ['A1', Validators.required]
-      })
-    );
-  }
-
-  removeLanguage(index: number): void {
-    this.languagesArray.removeAt(index);
-  }
-
   saveVacancy(): void {
     if (this.vacancyForm.invalid) {
       this.markFormGroupTouched(this.vacancyForm);
@@ -179,26 +238,30 @@ export class CreateVacancyComponent implements OnInit {
     }
     
     this.saving = true;
+    
+    const formValue = this.vacancyForm.value;
     const vacancyData: Partial<Vacancy> = {
-      ...this.vacancyForm.value,
+      ...formValue,
       companyId: this.company.id,
       is_archived: false,
       created_at: new Date()
     };
     
-    console.log('Sending vacancy data:', vacancyData);
 
-    this.vacanciesService.create(vacancyData).subscribe({
-      next: (createdVacancy) => {
-        console.log('Vacancy created successfully:', createdVacancy);
+    const operation = this.isEditMode && this.vacancyId
+      ? this.vacanciesService.update(this.vacancyId, vacancyData)
+      : this.vacanciesService.create(vacancyData);
+
+    operation.subscribe({
+      next: (vacancy) => {
         this.saving = false;
-        alert('Vacancy created successfully!');
+        alert(`Vacancy ${this.isEditMode ? 'updated' : 'created'} successfully!`);
         this.router.navigate(['/profile/company']);
       },
       error: (error) => {
-        console.error('Error creating vacancy:', error);
+        console.error('Error saving vacancy:', error);
         this.saving = false;
-        alert(`Failed to create vacancy: ${error.message || 'Unknown error'}`);
+        alert(`Failed to ${this.isEditMode ? 'update' : 'create'} vacancy: ${error.message || 'Unknown error'}`);
       }
     });
   }
@@ -209,14 +272,6 @@ export class CreateVacancyComponent implements OnInit {
 
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
-      } else if (control instanceof FormArray) {
-        control.controls.forEach(arrayControl => {
-          if (arrayControl instanceof FormGroup) {
-            this.markFormGroupTouched(arrayControl);
-          } else {
-            arrayControl.markAsTouched();
-          }
-        });
       }
     });
   }

@@ -6,11 +6,13 @@ import { CompanyViewComponent } from './src/pages/companies/company-view/company
 import { UserProfileComponent } from './src/pages/profile/user-profile/user-profile.component';
 import { CompanyProfileComponent } from './src/pages/profile/company-profile/company-profile.component';
 import { ResumeEditComponent } from './src/pages/profile/resume-edit/resume-edit.component';
+import { ResumeViewComponent } from './src/pages/profile/resume-view/resume-view.component';
 import { authGuard } from '../core/guards/auth.guard';
 import { roleGuard } from '../core/guards/role.guard';
 import { UserRoles } from '../core/enums/user-roles.enum';
 import { CreateVacancyComponent } from './src/pages/vacancies/create-vacancy/create-vacancy.component';
 import { ApplicationsListComponent } from './src/pages/vacancies/applications-list/applications-list.component';
+import { UserApplicationsComponent } from './src/pages/profile/user-applications/user-applications.component';
 
 export const routes: Routes = [
   { path: 'sign-in', component: AuthPageComponent },
@@ -42,6 +44,12 @@ export const routes: Routes = [
     data: { roles: [UserRoles.User] }
   },
   { 
+    path: 'resume/:resumeId', 
+    component: ResumeViewComponent,
+    canActivate: [authGuard],
+    data: { roles: [UserRoles.User, UserRoles.Company] }
+  },
+  { 
     path: 'vacancies/create', 
     component: CreateVacancyComponent,
     canActivate: [authGuard, roleGuard],
@@ -58,6 +66,12 @@ export const routes: Routes = [
     component: ApplicationsListComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: [UserRoles.Company] }
+  },
+  { 
+    path: 'profile/applications', 
+    component: UserApplicationsComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: [UserRoles.User] }
   },
   { path: '**', redirectTo: 'vacancies'}
 ];

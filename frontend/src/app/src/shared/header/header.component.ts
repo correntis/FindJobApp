@@ -84,17 +84,22 @@ export class HeaderComponent implements OnInit {
     const routes: Route[] = [
       {
         path: 'vacancies',
-        name: 'Vacancies',
+        name: 'Vacancy',
         condition: true,
       },
       {
+        path: 'profile/applications',
+        name: 'My Applications',
+        condition: this.authHelper.isUser(),
+      },
+      {
         path: 'profile/user',
-        name: 'User Profile',
+        name: 'Profile',
         condition: this.authHelper.isUser(),
       },
       {
         path: 'profile/company',
-        name: 'Company Profile',
+        name: 'Company profile',
         condition: this.authHelper.isCompany(),
       },
     ];

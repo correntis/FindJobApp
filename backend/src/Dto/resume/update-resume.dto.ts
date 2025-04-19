@@ -5,47 +5,47 @@ import { ExperienceDto } from "./experience.dto";
 export class UpdateResumeDto {
   @ApiProperty({
     example: "Backend Developer",
-    description: "Название резюме",
+    description: "Resume title",
     required: false,
   })
   title?: string;
 
   @ApiProperty({
-    example: "Опытный разработчик с 5-летним стажем в веб-разработке.",
-    description: "Краткое описание (саммари)",
+    example: "Experienced developer with 5 years of web development experience.",
+    description: "Brief description (summary)",
     required: false,
   })
   summary?: string;
 
   @ApiProperty({
-    example: ["МГТУ им. Баумана", "СПбГУ"],
-    description: "Список образовательных учреждений",
+    example: ["MIT", "Stanford University"],
+    description: "List of educational institutions",
     required: false,
   })
   educations?: string[];
 
   @ApiProperty({
     type: [ExperienceDto],
-    description: "Опыт работы",
+    description: "Work experience",
   })
   experiences: ExperienceDto[];
 
   @ApiProperty({
     example: ["Node.js", "NestJS", "MongoDB"],
-    description: "Навыки",
+    description: "Skills",
     required: false,
   })
   skills?: string[];
 
   @ApiProperty({
     example: ["backend", "typescript"],
-    description: "Теги",
+    description: "Tags",
     required: false,
   })
   tags?: string[];
 
   @ApiProperty({
-    description: "Список языков и уровней владения",
+    description: "List of languages and proficiency levels",
     type: [LanguageDto],
   })
   languages?: LanguageDto[];

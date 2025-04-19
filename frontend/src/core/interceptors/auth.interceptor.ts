@@ -18,8 +18,6 @@ export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
-  console.log('Auth Interceptor triggered');
-
   const localStorageService = inject(LocalStorageService);
   const userStateService = inject(UserStateService);
   const authService = inject(AuthService);
@@ -83,7 +81,6 @@ const handleTokenRefresh = (
 
   return authService.refreshToken(authUser.refreshToken).pipe(
     switchMap((result) => {
-      console.log('REFRESH');
       if (result.accessToken) {
         authUser.accessToken = result.accessToken;
         const updatedUser: AuthUser = {

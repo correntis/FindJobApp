@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="flex justify-center items-center min-h-[60vh]">
     <div class="flex flex-col items-center">
       <mat-spinner diameter="50" class="mb-4"></mat-spinner>
-      <p class="text-gray-500">Загрузка резюме...</p>
+      <p class="text-gray-500">Loading resume...</p>
     </div>
   </div>
 
@@ -14,54 +14,54 @@
             <mat-icon class="text-primary">description</mat-icon>
           </div>
         </div>
-        <h2 class="custom-card-title">{{ isCreate ? 'Создание резюме' : 'Редактирование резюме' }}</h2>
+        <h2 class="custom-card-title">{{ isCreate ? 'Create Resume' : 'Edit Resume' }}</h2>
       </div>
       <div class="custom-card-content">
         <form [formGroup]="resumeForm" (ngSubmit)="saveResume()" class="space-y-8">
           
-          <!-- Основная информация -->
+          <!-- Basic Information -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <h2 class="text-lg font-medium mb-4 flex items-center text-gray-800">
               <mat-icon class="mr-2 text-primary">info</mat-icon>
-              Основная информация
+              Basic Information
             </h2>
             <div class="grid grid-cols-1 gap-5">
               <div class="custom-form-field">
-                <label class="custom-label" for="title">Заголовок резюме</label>
+                <label class="custom-label" for="title">Resume Title</label>
                 <input 
                   id="title"
                   class="custom-input" 
                   [ngClass]="{'error': resumeForm.get('title')?.invalid && resumeForm.get('title')?.touched}" 
                   type="text" 
                   formControlName="title" 
-                  placeholder="Например: Разработчик JavaScript">
+                  placeholder="e.g. JavaScript Developer">
                 <p class="custom-error" *ngIf="resumeForm.get('title')?.invalid && resumeForm.get('title')?.touched">
-                  Заголовок обязателен
+                  Title is required
                 </p>
               </div>
 
               <div class="custom-form-field">
-                <label class="custom-label" for="summary">О себе</label>
+                <label class="custom-label" for="summary">About Me</label>
                 <textarea 
                   id="summary"
                   class="custom-input min-h-[120px]" 
                   [ngClass]="{'error': resumeForm.get('summary')?.invalid && resumeForm.get('summary')?.touched}" 
                   formControlName="summary" 
                   rows="4" 
-                  placeholder="Расскажите о себе и своем опыте"></textarea>
+                  placeholder="Tell about yourself and your experience"></textarea>
                 <p class="custom-error" *ngIf="resumeForm.get('summary')?.invalid && resumeForm.get('summary')?.touched">
-                  Поле обязательно
+                  This field is required
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- Образование -->
+          <!-- Education -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-lg font-medium flex items-center text-gray-800">
                 <mat-icon class="mr-2 text-primary">school</mat-icon>
-                Образование
+                Education
               </h2>
               <button 
                 type="button" 
@@ -72,10 +72,10 @@
             </div>
             
             <div *ngIf="educationsArray.controls.length === 0" class="text-gray-500 text-center py-6 border border-dashed border-gray-300 rounded-lg">
-              <p>Нет данных об образовании</p>
+              <p>No education information</p>
               <button type="button" class="btn btn-secondary btn-sm mt-3" (click)="addEducation()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Добавить образование
+                Add Education
               </button>
             </div>
             
@@ -85,7 +85,7 @@
                   <input 
                     class="custom-input" 
                     [formControlName]="i" 
-                    placeholder="Например: МГУ, Факультет информатики, 2018-2022">
+                    placeholder="e.g. MIT, Computer Science, 2018-2022">
                 </div>
                 <button 
                   type="button" 
@@ -97,12 +97,12 @@
             </div>
           </div>
 
-          <!-- Опыт работы -->
+          <!-- Work Experience -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-lg font-medium flex items-center text-gray-800">
                 <mat-icon class="mr-2 text-primary">work</mat-icon>
-                Опыт работы
+                Work Experience
               </h2>
               <button 
                 type="button" 
@@ -113,10 +113,10 @@
             </div>
             
             <div *ngIf="experiencesArray.controls.length === 0" class="text-gray-500 text-center py-6 border border-dashed border-gray-300 rounded-lg">
-              <p>Нет данных об опыте работы</p>
+              <p>No work experience</p>
               <button type="button" class="btn btn-secondary btn-sm mt-3" (click)="addExperience()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Добавить опыт работы
+                Add Work Experience
               </button>
             </div>
             
@@ -124,14 +124,14 @@
               <div *ngFor="let experience of experiencesArray.controls; let i = index" [formGroupName]="i" class="flex items-start gap-2 bg-gray-50 p-3 rounded-lg">
                 <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="custom-form-field mb-0">
-                    <label class="custom-label">Должность</label>
+                    <label class="custom-label">Job Title</label>
                     <input 
                       class="custom-input" 
                       formControlName="jobTitle" 
-                      placeholder="Например: Frontend-разработчик">
+                      placeholder="e.g. Frontend-разработчик">
                   </div>
                   <div class="custom-form-field mb-0">
-                    <label class="custom-label">Стаж (лет)</label>
+                    <label class="custom-label">Years</label>
                     <input 
                       class="custom-input" 
                       type="number" 
@@ -149,15 +149,15 @@
             </div>
           </div>
 
-          <!-- Навыки -->
+          <!-- Skills -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <h2 class="text-lg font-medium mb-4 flex items-center text-gray-800">
               <mat-icon class="mr-2 text-primary">build</mat-icon>
-              Навыки
+              Skills
             </h2>
             
             <div class="custom-form-field mb-0">
-              <label class="custom-label">Добавить навык</label>
+              <label class="custom-label">Add Skill</label>
               <div formArrayName="skills" class="border border-gray-300 rounded-lg p-3 bg-gray-50">
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span *ngFor="let skill of skillsArray.controls; let i = index" 
@@ -175,7 +175,7 @@
                 <div class="flex">
                   <input 
                     class="custom-input mb-0" 
-                    placeholder="Новый навык..."
+                    placeholder="New skill..."
                     [matChipInputFor]="chipGrid"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     (matChipInputTokenEnd)="addSkill($event)">
@@ -185,12 +185,12 @@
             </div>
           </div>
 
-          <!-- Языки -->
+          <!-- Languages -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-lg font-medium flex items-center text-gray-800">
                 <mat-icon class="mr-2 text-primary">translate</mat-icon>
-                Языки
+                Languages
               </h2>
               <button 
                 type="button" 
@@ -201,10 +201,10 @@
             </div>
             
             <div *ngIf="languagesArray.controls.length === 0" class="text-gray-500 text-center py-6 border border-dashed border-gray-300 rounded-lg">
-              <p>Нет данных о знании языков</p>
+              <p>No language data available</p>
               <button type="button" class="btn btn-secondary btn-sm mt-3" (click)="addLanguage()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Добавить язык
+                Add Language
               </button>
             </div>
             
@@ -212,22 +212,22 @@
               <div *ngFor="let language of languagesArray.controls; let i = index" [formGroupName]="i" class="flex items-start gap-2 bg-gray-50 p-3 rounded-lg">
                 <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="custom-form-field mb-0">
-                    <label class="custom-label">Язык</label>
+                    <label class="custom-label">Language</label>
                     <input 
                       class="custom-input" 
                       formControlName="name" 
-                      placeholder="Например: Английский">
+                      placeholder="e.g. English">
                   </div>
                   <div class="custom-form-field mb-0">
-                    <label class="custom-label">Уровень</label>
+                    <label class="custom-label">Level</label>
                     <select class="custom-select" formControlName="level">
-                      <option value="">Выберите уровень</option>
-                      <option value="A1">Начальный (A1)</option>
-                      <option value="A2">Элементарный (A2)</option>
-                      <option value="B1">Средний (B1)</option>
-                      <option value="B2">Выше среднего (B2)</option>
-                      <option value="C1">Продвинутый (C1)</option>
-                      <option value="C2">Свободное владение (C2)</option>
+                      <option value="">Select level</option>
+                      <option value="A1">Beginner (A1)</option>
+                      <option value="A2">Elementary (A2)</option>
+                      <option value="B1">Intermediate (B1)</option>
+                      <option value="B2">Upper Intermediate (B2)</option>
+                      <option value="C1">Advanced (C1)</option>
+                      <option value="C2">Proficient (C2)</option>
                     </select>
                   </div>
                 </div>
@@ -241,15 +241,15 @@
             </div>
           </div>
 
-          <!-- Теги -->
+          <!-- Tags -->
           <div class="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
             <h2 class="text-lg font-medium mb-4 flex items-center text-gray-800">
               <mat-icon class="mr-2 text-primary">local_offer</mat-icon>
-              Теги
+              Tags
             </h2>
             
             <div class="custom-form-field mb-0">
-              <label class="custom-label">Добавить тег</label>
+              <label class="custom-label">Add Tag</label>
               <div formArrayName="tags" class="border border-gray-300 rounded-lg p-3 bg-gray-50">
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span *ngFor="let tag of tagsArray.controls; let i = index" 
@@ -267,7 +267,7 @@
                 <div class="flex">
                   <input 
                     class="custom-input mb-0" 
-                    placeholder="Новый тег..."
+                    placeholder="New tag..."
                     [matChipInputFor]="tagChipGrid"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     (matChipInputTokenEnd)="addTag($event)">
@@ -279,14 +279,14 @@
         </form>
       </div>
       <div class="custom-card-footer">
-        <button type="button" class="btn btn-secondary mr-3" (click)="cancel()">Отмена</button>
+        <button type="button" class="btn btn-secondary mr-3" (click)="cancel()">Cancel</button>
         <button 
           type="button" 
           class="btn btn-primary flex items-center" 
           [disabled]="resumeForm.invalid || saving" 
           (click)="saveResume()">
           <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
-          <span>{{ isCreate ? 'Создать' : 'Сохранить' }}</span>
+          <span>{{ isCreate ? 'Create' : 'Save' }}</span>
         </button>
       </div>
     </div>

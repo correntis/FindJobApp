@@ -32,6 +32,10 @@ export class VacanciesRepository {
     return this.vacancyModel.find({ companyId }).exec();
   }
 
+  async findAllByUser(userId: string): Promise<VacancyDocument[]> {
+    return this.vacancyModel.find({ userId }).exec();
+  }
+
   async archive(vacancyId: string): Promise<VacancyDocument | null> {
     return this.vacancyModel.findByIdAndUpdate(
       vacancyId,

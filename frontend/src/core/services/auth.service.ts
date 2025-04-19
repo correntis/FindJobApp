@@ -29,8 +29,6 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    // В будущем можно добавить запрос на сервер для выхода
-    // сейчас просто возвращаем Observable
     return of(void 0);
   }
 }
