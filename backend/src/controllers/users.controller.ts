@@ -23,9 +23,14 @@ import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { RolesGuard } from "src/guards/roles-auth.guard";
 
 @Controller("users")
-@UseGuards(JwtAuthGuard, RolesGuard)
+// @UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+    @Get()
+  test( ): string {
+    return 'OKEKEKEKEKKE';
+  }
 
   @Get(":userId")
   @Roles(UserRole.User, UserRole.Company)
