@@ -22,17 +22,14 @@ export class TelegramService {
   async sendNotificationToUser(userId: string, message: string) {
     const user = await this.usersRepository.findById(userId);
 
-    if (user?.telegram) {
-      try {
-        // Отправка уведомления пользователю по его Telegram ID
-        await this.bot.telegram.sendMessage(user.telegram, message);
-      } catch (error) {
-        console.error("Ошибка при отправке уведомления:", error);
-      }
-    } else {
-      console.log(
-        `Пользователь с ID ${userId} не найден или не привязан к Telegram`
-      );
+    if (!user?.telegram) {
+      return;
+    }
+
+    try {
+      await this.bot.telegram.sendMessage(user.telegram, message);
+    } catch (error) {
+      console.error("Ошибка при отправке уведомления:", error);
     }
   }
 

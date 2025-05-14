@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="flex justify-center items-center min-h-[60vh]">
     <div class="flex flex-col items-center">
       <mat-spinner diameter="50" class="mb-4"></mat-spinner>
-      <p class="text-gray-500">Loading profile...</p>
+      <p class="text-gray-500">Загрузка профиля...</p>
     </div>
   </div>
 
@@ -11,7 +11,7 @@
     <div class="md:col-span-1">
       <div class="custom-card">
         <div class="custom-card-header">
-          <h2 class="custom-card-title">Personal Information</h2>
+          <h2 class="custom-card-title">Личная информация</h2>
           <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
             (click)="toggleEditMode()">
             <mat-icon class="text-lg">{{ editMode ? 'close' : 'edit' }}</mat-icon>
@@ -20,29 +20,29 @@
         <div class="custom-card-content">
           <form [formGroup]="userForm" class="space-y-5">
             <div class="custom-form-field">
-              <label class="custom-label" for="firstName">First Name</label>
+              <label class="custom-label" for="firstName">Имя</label>
               <input id="firstName" class="custom-input"
                 [ngClass]="{'error': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}"
-                type="text" formControlName="firstName" [readonly]="!editMode" placeholder="Your first name">
+                type="text" formControlName="firstName" [readonly]="!editMode" placeholder="Ваше имя">
               <p class="custom-error" *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched">
-                First name is required
+                Имя обязательно
               </p>
             </div>
 
             <div class="custom-form-field">
-              <label class="custom-label" for="lastName">Last Name</label>
+              <label class="custom-label" for="lastName">Фамилия</label>
               <input id="lastName" class="custom-input"
                 [ngClass]="{'error': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}"
-                type="text" formControlName="lastName" [readonly]="!editMode" placeholder="Your last name">
+                type="text" formControlName="lastName" [readonly]="!editMode" placeholder="Ваша фамилия">
               <p class="custom-error" *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched">
-                Last name is required
+                Фамилия обязательна
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="email">Email</label>
               <input id="email" class="custom-input bg-gray-50" type="email" formControlName="email" readonly
-                placeholder="Your email">
+                placeholder="Ваш email">
             </div>
 
             <div class="custom-form-field">
@@ -51,25 +51,25 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div class="flex items-center">
                     <mat-icon class="text-blue-500 mr-2">telegram</mat-icon>
-                    <span class="text-gray-700 font-medium">{{ telegramConnected ? 'Connected' : 'Not connected' }}</span>
+                    <span class="text-gray-700 font-medium">{{ telegramConnected ? 'Подключен' : 'Не подключен' }}</span>
                   </div>
                   <div class="w-full sm:w-auto">
                     <button *ngIf="!telegramConnected" 
                       class="btn btn-sm btn-primary flex items-center justify-center w-full" 
                       (click)="connectTelegram()">
                       <mat-icon class="text-sm mr-1">link</mat-icon>
-                      Connect
+                      Подключить
                     </button>
                     <div *ngIf="telegramConnected" class="grid grid-cols-2 gap-2">
                       <button class="btn btn-sm btn-primary flex items-center justify-center" 
                         (click)="openTelegramChat()">
                         <mat-icon class="text-sm mr-1">chat</mat-icon>
-                        Open Chat
+                        Открыть чат
                       </button>
                       <button class="btn btn-sm btn-secondary flex items-center justify-center" 
                         (click)="disconnectTelegram()">
                         <mat-icon class="text-sm mr-1">link_off</mat-icon>
-                        Disconnect
+                        Отключить
                       </button>
                     </div>
                   </div>
@@ -79,11 +79,11 @@
           </form>
         </div>
         <div *ngIf="editMode" class="custom-card-footer">
-          <button class="btn btn-secondary mr-3" (click)="toggleEditMode()">Cancel</button>
+          <button class="btn btn-secondary mr-3" (click)="toggleEditMode()">Отмена</button>
           <button class="btn btn-primary flex items-center" [disabled]="userForm.invalid || saving"
             (click)="saveUserData()">
             <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
-            <span>Save</span>
+            <span>Сохранить</span>
           </button>
         </div>
       </div>
@@ -93,17 +93,17 @@
     <div class="md:col-span-2">
       <div class="custom-card h-full flex flex-col">
         <div class="custom-card-header">
-          <h2 class="custom-card-title">Resume</h2>
+          <h2 class="custom-card-title">Резюме</h2>
         </div>
         <div class="custom-card-content flex-grow">
           <div *ngIf="!resume" class="flex flex-col items-center justify-center py-16 text-center">
             <div class="bg-gray-100 rounded-full p-6 mb-6">
               <mat-icon class="text-5xl text-gray-400">description</mat-icon>
             </div>
-            <p class="text-gray-500 mb-6 max-w-md">You don't have a resume yet. Create one to increase your chances of finding a suitable job!</p>
+            <p class="text-gray-500 mb-6 max-w-md">У вас еще нет резюме. Создайте его, чтобы увеличить шансы найти подходящую работу!</p>
             <button class="btn btn-primary flex items-center" (click)="createResume()">
               <mat-icon class="mr-2">add</mat-icon>
-              <span>Create Resume</span>
+              <span>Создать резюме</span>
             </button>
           </div>
 
@@ -119,7 +119,7 @@
             <div class="resume-section bg-gray-50 p-5 rounded-lg">
               <h3 class="text-lg font-medium mb-3 text-gray-800 flex items-center">
                 <mat-icon class="mr-2 text-gray-500">person</mat-icon>
-                About Me
+                Обо мне
               </h3>
               <p class="text-gray-700 leading-relaxed">{{ resume.summary }}</p>
             </div>
@@ -127,7 +127,7 @@
             <div class="resume-section bg-gray-50 p-5 rounded-lg" *ngIf="resume.educations && resume.educations.length">
               <h3 class="text-lg font-medium mb-3 text-gray-800 flex items-center">
                 <mat-icon class="mr-2 text-gray-500">school</mat-icon>
-                Education
+                Образование
               </h3>
               <ul class="space-y-2">
                 <li *ngFor="let education of resume.educations" class="flex items-start">
@@ -141,14 +141,14 @@
               *ngIf="resume.experiences && resume.experiences.length">
               <h3 class="text-lg font-medium mb-3 text-gray-800 flex items-center">
                 <mat-icon class="mr-2 text-gray-500">work</mat-icon>
-                Work Experience
+                Опыт работы
               </h3>
               <div class="space-y-4">
                 <div *ngFor="let experience of resume.experiences" class="border-l-2 border-primary pl-4 py-1">
                   <div class="font-medium text-gray-800">{{ experience.jobTitle }}</div>
                   <div class="text-sm text-gray-600 flex items-center mt-1">
                     <mat-icon class="text-sm mr-1 text-gray-400">schedule</mat-icon>
-                    <span>{{ experience.years }} {{ (+experience.years) === 1 ? 'year' : 'years' }}</span>
+                    <span>{{ experience.years }} {{ (+experience.years) === 1 ? 'год' : 'лет' }}</span>
                   </div>
                 </div>
               </div>
@@ -157,7 +157,7 @@
             <div class="resume-section bg-gray-50 p-5 rounded-lg" *ngIf="resume.skills && resume.skills.length">
               <h3 class="text-lg font-medium mb-3 text-gray-800 flex items-center">
                 <mat-icon class="mr-2 text-gray-500">build</mat-icon>
-                Skills
+                Навыки
               </h3>
               <div class="flex flex-wrap gap-2">
                 <span *ngFor="let skill of resume.skills" class="badge badge-primary">
@@ -169,7 +169,7 @@
             <div class="resume-section bg-gray-50 p-5 rounded-lg" *ngIf="resume.languages && resume.languages.length">
               <h3 class="text-lg font-medium mb-3 text-gray-800 flex items-center">
                 <mat-icon class="mr-2 text-gray-500">translate</mat-icon>
-                Languages
+                Языки
               </h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div *ngFor="let language of resume.languages"
@@ -189,7 +189,7 @@
         </div>
         <div *ngIf="resume" class="custom-card-footer">
           <button class="btn btn-primary" (click)="editResume()">
-            Edit Resume
+            Редактировать резюме
           </button>
         </div>
       </div>

@@ -88,7 +88,6 @@ export class VacanciesController {
     @Param("vacancyId") vacancyId: string,
     @Request() req: any
   ) {
-    // Получаем ID текущего пользователя из токена
     const userId = req.user.id;
     return this.vacanciesService.archive(vacancyId, userId);
   }

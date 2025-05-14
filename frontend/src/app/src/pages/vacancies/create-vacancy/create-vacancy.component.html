@@ -9,27 +9,27 @@
   <div *ngIf="!loading && company">
     <div class="custom-card">
       <div class="custom-card-header">
-        <h2 class="custom-card-title">{{ isEditMode ? 'Edit Vacancy' : 'Create New Vacancy' }}</h2>
+        <h2 class="custom-card-title">{{ isEditMode ? 'Редактировать вакансию' : 'Создать вакансию' }}</h2>
       </div>
       <div class="custom-card-content">
         <form [formGroup]="vacancyForm" (ngSubmit)="saveVacancy()" class="space-y-6">
           <!-- Basic Information -->
           <div class="form-section">
-            <h3 class="text-lg font-medium mb-4 text-gray-800">Basic Information</h3>
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Основная информация</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="custom-form-field md:col-span-2">
-                <label class="custom-label" for="title">Vacancy Title</label>
+                <label class="custom-label" for="title">Название вакансии</label>
                 <input id="title" class="custom-input" 
                   [ngClass]="{'error': vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched}"
-                  type="text" formControlName="title" placeholder="e.g. Senior Software Engineer">
+                  type="text" formControlName="title" placeholder="например, Старший разработчик ПО">
                 <p class="custom-error" *ngIf="vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched">
-                  Vacancy title is required
+                  Название вакансии обязательно
                 </p>
               </div>
 
               <div class="custom-form-field">
-                <label class="custom-label" for="empl_type">Employment Type</label>
+                <label class="custom-label" for="empl_type">Тип занятости</label>
                 <select id="empl_type" class="custom-select" formControlName="empl_type">
                   <option *ngFor="let type of employmentTypes" [value]="type">{{ type }}</option>
                 </select>
@@ -39,52 +39,52 @@
 
           <!-- Salary and Experience -->
           <div class="form-section">
-            <h3 class="text-lg font-medium mb-4 text-gray-800">Salary and Experience</h3>
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Зарплата и опыт</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div formGroupName="salary">
-                <h4 class="text-md font-medium mb-2 text-gray-700">Salary Range ($)</h4>
+                <h4 class="text-md font-medium mb-2 text-gray-700">Диапазон зарплаты ($)</h4>
                 <div class="grid grid-cols-2 gap-4">
                   <div class="custom-form-field">
-                    <label class="custom-label" for="salary-min">Minimum</label>
+                    <label class="custom-label" for="salary-min">Минимум</label>
                     <input id="salary-min" class="custom-input" 
                       [ngClass]="{'error': vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched}"
                       type="number" formControlName="min" min="0">
                     <p class="custom-error" *ngIf="vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched">
-                      Valid minimum salary is required
+                      Введите корректную минимальную зарплату
                     </p>
                   </div>
                   <div class="custom-form-field">
-                    <label class="custom-label" for="salary-max">Maximum</label>
+                    <label class="custom-label" for="salary-max">Максимум</label>
                     <input id="salary-max" class="custom-input" 
                       [ngClass]="{'error': vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched}"
                       type="number" formControlName="max" min="0">
                     <p class="custom-error" *ngIf="vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched">
-                      Valid maximum salary is required
+                      Введите корректную максимальную зарплату
                     </p>
                   </div>
                 </div>
               </div>
 
               <div formGroupName="experience_level">
-                <h4 class="text-md font-medium mb-2 text-gray-700">Experience Level (years)</h4>
+                <h4 class="text-md font-medium mb-2 text-gray-700">Требуемый опыт (лет)</h4>
                 <div class="grid grid-cols-2 gap-4">
                   <div class="custom-form-field">
-                    <label class="custom-label" for="exp-min">Minimum</label>
+                    <label class="custom-label" for="exp-min">Минимум</label>
                     <input id="exp-min" class="custom-input" 
                       [ngClass]="{'error': vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched}"
                       type="number" formControlName="min" min="0">
                     <p class="custom-error" *ngIf="vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched">
-                      Valid minimum experience is required
+                      Введите корректный минимальный опыт
                     </p>
                   </div>
                   <div class="custom-form-field">
-                    <label class="custom-label" for="exp-max">Maximum</label>
+                    <label class="custom-label" for="exp-max">Максимум</label>
                     <input id="exp-max" class="custom-input" 
                       [ngClass]="{'error': vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched}"
                       type="number" formControlName="max" min="0">
                     <p class="custom-error" *ngIf="vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched">
-                      Valid maximum experience is required
+                      Введите корректный максимальный опыт
                     </p>
                   </div>
                 </div>
@@ -95,10 +95,10 @@
           <!-- Requirements -->
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-medium text-gray-800">Requirements</h3>
+              <h3 class="text-lg font-medium text-gray-800">Требования</h3>
               <button type="button" class="btn btn-sm btn-primary" (click)="addRequirement()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Add Requirement
+                Добавить требование
               </button>
             </div>
             
@@ -108,9 +108,9 @@
                   <input class="custom-input" 
                     [formControlName]="i"
                     [ngClass]="{'error': requirement.invalid && requirement.touched}"
-                    placeholder="Enter requirement">
+                    placeholder="Введите требование">
                   <p class="custom-error" *ngIf="requirement.invalid && requirement.touched">
-                    Requirement is required
+                    Требование обязательно
                   </p>
                 </div>
                 <button type="button" class="btn btn-sm btn-error" (click)="removeRequirement(i)" 
@@ -124,10 +124,10 @@
           <!-- Skills -->
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-medium text-gray-800">Required Skills</h3>
+              <h3 class="text-lg font-medium text-gray-800">Необходимые навыки</h3>
               <button type="button" class="btn btn-sm btn-primary" (click)="addSkill()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Add Skill
+                Добавить навык
               </button>
             </div>
             
@@ -137,9 +137,9 @@
                   <input class="custom-input" 
                     [formControlName]="i"
                     [ngClass]="{'error': skill.invalid && skill.touched}"
-                    placeholder="Enter skill">
+                    placeholder="Введите навык">
                   <p class="custom-error" *ngIf="skill.invalid && skill.touched">
-                    Skill is required
+                    Навык обязателен
                   </p>
                 </div>
                 <button type="button" class="btn btn-sm btn-error" (click)="removeSkill(i)" 
@@ -153,10 +153,10 @@
           <!-- Tags -->
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-medium text-gray-800">Tags</h3>
+              <h3 class="text-lg font-medium text-gray-800">Теги</h3>
               <button type="button" class="btn btn-sm btn-primary" (click)="addTag()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Add Tag
+                Добавить тег
               </button>
             </div>
             
@@ -166,9 +166,9 @@
                   <input class="custom-input" 
                     [formControlName]="i"
                     [ngClass]="{'error': tag.invalid && tag.touched}"
-                    placeholder="Enter tag">
+                    placeholder="Введите тег">
                   <p class="custom-error" *ngIf="tag.invalid && tag.touched">
-                    Tag is required
+                    Тег обязателен
                   </p>
                 </div>
                 <button type="button" class="btn btn-sm btn-error" (click)="removeTag(i)" 
@@ -182,10 +182,10 @@
           <!-- Languages -->
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-medium text-gray-800">Language Requirements</h3>
+              <h3 class="text-lg font-medium text-gray-800">Требуемые языки</h3>
               <button type="button" class="btn btn-sm btn-primary" (click)="addLanguage()">
                 <mat-icon class="mr-1">add</mat-icon>
-                Add Language
+                Добавить язык
               </button>
             </div>
             
@@ -193,25 +193,25 @@
               <div *ngFor="let language of languagesArray.controls; let i=index" [formGroupName]="i" class="bg-gray-50 p-3 rounded-lg">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="custom-form-field">
-                    <label class="custom-label">Language</label>
+                    <label class="custom-label">Язык</label>
                     <input class="custom-input" 
                       [ngClass]="{'error': language.get('name')?.invalid && language.get('name')?.touched}"
-                      formControlName="name" placeholder="e.g. English">
+                      formControlName="name" placeholder="например, Английский">
                     <p class="custom-error" *ngIf="language.get('name')?.invalid && language.get('name')?.touched">
-                      Language name is required
+                      Название языка обязательно
                     </p>
                   </div>
                   <div class="custom-form-field">
-                    <label class="custom-label">Level</label>
+                    <label class="custom-label">Уровень</label>
                     <select class="custom-select" formControlName="level">
-                      <option value="">Select level</option>
+                      <option value="">Выберите уровень</option>
                       <option value="A1">A1</option>
                       <option value="A2">A2</option>
                       <option value="B1">B1</option>
                       <option value="B2">B2</option>
                       <option value="C1">C1</option>
                       <option value="C2">C2</option>
-                      <option value="Native">Native</option>
+                      <option value="Native">Носитель</option>
                     </select>
                   </div>
                 </div>
@@ -219,7 +219,7 @@
                   <button type="button" class="btn btn-sm btn-error" (click)="removeLanguage(i)" 
                     *ngIf="languagesArray.length > 1">
                     <mat-icon>delete</mat-icon>
-                    Remove Language
+                    Удалить язык
                   </button>
                 </div>
               </div>
@@ -228,10 +228,10 @@
 
           <!-- Form Actions -->
           <div class="flex justify-end gap-4">
-            <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="cancel()">Отмена</button>
             <button type="submit" class="btn btn-primary" [disabled]="vacancyForm.invalid || saving">
               <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
-              {{ isEditMode ? 'Update Vacancy' : 'Create Vacancy' }}
+              {{ isEditMode ? 'Обновить вакансию' : 'Создать вакансию' }}
             </button>
           </div>
         </form>

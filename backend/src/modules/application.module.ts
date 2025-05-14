@@ -8,6 +8,8 @@ import { Vacancy, VacancySchema } from "src/schemas/vacancy.schema";
 import { User, UserSchema } from "src/schemas/user.schema";
 import { ApplicationsService } from "src/services/application.service";
 import { ApplicationsController } from "src/controllers/applications.controller";
+import { TelegramService } from "src/services/telegram.service";
+import { TelegramModule } from "./telegram.module";
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { ApplicationsController } from "src/controllers/applications.controller"
       { name: Vacancy.name, schema: VacancySchema },
       { name: User.name, schema: UserSchema },
     ]),
+    TelegramModule,
   ],
   controllers: [ApplicationsController],
   providers: [

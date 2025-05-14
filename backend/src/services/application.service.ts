@@ -11,13 +11,16 @@ import {
 } from "src/schemas/application.schema";
 import { User } from "src/schemas/user.schema";
 import { Vacancy } from "src/schemas/vacancy.schema";
+import { TelegramService } from "./telegram.service";
+import { ApplicationStatus } from "src/enums/applications-status.enum";
 
 @Injectable()
 export class ApplicationsService {
   constructor(
     private readonly applicationsRepository: ApplicationsRepository,
     private readonly usersRepository: UsersRepository,
-    private readonly vacanciesRepository: VacanciesRepository
+    private readonly vacanciesRepository: VacanciesRepository,
+    private readonly notifiactionService: TelegramService
   ) {}
 
   async create(
@@ -46,9 +49,28 @@ export class ApplicationsService {
   ): Promise<ApplicationDocument | null> {
     const application =
       await this.applicationsRepository.findById(applicationId);
+
     if (!application) {
       throw new NotFoundException(Application);
     }
+
+    var vacancy = await this.vacanciesRepository.findById(
+      application.vacancyId
+    );
+
+    if (!vacancy) {
+      throw new NotFoundException(Vacancy);
+    }
+
+    await this.notifiactionService.sendNotificationToUser(
+      application.userId,
+      `✨ *Update on your application!* ✨\n\n📄 You applied for: _${vacancy.title}_\n🏢 The company has updated your application status to: *${updateApplicationDto.status}*\n${
+        updateApplicationDto.status === ApplicationStatus.Applied
+          ? `💬 *Message for you:* ${updateApplicationDto.replyMessage}`
+          : ""
+      }`
+    );
+    
 
     return this.applicationsRepository.update(
       applicationId,

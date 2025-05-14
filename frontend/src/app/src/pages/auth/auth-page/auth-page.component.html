@@ -7,7 +7,7 @@
     </div>
     
     <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
-      {{ isLogin ? "Sign In" : "Create Account" }}
+      {{ isLogin ? "Вход" : "Создать аккаунт" }}
     </h2>
 
     <form
@@ -28,26 +28,26 @@
             [ngClass]="{'error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}" 
             formControlName="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="Введите ваш email"
             required
             aria-describedby="emailError"
           />
         </div>
         <p class="custom-error" *ngIf="loginForm.get('email')?.errors && loginForm.get('email')?.touched">
           <ng-container *ngIf="loginForm.get('email')?.hasError('required')">
-            Email is required
+            Email обязателен
           </ng-container>
           <ng-container *ngIf="loginForm.get('email')?.hasError('email')">
-            Invalid email format
+            Неверный формат email
           </ng-container>
           <ng-container *ngIf="loginForm.get('email')?.hasError('emailNotFound')">
-            User with this email does not exist
+            Пользователь с таким email не существует
           </ng-container>
         </p>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="login-password">Password</label>
+        <label class="custom-label" for="login-password">Пароль</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
             <mat-icon class="text-lg">lock</mat-icon>
@@ -58,7 +58,7 @@
             [ngClass]="{'error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
             formControlName="password"
             [type]="hidePassword ? 'password' : 'text'"
-            placeholder="Enter your password"
+            placeholder="Введите ваш пароль"
             required
             minlength="6"
             aria-describedby="passwordError"
@@ -72,16 +72,16 @@
         </div>
         <p class="custom-error" *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched">
           <ng-container *ngIf="loginForm.get('password')?.hasError('required')">
-            Password is required
+            Пароль обязателен
           </ng-container>
           <ng-container *ngIf="loginForm.get('password')?.hasError('minlength')">
-            Minimum 6 characters
+            Минимум 6 символов
           </ng-container>
           <ng-container *ngIf="loginForm.get('password')?.hasError('pattern')">
-            Password must contain one uppercase letter, a number and a special character (!%&)
+            Пароль должен содержать одну заглавную букву, цифру и специальный символ (!%&)
           </ng-container>
           <ng-container *ngIf="loginForm.get('password')?.hasError('invalidPassword')">
-            Invalid password
+            Неверный пароль
           </ng-container>
         </p>
       </div>
@@ -90,7 +90,7 @@
         class="btn btn-primary w-full py-3 mt-6"
         type="submit"
       >
-        Sign In
+        Войти
       </button>
     </form>
 
@@ -103,34 +103,34 @@
     >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="custom-form-field">
-          <label class="custom-label" for="reg-firstName">First Name</label>
+          <label class="custom-label" for="reg-firstName">Имя</label>
           <input
             id="reg-firstName"
             class="custom-input"
             [ngClass]="{'error': registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched}"
             formControlName="firstName"
             type="text"
-            placeholder="Enter your first name"
+            placeholder="Введите ваше имя"
             required
           />
           <p class="custom-error" *ngIf="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched">
-            First name is required
+            Имя обязательно
           </p>
         </div>
 
         <div class="custom-form-field">
-          <label class="custom-label" for="reg-lastName">Last Name</label>
+          <label class="custom-label" for="reg-lastName">Фамилия</label>
           <input
             id="reg-lastName"
             class="custom-input"
             [ngClass]="{'error': registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched}"
             formControlName="lastName"
             type="text"
-            placeholder="Enter your last name"
+            placeholder="Введите вашу фамилию"
             required
           />
           <p class="custom-error" *ngIf="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched">
-            Last name is required
+            Фамилия обязательна
           </p>
         </div>
       </div>
@@ -147,25 +147,25 @@
             [ngClass]="{'error': registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched}"
             formControlName="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="Введите ваш email"
             required
           />
         </div>
         <p class="custom-error" *ngIf="registrationForm.get('email')?.errors && registrationForm.get('email')?.touched">
           <ng-container *ngIf="registrationForm.get('email')?.hasError('required')">
-            Email is required
+            Email обязателен
           </ng-container>
           <ng-container *ngIf="registrationForm.get('email')?.hasError('email')">
-            Invalid email format
+            Неверный формат email
           </ng-container>
           <ng-container *ngIf="registrationForm.get('email')?.hasError('existingEmail')">
-            User with this email already exists
+            Пользователь с таким email уже существует
           </ng-container>
         </p>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="reg-password">Password</label>
+        <label class="custom-label" for="reg-password">Пароль</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
             <mat-icon class="text-lg">lock</mat-icon>
@@ -176,7 +176,7 @@
             [ngClass]="{'error': registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched}"
             formControlName="password"
             [type]="hidePassword ? 'password' : 'text'"
-            placeholder="Create password"
+            placeholder="Создайте пароль"
             required
             minlength="6"
           />
@@ -189,19 +189,19 @@
         </div>
         <p class="custom-error" *ngIf="registrationForm.get('password')?.errors && registrationForm.get('password')?.touched">
           <ng-container *ngIf="registrationForm.get('password')?.hasError('required')">
-            Password is required
+            Пароль обязателен
           </ng-container>
           <ng-container *ngIf="registrationForm.get('password')?.hasError('minlength')">
-            Minimum 6 characters
+            Минимум 6 символов
           </ng-container>
           <ng-container *ngIf="registrationForm.get('password')?.hasError('pattern')">
-            Password must contain one uppercase letter, a number and a special character (!%&)
+            Пароль должен содержать одну заглавную букву, цифру и специальный символ (!%&)
           </ng-container>
         </p>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="confirmPassword">Confirm Password</label>
+        <label class="custom-label" for="confirmPassword">Подтвердите пароль</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
             <mat-icon class="text-lg">lock_outline</mat-icon>
@@ -212,7 +212,7 @@
             [ngClass]="{'error': registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched}"
             formControlName="confirmPassword"
             [type]="hideConfirmPassword ? 'password' : 'text'"
-            placeholder="Confirm password"
+            placeholder="Подтвердите пароль"
             required
           />
           <button 
@@ -224,16 +224,16 @@
         </div>
         <p class="custom-error" *ngIf="registrationForm.get('confirmPassword')?.errors && registrationForm.get('confirmPassword')?.touched">
           <ng-container *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
-            Password confirmation is required
+            Подтверждение пароля обязательно
           </ng-container>
           <ng-container *ngIf="registrationForm.get('confirmPassword')?.hasError('mustMatch')">
-            Passwords must match
+            Пароли должны совпадать
           </ng-container>
         </p>
       </div>
 
       <div class="mt-6">
-        <label class="custom-label block mb-3">Choose your role:</label>
+        <label class="custom-label block mb-3">Выберите вашу роль:</label>
         <div class="space-y-3 bg-white p-4 rounded-lg shadow-sm">
           <div *ngFor="let role of appRoles" 
                class="flex items-start p-3 rounded-lg transition-colors cursor-pointer"
@@ -245,13 +245,13 @@
                   formControlName="choosedRole"
                   class="mt-1 mr-3">
             <div>
-              <span class="font-medium block mb-1">{{ role.roleName === 'User' ? 'Job Seeker' : 'Employer' }}</span>
+              <span class="font-medium block mb-1">{{ role.roleName === 'User' ? 'Соискатель' : 'Работодатель' }}</span>
               <span class="text-sm text-gray-600">{{ role.text }}</span>
             </div>
           </div>
         </div>
         <p class="custom-error" *ngIf="registrationForm.get('choosedRole')?.hasError('required') && registrationForm.get('choosedRole')?.touched">
-          Role selection is required
+          Выбор роли обязателен
         </p>
       </div>
 
@@ -259,7 +259,7 @@
         class="btn btn-primary w-full py-3 mt-6"
         type="submit"
       >
-        Register
+        Зарегистрироваться
       </button>
     </form>
 
@@ -274,27 +274,27 @@
         <div class="bg-primary/10 p-3 rounded-full">
           <mat-icon class="text-primary text-xl">business</mat-icon>
         </div>
-        <h3 class="text-xl font-semibold ml-3">Company Information</h3>
+        <h3 class="text-xl font-semibold ml-3">Информация о компании</h3>
       </div>
       
       <div class="custom-form-field">
-        <label class="custom-label" for="companyName">Company Name</label>
+        <label class="custom-label" for="companyName">Название компании</label>
         <input
           id="companyName"
           class="custom-input"
           [ngClass]="{'error': companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched}"
           formControlName="companyName"
           type="text"
-          placeholder="Enter company name"
+          placeholder="Введите название компании"
           required
         />
         <p class="custom-error" *ngIf="companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched">
-          Company name is required
+          Название компании обязательно
         </p>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="companyPhone">Company Phone</label>
+        <label class="custom-label" for="companyPhone">Телефон компании</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
             <mat-icon class="text-lg">phone</mat-icon>
@@ -305,18 +305,18 @@
             [ngClass]="{'error': companyForm.get('companyPhone')?.invalid && companyForm.get('companyPhone')?.touched}"
             formControlName="companyPhone"
             type="tel"
-            placeholder="Contact phone"
+            placeholder="Контактный телефон"
           />
         </div>
         <p class="custom-error" *ngIf="companyForm.get('companyPhone')?.errors && companyForm.get('companyPhone')?.touched">
           <ng-container *ngIf="companyForm.get('companyPhone')?.hasError('pattern')">
-            Invalid phone format
+            Неверный формат телефона
           </ng-container>
         </p>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="companyCity">City</label>
+        <label class="custom-label" for="companyCity">Город</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
             <mat-icon class="text-lg">location_city</mat-icon>
@@ -326,18 +326,18 @@
             class="custom-input pl-10"
             formControlName="companyCity"
             type="text"
-            placeholder="Company location"
+            placeholder="Местоположение компании"
           />
         </div>
       </div>
 
       <div class="custom-form-field">
-        <label class="custom-label" for="companyDescription">Company Description</label>
+        <label class="custom-label" for="companyDescription">Описание компании</label>
         <textarea
           id="companyDescription"
           class="custom-input min-h-[120px]"
           formControlName="companyDescription"
-          placeholder="Brief company description, field of activity"
+          placeholder="Краткое описание компании, сфера деятельности"
           rows="4"
         ></textarea>
       </div>
@@ -349,13 +349,13 @@
           (click)="backToFirstStep()"
         >
           <mat-icon class="mr-2">arrow_back</mat-icon>
-          Back
+          Назад
         </button>
         <button
           type="submit"
           class="btn btn-primary flex-grow"
         >
-          Complete Registration
+          Завершить регистрацию
           <mat-icon class="ml-2">check_circle</mat-icon>
         </button>
       </div>
@@ -363,12 +363,12 @@
 
     <div class="mt-6 text-center border-t border-gray-200 pt-6">
       <p class="text-gray-600">
-        {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+        {{ isLogin ? "Нет аккаунта?" : "Уже есть аккаунт?" }}
         <a
           (click)="toggleForm()"
           class="text-primary cursor-pointer hover:underline font-medium ml-1"
         >
-          {{ isLogin ? "Register" : "Sign In" }}
+          {{ isLogin ? "Зарегистрироваться" : "Войти" }}
         </a>
       </p>
     </div>

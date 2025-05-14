@@ -39,7 +39,7 @@ interface ApplicationWithVacancyInfo extends Application {
     <div class="responsive-container py-6">
       <div class="custom-card">
         <div class="custom-card-header">
-          <h1 class="custom-card-title text-2xl">My applications</h1>
+          <h1 class="custom-card-title text-2xl">Мои отклики</h1>
         </div>
         
         <div class="custom-card-content">
@@ -48,13 +48,13 @@ interface ApplicationWithVacancyInfo extends Application {
           </div>
 
           <div *ngIf="!isLoading && applications.length === 0" class="text-center py-8">
-            <div class="text-gray-500">There are no applications now</div>
+            <div class="text-gray-500">У вас пока нет откликов</div>
           </div>
 
           <table *ngIf="!isLoading && applications.length > 0" mat-table [dataSource]="applications" class="w-full">
             <!-- Date Column -->
             <ng-container matColumnDef="appliedAt">
-              <th mat-header-cell *matHeaderCellDef>Application date</th>
+              <th mat-header-cell *matHeaderCellDef>Дата отклика</th>
               <td mat-cell *matCellDef="let application">
                 {{application.appliedAt | date:'dd.MM.yyyy'}}
               </td>
@@ -62,9 +62,9 @@ interface ApplicationWithVacancyInfo extends Application {
 
             <!-- Vacancy Column -->
             <ng-container matColumnDef="vacancy">
-              <th mat-header-cell *matHeaderCellDef>Vacancy</th>
+              <th mat-header-cell *matHeaderCellDef>Вакансия</th>
               <td mat-cell *matCellDef="let application">
-                <a [routerLink]="['/vacancies', application.vacancyId]" class="text-primary-600 hover:text-primary-700">
+                <a [routerLink]="['/vacancy', application.vacancyId]" class="text-primary-600 hover:text-primary-700">
                   {{application.vacancy?.title}}
                 </a>
               </td>
@@ -72,7 +72,7 @@ interface ApplicationWithVacancyInfo extends Application {
 
             <!-- Status Column -->
             <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <th mat-header-cell *matHeaderCellDef>Статус</th>
               <td mat-cell *matCellDef="let application">
                 <span [ngClass]="{
                   'text-yellow-600': application.status === applicationStatus.Pending,
@@ -86,13 +86,13 @@ interface ApplicationWithVacancyInfo extends Application {
 
             <!-- Reply Message Column -->
             <ng-container matColumnDef="replyMessage">
-              <th mat-header-cell *matHeaderCellDef>Reply message</th>
+              <th mat-header-cell *matHeaderCellDef>Ответ работодателя</th>
               <td mat-cell *matCellDef="let application">
                 <span *ngIf="application.replyMessage" [matTooltip]="application.replyMessage">
                   {{application.replyMessage | slice:0:50}}{{application.replyMessage.length > 50 ? '...' : ''}}
                 </span>
                 <span *ngIf="!application.replyMessage" class="text-gray-500">
-                  No answer
+                  Нет ответа
                 </span>
               </td>
             </ng-container>
@@ -195,13 +195,13 @@ export class UserApplicationsComponent implements OnInit {
   getStatusText(status: ApplicationStatus): string {
     switch (status) {
       case ApplicationStatus.Pending:
-        return 'Pending';
+        return 'В ожидании';
       case ApplicationStatus.Applied:
-        return 'Applied';
+        return 'Принят';
       case ApplicationStatus.Rejected:
-        return 'Reject';
+        return 'Отклонён';
       default:
-        return 'Unknown';
+        return 'Неизвестно';
     }
   }
 } 

@@ -8,7 +8,7 @@
       </div>
       <div *ngIf="vacancy?.is_archived" class="ml-2 badge badge-error flex items-center">
         <mat-icon class="text-sm mr-1">archive</mat-icon>
-        Archived
+        В архиве
       </div>
     </div>
   </div>
@@ -22,15 +22,15 @@
           <mat-icon class="text-primary">work</mat-icon>
         </div>
         <div>
-          <p class="text-xs text-gray-500 uppercase">Experience</p>
+          <p class="text-xs text-gray-500 uppercase">Опыт</p>
           <p class="font-medium" *ngIf="vacancy?.experience_level?.min || vacancy?.experience_level?.max; else noExperience">
-            <ng-container *ngIf="vacancy?.experience_level?.min">from {{ vacancy?.experience_level?.min }}</ng-container>
+            <ng-container *ngIf="vacancy?.experience_level?.min">от {{ vacancy?.experience_level?.min }}</ng-container>
             <ng-container *ngIf="vacancy?.experience_level?.min && vacancy?.experience_level?.max"> - </ng-container>
-            <ng-container *ngIf="vacancy?.experience_level?.max">to {{ vacancy?.experience_level?.max }}</ng-container>
-            years
+            <ng-container *ngIf="vacancy?.experience_level?.max">до {{ vacancy?.experience_level?.max }}</ng-container>
+            лет
           </p>
           <ng-template #noExperience>
-            <p class="font-medium">Not specified</p>
+            <p class="font-medium">Не указан</p>
           </ng-template>
         </div>
       </div>
@@ -41,8 +41,8 @@
           <mat-icon class="text-green-600">schedule</mat-icon>
         </div>
         <div>
-          <p class="text-xs text-gray-500 uppercase">Employment type</p>
-          <p class="font-medium">{{ vacancy?.empl_type || 'Not specified' }}</p>
+          <p class="text-xs text-gray-500 uppercase">Тип занятости</p>
+          <p class="font-medium">{{ vacancy?.empl_type || 'Не указан' }}</p>
         </div>
       </div>
     </div>
@@ -53,12 +53,12 @@
         <div class="bg-blue-100 rounded-full p-2 mr-3">
           <mat-icon class="text-blue-600">payments</mat-icon>
         </div>
-        <p class="text-sm text-gray-600 font-medium">Salary</p>
+        <p class="text-sm text-gray-600 font-medium">Зарплата</p>
       </div>
       <p class="font-bold text-xl text-gray-800">
-        <ng-container *ngIf="vacancy?.salary?.min">from {{ vacancy?.salary?.min | number:'1.0-0' }}</ng-container>
+        <ng-container *ngIf="vacancy?.salary?.min">от {{ vacancy?.salary?.min | number:'1.0-0' }}</ng-container>
         <ng-container *ngIf="vacancy?.salary?.min && vacancy?.salary?.max"> - </ng-container>
-        <ng-container *ngIf="vacancy?.salary?.max">to {{ vacancy?.salary?.max | number:'1.0-0' }}</ng-container>
+        <ng-container *ngIf="vacancy?.salary?.max">до {{ vacancy?.salary?.max | number:'1.0-0' }}</ng-container>
         <span class="text-gray-600 ml-1">$</span>
       </p>
     </div>
@@ -66,12 +66,12 @@
     <!-- Creation date -->
     <div class="flex items-center text-gray-600">
       <mat-icon class="text-sm mr-1">calendar_today</mat-icon>
-      <span class="text-sm">Posted: {{ vacancy?.created_at | date:'longDate' }}</span>
+      <span class="text-sm">Размещено: {{ vacancy?.created_at | date:'longDate' }}</span>
     </div>
 
     <!-- Skills -->
     <div *ngIf="vacancy?.skills?.length" class="mt-2">
-      <p class="text-sm font-medium text-gray-700 mb-2">Required skills</p>
+      <p class="text-sm font-medium text-gray-700 mb-2">Необходимые навыки</p>
       <div class="flex flex-wrap gap-2">
         <span *ngFor="let skill of vacancy?.skills" class="badge badge-primary">
           {{ skill }}
@@ -81,7 +81,7 @@
 
     <!-- Tags -->
     <div *ngIf="vacancy?.tags?.length" class="mt-2">
-      <p class="text-sm font-medium text-gray-700 mb-2">Tags</p>
+      <p class="text-sm font-medium text-gray-700 mb-2">Теги</p>
       <div class="flex flex-wrap gap-2">
         <span *ngFor="let tech of vacancy?.tags" class="badge badge-neutral">
           {{ tech }}
@@ -97,7 +97,7 @@
       class="btn btn-primary w-full"
       (click)="redirectToVacancyPage()"
     >
-      View Details
+      Подробнее
       <mat-icon class="ml-1">arrow_forward</mat-icon>
     </button>
   </div>

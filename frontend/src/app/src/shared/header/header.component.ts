@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router, 
     private cdRef: ChangeDetectorRef,
-    private authHelper: AuthHelperService,
+    public authHelper: AuthHelperService,
     private userStateService: UserStateService,
     private authService: AuthService
   ) {}
@@ -84,22 +84,22 @@ export class HeaderComponent implements OnInit {
     const routes: Route[] = [
       {
         path: 'vacancies',
-        name: 'Vacancy',
-        condition: true,
+        name: 'Вакансии',
+        condition: this.authHelper.isUser(),
       },
       {
         path: 'profile/applications',
-        name: 'My Applications',
+        name: 'Мои отклики',
         condition: this.authHelper.isUser(),
       },
       {
         path: 'profile/user',
-        name: 'Profile',
+        name: 'Профиль',
         condition: this.authHelper.isUser(),
       },
       {
         path: 'profile/company',
-        name: 'Company profile',
+        name: 'Профиль компании',
         condition: this.authHelper.isCompany(),
       },
     ];

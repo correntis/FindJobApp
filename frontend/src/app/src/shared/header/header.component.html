@@ -5,7 +5,13 @@
   <div class="responsive-container flex items-center justify-between h-16">
     <!-- Logo -->
     <div class="logo text-2xl font-bold text-white transition-transform duration-300 hover:scale-105">
-      <a routerLink="/vacancies" class="flex items-center">
+      <a *ngIf="this.authHelper.isUser()" routerLink="/vacancies" class="flex items-center">
+        <span class="text-white bg-primary-600 p-1.5 rounded-lg mr-2">
+          <mat-icon>work_outline</mat-icon>
+        </span>
+        <span>FindJob</span>
+      </a>
+      <a *ngIf="!this.authHelper.isUser()" class="flex items-center cursor-pointer">
         <span class="text-white bg-primary-600 p-1.5 rounded-lg mr-2">
           <mat-icon>work_outline</mat-icon>
         </span>
@@ -42,17 +48,17 @@
 
         <mat-menu #menu="matMenu" class="mt-2 user-menu">
           <div class="user-menu-header">
-            <p class="text-sm text-gray-600">Welcome</p>
+            <p class="text-sm text-gray-600">Добро пожаловать</p>
             <p class="font-medium">{{ getUserName() }}</p>
           </div>
           <button mat-menu-item (click)="goToProfile()" class="flex items-center">
             <mat-icon class="text-primary mr-2">person</mat-icon>
-            <span>My Profile</span>
+            <span>Мой профиль</span>
           </button>
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="logout()" class="flex items-center">
             <mat-icon class="text-red-500 mr-2">logout</mat-icon>
-            <span class="text-red-500">Sign Out</span>
+            <span class="text-red-500">Выйти</span>
           </button>
         </mat-menu>
       </div>
@@ -64,20 +70,20 @@
           class="border border-white/50 text-white hover:bg-white/10 transition-colors duration-300 header-button"
           (click)="goToRoute('sign-in')"
         >
-          Sign In
+          Войти
         </button>
         <button 
           mat-flat-button 
           class="bg-accent hover:bg-accent-600 text-white transition-colors duration-300 header-button"
           (click)="goToRoute('sign-up')"
         >
-          Sign Up
+          Регистрация
         </button>
       </div>
 
       <!-- Mobile menu (optional) -->
       <button 
-        *ngIf="getHeaderLinksRoutes().length > 0"
+        *ngIf="false"
         mat-icon-button 
         class="md:hidden text-white"
         (click)="toggleMobileMenu()"

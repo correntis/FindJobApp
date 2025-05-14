@@ -7,14 +7,14 @@
           <div class="custom-card-header pb-4">
             <h2 class="text-xl font-semibold flex items-center">
               <mat-icon class="mr-2 text-primary">filter_list</mat-icon>
-              Filters
+              Фильтры
             </h2>
           </div>
           
           <div class="custom-card-content space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
               <div class="custom-form-field">
-                <label class="custom-label" for="minSalary">Min. Salary</label>
+                <label class="custom-label" for="minSalary">Мин. зарплата</label>
                 <div class="relative">
                   <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
                   <input 
@@ -22,12 +22,12 @@
                     class="custom-input pl-8" 
                     type="number" 
                     formControlName="minSalary" 
-                    placeholder="From">
+                    placeholder="От">
                 </div>
               </div>
               
               <div class="custom-form-field">
-                <label class="custom-label" for="maxSalary">Max. Salary</label>
+                <label class="custom-label" for="maxSalary">Макс. зарплата</label>
                 <div class="relative">
                   <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
                   <input 
@@ -35,37 +35,37 @@
                     class="custom-input pl-8" 
                     type="number" 
                     formControlName="maxSalary" 
-                    placeholder="To">
+                    placeholder="До">
                 </div>
               </div>
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
               <div class="custom-form-field">
-                <label class="custom-label" for="minExperience">Min. Experience (years)</label>
+                <label class="custom-label" for="minExperience">Мин. опыт (лет)</label>
                 <input 
                   id="minExperience"
                   class="custom-input" 
                   type="number" 
                   formControlName="minExperience" 
-                  placeholder="From">
+                  placeholder="От">
               </div>
               
               <div class="custom-form-field">
-                <label class="custom-label" for="maxExperience">Max. Experience (years)</label>
+                <label class="custom-label" for="maxExperience">Макс. опыт (лет)</label>
                 <input 
                   id="maxExperience"
                   class="custom-input" 
                   type="number" 
                   formControlName="maxExperience" 
-                  placeholder="To">
+                  placeholder="До">
               </div>
             </div>
             
             <div class="custom-form-field">
-              <label class="custom-label" for="empl_type">Employment Type</label>
+              <label class="custom-label" for="empl_type">Тип занятости</label>
               <select class="custom-select" id="empl_type" formControlName="empl_type">
-                <option value="">All types</option>
+                <option value="">Все типы</option>
                 <option *ngFor="let type of employmentTypes" [value]="type">
                   {{ type }}
                 </option>
@@ -73,7 +73,7 @@
             </div>
 
             <div class="custom-form-field">
-              <label class="custom-label" for="skills">Skills</label>
+              <label class="custom-label" for="skills">Навыки</label>
               <div class="border border-gray-300 rounded-lg p-3 bg-gray-50">
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span *ngFor="let skill of form.controls['skills'].value" class="badge badge-primary flex items-center">
@@ -91,7 +91,7 @@
                   <input 
                     id="skills"
                     class="custom-input mb-0" 
-                    placeholder="Add skill..."
+                    placeholder="Добавить навык..."
                     [matChipInputFor]="skillsGrid"
                     (matChipInputTokenEnd)="addSkill($event)">
                   <mat-chip-grid #skillsGrid class="hidden"></mat-chip-grid>
@@ -100,7 +100,7 @@
             </div>
 
             <div class="custom-form-field">
-              <label class="custom-label" for="languages">Languages</label>
+              <label class="custom-label" for="languages">Языки</label>
               <div class="border border-gray-300 rounded-lg p-3 bg-gray-50">
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span *ngFor="let language of form.controls['languages'].value" class="badge badge-success flex items-center">
@@ -118,7 +118,7 @@
                   <input 
                     id="languages"
                     class="custom-input mb-0" 
-                    placeholder="Add language..."
+                    placeholder="Добавить язык..."
                     [matChipInputFor]="languagesGrid"
                     (matChipInputTokenEnd)="addLanguage($event)">
                   <mat-chip-grid #languagesGrid class="hidden"></mat-chip-grid>
@@ -131,7 +131,7 @@
                 <input type="checkbox" formControlName="is_archived" class="sr-only peer">
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 <span class="ms-3 text-sm font-medium text-gray-700">
-                  {{ currentUser?.role === 'Company' ? 'Show archived vacancies' : 'Include vacancies I applied to' }}
+                  {{ currentUser?.role === 'Company' ? 'Показать архивные вакансии' : 'Включая вакансии, на которые я откликнулся' }}
                 </span>
               </label>
             </div>
@@ -143,8 +143,8 @@
     <!-- Список вакансий -->
     <div class="lg:col-span-3">
       <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Find Your Perfect Job</h1>
-        <p class="text-gray-600">Explore opportunities that match your skills and experience</p>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Найдите идеальную работу</h1>
+        <p class="text-gray-600">Изучите возможности, соответствующие вашим навыкам и опыту</p>
       </div>
       
       <div *ngIf="loading && vacancies.length === 0" class="flex justify-center py-16">
@@ -155,8 +155,8 @@
         <div class="bg-gray-100 rounded-full p-6 mb-6">
           <mat-icon class="text-5xl text-gray-400">work_off</mat-icon>
         </div>
-        <h3 class="text-xl font-semibold text-gray-700 mb-2">No vacancies found</h3>
-        <p class="text-gray-500 max-w-lg">Try changing your filter parameters or check back later when new vacancies are posted</p>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Вакансии не найдены</h3>
+        <p class="text-gray-500 max-w-lg">Попробуйте изменить параметры фильтра или проверьте позже, когда будут опубликованы новые вакансии</p>
       </div>
       
       <div class="grid grid-cols-1 gap-6">
@@ -176,7 +176,7 @@
             (click)="searchVacancies()"
           >
             <mat-icon class="mr-2">refresh</mat-icon>
-            Load more
+            Загрузить еще
           </button>
         </div>
       </div>

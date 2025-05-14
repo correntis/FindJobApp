@@ -24,29 +24,29 @@ import { FormsModule } from '@angular/forms';
     
     <mat-dialog-content class="!m-0 !p-6">
       <div class="custom-form-field">
-        <label class="custom-label" for="replyMessage">Reply Message</label>
+        <label class="custom-label" for="replyMessage">Ответное сообщение</label>
         <textarea
           id="replyMessage"
           [(ngModel)]="message"
-          placeholder="Enter your reply message"
+          placeholder="Введите ваш ответ"
           rows="4"
           class="custom-input resize-none"
           required
           #messageInput="ngModel"
         ></textarea>
         <p class="custom-error" *ngIf="messageInput.invalid && (messageInput.dirty || messageInput.touched)">
-          Reply message is required
+          Ответ обязательно
         </p>
       </div>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="!m-0 !p-4 !px-6 border-t border-gray-200 bg-gray-50 gap-3">
-      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-button (click)="onCancel()">Отмена</button>
       <button mat-raised-button 
               color="primary" 
               (click)="onSubmit()"
               [disabled]="!message?.trim()">
-        Save
+        Сохранить
       </button>
     </mat-dialog-actions>
   `,

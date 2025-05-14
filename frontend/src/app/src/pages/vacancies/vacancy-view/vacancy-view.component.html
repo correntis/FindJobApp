@@ -7,7 +7,7 @@
           *ngIf="vacancy?.is_archived"
           class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm"
         >
-          Archived
+          В архиве
         </span>
       </div>
 
@@ -31,7 +31,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <div class="bg-blue-50 p-4 rounded-lg">
-        <h3 class="text-sm font-semibold text-blue-800 mb-2">Salary Range</h3>
+        <h3 class="text-sm font-semibold text-blue-800 mb-2">Зарплата</h3>
         <div class="text-2xl font-bold text-blue-600">
           {{ vacancy?.salary?.min | currency }} -
           {{ vacancy?.salary?.max | currency }}
@@ -40,18 +40,18 @@
 
       <div class="bg-purple-50 p-4 rounded-lg">
         <h3 class="text-sm font-semibold text-purple-800 mb-2">
-          Experience Level
+          Требуемый опыт
         </h3>
         <div class="text-2xl font-bold text-purple-600">
           {{ vacancy?.experience_level?.min }} -
-          {{ vacancy?.experience_level?.max }} years
+          {{ vacancy?.experience_level?.max }} лет
         </div>
       </div>
     </div>
 
     <!-- Employment Type -->
     <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-2">Employment Type</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Тип занятости</h3>
       <div class="bg-gray-100 px-4 py-2 rounded-lg inline-block">
         {{ vacancy?.empl_type }}
       </div>
@@ -59,7 +59,7 @@
 
     <!-- Skills -->
     <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Required Skills</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Необходимые навыки</h3>
       <div class="flex flex-wrap gap-2">
         <mat-chip
           *ngFor="let skill of vacancy?.skills"
@@ -73,7 +73,7 @@
     <!-- Languages -->
     <div class="mb-6">
       <h3 class="text-lg font-semibold text-gray-800 mb-4">
-        Language Requirements
+        Требуемые языки
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div
@@ -88,7 +88,7 @@
 
     <!-- Requirements -->
     <div class="mb-8">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Requirements</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Требования</h3>
       <ul class="list-disc pl-6 space-y-2 text-gray-700">
         <li *ngFor="let req of vacancy?.requirements">{{ req }}</li>
       </ul>
@@ -106,18 +106,7 @@
             routerLink="/profile/company"
           >
             <mat-icon class="mr-2">keyboard_backspace</mat-icon>
-            Back to Profile
-          </button>
-          
-          <button
-            *ngIf="vacancy?.is_archived"
-            mat-raised-button
-            color="accent"
-            class="!px-6 !py-2"
-            (click)="unarchiveVacancy()"
-          >
-            <mat-icon class="mr-2">unarchive</mat-icon>
-            Unarchive Vacancy
+            В профиль компании
           </button>
           
           <button
@@ -126,7 +115,7 @@
             routerLink="/vacancies/{{vacancy?.id}}/applications"
           >
             <mat-icon class="mr-2">people</mat-icon>
-            View Applications
+            Отклики
           </button>
           
           <button
@@ -135,7 +124,7 @@
             routerLink="/vacancies/edit/{{vacancy?.id}}"
           >
             <mat-icon class="mr-2">edit</mat-icon>
-            Edit Vacancy
+            Редактировать вакансию
           </button>
         </div>
         
@@ -149,7 +138,7 @@
             (click)="applyForVacancy()"
           >
             <mat-icon class="mr-2">check</mat-icon>
-            Apply Now
+            Откликнуться
           </button>
 
           <div
@@ -158,7 +147,7 @@
           >
             <mat-icon class="text-green-600">check_circle</mat-icon>
             <span class="ml-3 text-lg text-green-800 font-medium"
-              >Application Submitted</span
+              >Отклик отправлен</span
             >
           </div>
 
@@ -168,7 +157,7 @@
           >
             <mat-icon class="text-red-600">archive</mat-icon>
             <span class="ml-3 text-lg text-red-800 font-medium"
-              >This vacancy is archived and not accepting applications</span
+              >Вакансия в архиве и не принимает отклики</span
             >
           </div>
         </div>
@@ -180,7 +169,7 @@
         >
           <mat-icon class="text-gray-600">info</mat-icon>
           <span class="ml-3 text-lg text-gray-800 font-medium"
-            >Sign in as a user to apply for this vacancy</span
+            >Войдите как соискатель, чтобы откликнуться на вакансию</span
           >
         </div>
       </div>

@@ -106,9 +106,9 @@ export class ResumeViewComponent implements OnInit {
     const referer = window.history.state?.referer;
     
     if (referer === 'applications') {
-      return 'Back to Applications';
+      return 'Назад к Откликам';
     }
     
-    return 'Back';
+    return 'Назад';
   }
 } 
