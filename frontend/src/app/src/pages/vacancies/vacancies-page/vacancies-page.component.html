@@ -10,9 +10,22 @@
               Фильтры
             </h2>
           </div>
-          
+
+
+
           <div class="custom-card-content space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+
+              <div class="custom-form-field">
+                <label class="custom-label" for="title">Название вакансии</label>
+                <input 
+                  id="title"
+                  class="custom-input"
+                  type="text"
+                  formControlName="title"
+                  placeholder="Введите название вакансии">
+              </div>
+              
               <div class="custom-form-field">
                 <label class="custom-label" for="minSalary">Мин. зарплата</label>
                 <div class="relative">
@@ -125,6 +138,7 @@
                 </div>
               </div>
             </div>
+
 
             <div class="flex items-center" *ngIf="showArchivedOption || currentUser?.role === 'User'">
               <label class="relative inline-flex items-center cursor-pointer">

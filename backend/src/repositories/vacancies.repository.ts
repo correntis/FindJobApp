@@ -100,6 +100,10 @@ export class VacanciesRepository {
       query.languages = { $elemMatch: { name: { $in: filters.languages } } };
     }
 
+    if (filters.title) {
+      query.title = { $regex: filters.title, $options: 'i' };
+    }
+
     const page = Math.max(1, filters.page || 1);
     const limit = Math.max(1, filters.limit || 10);
     const skip = (page - 1) * limit;

@@ -1,4 +1,5 @@
 export interface SearchVacancyDto {
+  title: string;
   minSalary: number;
   maxSalary: number;
   minExperience: number;

@@ -36,4 +36,7 @@ export class SearchVacancyDto {
 
   @ApiProperty({ required: false, example: 10 })
   limit: number = 10;
+
+  @ApiProperty({ required: false, example: 'Разработчик' })
+  title?: string;
 }

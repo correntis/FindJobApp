@@ -79,6 +79,7 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
     private applicationsService: ApplicationsService
   ) {
     this.form = this.fb.group({
+      title: [''],
       minSalary: [null],
       maxSalary: [null],
       minExperience: [null],
