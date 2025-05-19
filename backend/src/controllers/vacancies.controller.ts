@@ -146,11 +146,6 @@ export class VacanciesController {
   async searchVacancies(
     @Body() searchDto: SearchVacancyDto
   ): Promise<VacancyDocument[] | null> {
-    try {
       return this.vacanciesService.search(searchDto);
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
   }
 }

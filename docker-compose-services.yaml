@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  k4-backend-node:
+    container_name: k4-backend-node
+    build: ./backend
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production

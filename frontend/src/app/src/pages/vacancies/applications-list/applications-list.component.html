@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto p-6">
+<div class="max-w-7xl mx-auto p-6">
   <div class="bg-white rounded-xl shadow-lg p-8">
     <div class="border-b border-gray-200 pb-6 mb-6">
       <div class="flex items-center justify-between mb-4">
@@ -97,7 +97,7 @@
           <th mat-header-cell *matHeaderCellDef>Ответное сообщение</th>
           <td mat-cell *matCellDef="let application">
             <div class="flex items-center">
-              <span class="text-gray-600 truncate max-w-xs" [title]="application.replyMessage">
+              <span class="text-gray-600 truncate max-w-48" [title]="application.replyMessage">
                 {{ application.replyMessage || 'Нет сообщения' }}
               </span>
             </div>

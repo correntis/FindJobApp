@@ -45,7 +45,7 @@ export class TelegramService {
 
       if (isChatExist && isChatExist.length > 0) {
         await ctx.reply(
-          "This chat is already used for another account in the application. You can continue working with the old account",
+          "Этот чат уже используется другим аккаунтом в приложении. Вы можете продолжить работу с ним",
           Markup.keyboard([[this.profileMessage]]).resize()
         );
 
@@ -62,7 +62,7 @@ export class TelegramService {
           });
 
           await ctx.reply(
-            "Hello! Welcome to our service!\nI will send you notifications about new events!😊",
+            "Привет! Рады видеть тебя здесю!\n Я буду присылать тебе уведомления!😊",
             Markup.keyboard([[this.profileMessage]]).resize()
           );
 
@@ -72,7 +72,7 @@ export class TelegramService {
     }
 
     await ctx.reply(
-      "The /start command only works when accessed through your personal link"
+      "Команда /start работает только через персональную ссылку"
     );
   }
 

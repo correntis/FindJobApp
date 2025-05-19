@@ -10,6 +10,7 @@ import { ApplicationsService } from "src/services/application.service";
 import { ApplicationsController } from "src/controllers/applications.controller";
 import { TelegramService } from "src/services/telegram.service";
 import { TelegramModule } from "./telegram.module";
+import { CompaniesModule } from "./companies.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TelegramModule } from "./telegram.module";
       { name: User.name, schema: UserSchema },
     ]),
     TelegramModule,
+    CompaniesModule,
   ],
   controllers: [ApplicationsController],
   providers: [

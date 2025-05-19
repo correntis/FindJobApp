@@ -71,7 +71,8 @@
         <ng-container *ngIf="vacancy?.salary?.min">от {{ vacancy?.salary?.min | number:'1.0-0' }}</ng-container>
         <ng-container *ngIf="vacancy?.salary?.min && vacancy?.salary?.max"> - </ng-container>
         <ng-container *ngIf="vacancy?.salary?.max">до {{ vacancy?.salary?.max | number:'1.0-0' }}</ng-container>
-        <span class="text-gray-600 ml-1">$</span>
+        <span *ngIf="vacancy?.salary?.min || vacancy?.salary?.max" class="text-gray-600 ml-1">₽</span>
+        <span *ngIf="!vacancy?.salary?.min && !vacancy?.salary?.max">Не указано</span>
       </p>
     </div>
 

@@ -13,6 +13,8 @@ import { User } from "src/schemas/user.schema";
 import { Vacancy } from "src/schemas/vacancy.schema";
 import { TelegramService } from "./telegram.service";
 import { ApplicationStatus } from "src/enums/applications-status.enum";
+import { CompaniesRepository } from "src/repositories/companies.repository";
+import { Company } from "src/schemas/company.schema";
 
 @Injectable()
 export class ApplicationsService {
@@ -20,7 +22,8 @@ export class ApplicationsService {
     private readonly applicationsRepository: ApplicationsRepository,
     private readonly usersRepository: UsersRepository,
     private readonly vacanciesRepository: VacanciesRepository,
-    private readonly notifiactionService: TelegramService
+    private readonly notifiactionService: TelegramService,
+    private readonly companiesRepository: CompaniesRepository
   ) {}
 
   async create(
@@ -39,6 +42,21 @@ export class ApplicationsService {
     if (!vacancy) {
       throw new NotFoundException(Vacancy);
     }
+
+    const company = await this.companiesRepository.findById(vacancy.companyId);
+    if (!company) {
+      throw new NotFoundException(Company);
+    }
+
+    const companyUser = await this.usersRepository.findById(company.userId);
+    if (!companyUser) {
+      throw new NotFoundException(User);
+    }
+
+    await this.notifiactionService.sendNotificationToUser(
+      companyUser.id,
+      `✨ *На вашу вакансию откликнулись! ✨\n\n📄 Вакансия: _${vacancy.title}_\n🏢 Соискатель: *${user.firstName} ${user.lastName}*\n`
+    );
 
     return this.applicationsRepository.create(createApplicationDto);
   }
@@ -64,13 +82,8 @@ export class ApplicationsService {
 
     await this.notifiactionService.sendNotificationToUser(
       application.userId,
-      `✨ *Update on your application!* ✨\n\n📄 You applied for: _${vacancy.title}_\n🏢 The company has updated your application status to: *${updateApplicationDto.status}*\n${
-        updateApplicationDto.status === ApplicationStatus.Applied
-          ? `💬 *Message for you:* ${updateApplicationDto.replyMessage}`
-          : ""
-      }`
+      `✨ *Обновление в вашем отклике!* ✨\n\n📄 Вы откликались на: _${vacancy.title}_\n🏢 Компания ответила вам со статусом: *${updateApplicationDto.status}*\n${`💬 *Сообщеие для вас:* ${updateApplicationDto.replyMessage}`}`
     );
-    
 
     return this.applicationsRepository.update(
       applicationId,

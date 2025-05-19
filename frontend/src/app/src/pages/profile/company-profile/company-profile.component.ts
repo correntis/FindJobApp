@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +34,7 @@ import { switchMap } from 'rxjs/operators';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './company-profile.component.html',
 })
@@ -41,6 +46,7 @@ export class CompanyProfileComponent implements OnInit {
   loading = true;
   saving = false;
   editMode = false;
+  telegramConnected = false;
 
   constructor(
     private userStateService: UserStateService,
@@ -49,7 +55,7 @@ export class CompanyProfileComponent implements OnInit {
     private vacanciesService: VacanciesService,
     private formBuilder: FormBuilder,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -65,54 +71,58 @@ export class CompanyProfileComponent implements OnInit {
       street: [''],
       phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      webSite: ['']
+      webSite: [''],
     });
   }
 
   loadData(): void {
     this.loading = true;
     const userId = this.userStateService.authUserValue?.user.id;
-    
+
     if (!userId) {
       this.loading = false;
       return;
     }
 
-    this.usersService.getById(userId).pipe(
-      switchMap(user => {
-        this.user = user;
-        
-        return this.companiesService.getByUserId(userId).pipe(
-          catchError(() => of(null))
-        );
-      }),
-      switchMap(company => {
-        this.company = company;
-        
-        if (company) {
-          this.updateForm(company);
-          
-          return this.vacanciesService.getAllByCompanyId(company.id).pipe(
-            catchError(() => of([]))
-          );
-        } else {
-          return of([]);
-        }
-      })
-    ).subscribe({
-      next: (vacancies) => {
-        this.vacancies = vacancies;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
+    this.usersService
+      .getById(userId)
+      .pipe(
+        switchMap((user) => {
+          this.user = user;
+          this.telegramConnected = !!user.telegram;
+
+          return this.companiesService
+            .getByUserId(userId)
+            .pipe(catchError(() => of(null)));
+        }),
+        switchMap((company) => {
+          this.company = company;
+
+          if (company) {
+            this.updateForm(company);
+
+            return this.vacanciesService
+              .getAllByCompanyId(company.id)
+              .pipe(catchError(() => of([])));
+          } else {
+            return of([]);
+          }
+        })
+      )
+      .subscribe({
+        next: (vacancies) => {
+          this.vacancies = vacancies;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 
   updateForm(company: Company): void {
     if (!this.companyForm) return;
-    
+
     this.companyForm.patchValue({
       name: company.name,
       description: company.description,
@@ -121,7 +131,7 @@ export class CompanyProfileComponent implements OnInit {
       street: company.street,
       phone: company.phone,
       email: company.email,
-      webSite: company.webSite
+      webSite: company.webSite,
     });
   }
 
@@ -134,10 +144,10 @@ export class CompanyProfileComponent implements OnInit {
 
   saveCompanyData(): void {
     if (this.companyForm.invalid) return;
-    
+
     this.saving = true;
     const userId = this.userStateService.authUserValue?.user.id;
-    
+
     if (!userId) {
       this.saving = false;
       return;
@@ -145,7 +155,7 @@ export class CompanyProfileComponent implements OnInit {
 
     const companyData = {
       ...this.companyForm.value,
-      userId
+      userId,
     };
 
     if (this.company) {
@@ -157,7 +167,7 @@ export class CompanyProfileComponent implements OnInit {
         },
         error: () => {
           this.saving = false;
-        }
+        },
       });
     } else {
       this.companiesService.create(companyData).subscribe({
@@ -168,7 +178,7 @@ export class CompanyProfileComponent implements OnInit {
         },
         error: () => {
           this.saving = false;
-        }
+        },
       });
     }
   }
@@ -184,45 +194,104 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   archiveVacancy(vacancyId: string): void {
-    const vacancy = this.vacancies.find(v => v.id === vacancyId);
+    const vacancy = this.vacancies.find((v) => v.id === vacancyId);
     if (!vacancy) {
       alert('Vacancy not found');
       return;
     }
 
-    if (confirm(`Are you sure you want to ${vacancy.is_archived ? 'unarchive' : 'archive'} this vacancy?`)) {
+    if (
+      confirm(
+        `Are you sure you want to ${
+          vacancy.is_archived ? 'unarchive' : 'archive'
+        } this vacancy?`
+      )
+    ) {
       this.loading = true;
-      
+
       this.vacanciesService.archive(vacancyId).subscribe({
         next: () => {
-          const updatedVacancy = { ...vacancy, is_archived: !vacancy.is_archived };
-          
-            this.vacancies = this.vacancies.map(v => 
-              v.id === vacancyId ? updatedVacancy : v
-            );
-          
+          const updatedVacancy = {
+            ...vacancy,
+            is_archived: !vacancy.is_archived,
+          };
+
+          this.vacancies = this.vacancies.map((v) =>
+            v.id === vacancyId ? updatedVacancy : v
+          );
+
           this.loading = false;
-          alert(`Vacancy successfully ${vacancy.is_archived ? 'unarchived' : 'archived'}`);
+          alert(
+            `Vacancy successfully ${
+              vacancy.is_archived ? 'unarchived' : 'archived'
+            }`
+          );
         },
         error: (error) => {
           console.error('Error archiving vacancy:', error);
           this.loading = false;
-          
+
           if (error.status === 403) {
             alert('Вы не можете архивировать чужие вакансии');
           } else {
-            alert(`Failed to ${vacancy.is_archived ? 'unarchive' : 'archive'} vacancy. Please try again.`);
+            alert(
+              `Failed to ${
+                vacancy.is_archived ? 'unarchive' : 'archive'
+              } vacancy. Please try again.`
+            );
           }
-        }
+        },
       });
     }
   }
-  
+
   viewVacancy(vacancyId: string): void {
     this.router.navigate(['/vacancy', vacancyId]);
   }
 
   viewApplications(vacancyId: string): void {
     this.router.navigate(['/vacancies', vacancyId, 'applications']);
+  }
+
+    connectTelegram(): void {
+    if (!this.user?.telegramLink) return;
+    
+    window.open(this.user.telegramLink, '_blank');
+    
+    alert('Please open the link in Telegram to connect your account. After connecting, refresh this page to see the updated status.');
+  }
+  
+  disconnectTelegram(): void {
+    if (!this.user?.id) return;
+    
+    this.saving = true;
+    
+    this.usersService.update(this.user.id, { telegram: '' }).subscribe({
+      next: (updatedUser) => {
+        this.user = updatedUser;
+        this.telegramConnected = false;
+        this.saving = false;
+        
+        const currentAuthUser = this.userStateService.authUserValue;
+        if (currentAuthUser) {
+          const updatedAuthUser = {
+            ...currentAuthUser,
+            user: {
+              ...currentAuthUser.user,
+              telegram: ''
+            }
+          };
+          this.userStateService.setUser(updatedAuthUser);
+        }
+      },
+      error: () => {
+        this.saving = false;
+        alert('Failed to disconnect Telegram. Please try again.');
+      }
+    });
+  }
+  
+  openTelegramChat(): void {
+    window.open('https://t.me/findjobapp_bot', '_blank');
   }
 }

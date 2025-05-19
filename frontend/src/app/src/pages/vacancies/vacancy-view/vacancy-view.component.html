@@ -1,6 +1,12 @@
 <div class="max-w-4xl mx-auto p-6">
   <div class="bg-white rounded-xl shadow-lg p-8">
     <div class="border-b border-gray-200 pb-6 mb-6">
+      <p
+        *ngIf="vacancy?.for_invalids"
+        class="relative text-xs text-red-600 top-[-5px] left-[-5px]"
+      >
+        Подходит для людей с инвалидностью
+      </p>
       <div class="flex items-center justify-between mb-4">
         <h1 class="text-3xl font-bold text-gray-800">{{ vacancy?.title }}</h1>
         <span
@@ -29,12 +35,12 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-blue-50 p-4 rounded-lg">
         <h3 class="text-sm font-semibold text-blue-800 mb-2">Зарплата</h3>
         <div class="text-2xl font-bold text-blue-600">
-          {{ vacancy?.salary?.min | currency }} -
-          {{ vacancy?.salary?.max | currency }}
+          {{ vacancy?.salary?.min }}
+          {{ "-" + vacancy?.salary?.max }} ₽
         </div>
       </div>
 
@@ -45,6 +51,22 @@
         <div class="text-2xl font-bold text-purple-600">
           {{ vacancy?.experience_level?.min }} -
           {{ vacancy?.experience_level?.max }} лет
+        </div>
+      </div>
+
+      <div class="bg-purple-50 p-4 rounded-lg">
+        <h3 class="text-sm font-semibold text-yellow-800 mb-2">Возраст</h3>
+        <div
+          *ngIf="!vacancy?.min_age"
+          class="text-2xl font-bold text-yellow-600"
+        >
+          Не указано
+        </div>
+        <div
+          *ngIf="vacancy?.min_age"
+          class="text-2xl font-bold text-yellow-600"
+        >
+          {{ "от" + vacancy?.min_age }}
         </div>
       </div>
     </div>
@@ -59,7 +81,9 @@
 
     <!-- Skills -->
     <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Необходимые навыки</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">
+        Необходимые навыки
+      </h3>
       <div class="flex flex-wrap gap-2">
         <mat-chip
           *ngFor="let skill of vacancy?.skills"
@@ -72,9 +96,7 @@
 
     <!-- Languages -->
     <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">
-        Требуемые языки
-      </h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Требуемые языки</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div
           *ngFor="let lang of vacancy?.languages"
@@ -108,26 +130,26 @@
             <mat-icon class="mr-2">keyboard_backspace</mat-icon>
             В профиль компании
           </button>
-          
+
           <button
             mat-raised-button
             class="!px-6 !py-2"
-            routerLink="/vacancies/{{vacancy?.id}}/applications"
+            routerLink="/vacancies/{{ vacancy?.id }}/applications"
           >
             <mat-icon class="mr-2">people</mat-icon>
             Отклики
           </button>
-          
+
           <button
             mat-raised-button
             class="!px-6 !py-2"
-            routerLink="/vacancies/edit/{{vacancy?.id}}"
+            routerLink="/vacancies/edit/{{ vacancy?.id }}"
           >
             <mat-icon class="mr-2">edit</mat-icon>
             Редактировать вакансию
           </button>
         </div>
-        
+
         <!-- For job seekers (users) -->
         <div *ngIf="user?.role === 'User'" class="w-full">
           <button
@@ -161,7 +183,7 @@
             >
           </div>
         </div>
-        
+
         <!-- For non-authenticated users or companies viewing other vacancies -->
         <div
           *ngIf="!user || (user?.role !== 'User' && !isCompanyOwner)"

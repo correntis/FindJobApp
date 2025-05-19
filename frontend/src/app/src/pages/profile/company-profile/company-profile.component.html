@@ -11,91 +11,261 @@
       <div class="custom-card">
         <div class="custom-card-header">
           <h2 class="custom-card-title">Информация о компании</h2>
-          <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
-            (click)="toggleEditMode()">
-            <mat-icon class="text-lg">{{ editMode ? 'close' : 'edit' }}</mat-icon>
+          <button
+            class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
+            (click)="toggleEditMode()"
+          >
+            <mat-icon class="text-lg">{{
+              editMode ? "close" : "edit"
+            }}</mat-icon>
           </button>
         </div>
         <div class="custom-card-content">
           <form [formGroup]="companyForm" class="space-y-5">
             <div class="custom-form-field">
               <label class="custom-label" for="name">Название компании</label>
-              <input id="name" class="custom-input"
-                [ngClass]="{'error': companyForm.get('name')?.invalid && companyForm.get('name')?.touched}"
-                type="text" formControlName="name" [readonly]="!editMode" placeholder="Название компании">
-              <p class="custom-error" *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched">
+              <input
+                id="name"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('name')?.invalid &&
+                    companyForm.get('name')?.touched
+                }"
+                type="text"
+                formControlName="name"
+                [readonly]="!editMode"
+                placeholder="Название компании"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('name')?.invalid &&
+                  companyForm.get('name')?.touched
+                "
+              >
                 Название компании обязательно
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="description">Описание</label>
-              <textarea id="description" class="custom-input"
-                [ngClass]="{'error': companyForm.get('description')?.invalid && companyForm.get('description')?.touched}"
-                formControlName="description" [readonly]="!editMode" rows="3" placeholder="Описание компании"></textarea>
-              <p class="custom-error" *ngIf="companyForm.get('description')?.invalid && companyForm.get('description')?.touched">
+              <textarea
+                id="description"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('description')?.invalid &&
+                    companyForm.get('description')?.touched
+                }"
+                formControlName="description"
+                [readonly]="!editMode"
+                rows="3"
+                placeholder="Описание компании"
+              ></textarea>
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('description')?.invalid &&
+                  companyForm.get('description')?.touched
+                "
+              >
                 Описание обязательно
               </p>
             </div>
 
             <div class="custom-form-field">
-              <label class="custom-label" for="industry">Сфера деятельности</label>
-              <input id="industry" class="custom-input"
-                [ngClass]="{'error': companyForm.get('industry')?.invalid && companyForm.get('industry')?.touched}"
-                type="text" formControlName="industry" [readonly]="!editMode" placeholder="Сфера деятельности">
-              <p class="custom-error" *ngIf="companyForm.get('industry')?.invalid && companyForm.get('industry')?.touched">
+              <label class="custom-label" for="industry"
+                >Сфера деятельности</label
+              >
+              <input
+                id="industry"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('industry')?.invalid &&
+                    companyForm.get('industry')?.touched
+                }"
+                type="text"
+                formControlName="industry"
+                [readonly]="!editMode"
+                placeholder="Сфера деятельности"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('industry')?.invalid &&
+                  companyForm.get('industry')?.touched
+                "
+              >
                 Сфера деятельности обязательна
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="city">Город</label>
-              <input id="city" class="custom-input"
-                [ngClass]="{'error': companyForm.get('city')?.invalid && companyForm.get('city')?.touched}"
-                type="text" formControlName="city" [readonly]="!editMode" placeholder="Город">
-              <p class="custom-error" *ngIf="companyForm.get('city')?.invalid && companyForm.get('city')?.touched">
+              <input
+                id="city"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('city')?.invalid &&
+                    companyForm.get('city')?.touched
+                }"
+                type="text"
+                formControlName="city"
+                [readonly]="!editMode"
+                placeholder="Город"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('city')?.invalid &&
+                  companyForm.get('city')?.touched
+                "
+              >
                 Город обязателен
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="street">Улица</label>
-              <input id="street" class="custom-input"
-                type="text" formControlName="street" [readonly]="!editMode" placeholder="Улица, дом">
+              <input
+                id="street"
+                class="custom-input"
+                type="text"
+                formControlName="street"
+                [readonly]="!editMode"
+                placeholder="Улица, дом"
+              />
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="phone">Телефон</label>
-              <input id="phone" class="custom-input"
-                [ngClass]="{'error': companyForm.get('phone')?.invalid && companyForm.get('phone')?.touched}"
-                type="text" formControlName="phone" [readonly]="!editMode" placeholder="Телефон">
-              <p class="custom-error" *ngIf="companyForm.get('phone')?.invalid && companyForm.get('phone')?.touched">
+              <input
+                id="phone"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('phone')?.invalid &&
+                    companyForm.get('phone')?.touched
+                }"
+                type="text"
+                formControlName="phone"
+                [readonly]="!editMode"
+                placeholder="Телефон"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('phone')?.invalid &&
+                  companyForm.get('phone')?.touched
+                "
+              >
                 Телефон обязателен
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="email">Email</label>
-              <input id="email" class="custom-input"
-                [ngClass]="{'error': companyForm.get('email')?.invalid && companyForm.get('email')?.touched}"
-                type="email" formControlName="email" [readonly]="!editMode" placeholder="Email компании">
-              <p class="custom-error" *ngIf="companyForm.get('email')?.invalid && companyForm.get('email')?.touched">
+              <input
+                id="email"
+                class="custom-input"
+                [ngClass]="{
+                  error:
+                    companyForm.get('email')?.invalid &&
+                    companyForm.get('email')?.touched
+                }"
+                type="email"
+                formControlName="email"
+                [readonly]="!editMode"
+                placeholder="Email компании"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  companyForm.get('email')?.invalid &&
+                  companyForm.get('email')?.touched
+                "
+              >
                 Введите корректный email
               </p>
             </div>
 
             <div class="custom-form-field">
               <label class="custom-label" for="webSite">Сайт</label>
-              <input id="webSite" class="custom-input"
-                type="text" formControlName="webSite" [readonly]="!editMode" placeholder="Сайт компании">
+              <input
+                id="webSite"
+                class="custom-input"
+                type="text"
+                formControlName="webSite"
+                [readonly]="!editMode"
+                placeholder="Сайт компании"
+              />
+            </div>
+
+            <div class="custom-form-field">
+              <label class="custom-label">Telegram</label>
+              <div
+                class="bg-gray-50 p-4 rounded-lg mt-1 border border-gray-200"
+              >
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+                >
+                  <div class="flex items-center">
+                    <mat-icon class="text-blue-500 mr-2">telegram</mat-icon>
+                    <span class="text-gray-700 font-medium">{{
+                      telegramConnected ? "Подключен" : "Не подключен"
+                    }}</span>
+                  </div>
+                  <div class="w-full sm:w-auto">
+                    <button
+                      *ngIf="!telegramConnected"
+                      class="btn btn-sm btn-primary flex items-center justify-center w-full"
+                      (click)="connectTelegram()"
+                    >
+                      <mat-icon class="text-sm mr-1">link</mat-icon>
+                      Подключить
+                    </button>
+                    <div
+                      *ngIf="telegramConnected"
+                      class="grid grid-cols-2 gap-2"
+                    >
+                      <button
+                        class="btn btn-sm btn-primary flex items-center justify-center"
+                        (click)="openTelegramChat()"
+                      >
+                        <mat-icon class="text-sm mr-1">chat</mat-icon>
+                        Открыть чат
+                      </button>
+                      <button
+                        class="btn btn-sm btn-secondary flex items-center justify-center"
+                        (click)="disconnectTelegram()"
+                      >
+                        <mat-icon class="text-sm mr-1">link_off</mat-icon>
+                        Отключить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
         <div *ngIf="editMode" class="custom-card-footer">
-          <button class="btn btn-secondary mr-3" (click)="toggleEditMode()">Отмена</button>
-          <button class="btn btn-primary flex items-center" [disabled]="companyForm.invalid || saving"
-            (click)="saveCompanyData()">
-            <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
+          <button class="btn btn-secondary mr-3" (click)="toggleEditMode()">
+            Отмена
+          </button>
+          <button
+            class="btn btn-primary flex items-center"
+            [disabled]="companyForm.invalid || saving"
+            (click)="saveCompanyData()"
+          >
+            <mat-spinner
+              *ngIf="saving"
+              diameter="20"
+              class="mr-2"
+            ></mat-spinner>
             <span>Сохранить</span>
           </button>
         </div>
@@ -106,67 +276,112 @@
       <div class="custom-card h-full flex flex-col">
         <div class="custom-card-header">
           <h2 class="custom-card-title">Вакансии</h2>
-          <button *ngIf="company" 
-            class="btn btn-sm btn-primary flex items-center" 
-            (click)="createVacancy()" 
-            title="Создать новую вакансию">
+          <button
+            *ngIf="company"
+            class="btn btn-sm btn-primary flex items-center"
+            (click)="createVacancy()"
+            title="Создать новую вакансию"
+          >
             <mat-icon class="text-sm mr-1">add</mat-icon>
             Добавить вакансию
           </button>
         </div>
         <div class="custom-card-content flex-grow">
-          <div *ngIf="!company" class="flex flex-col items-center justify-center py-16 text-center">
+          <div
+            *ngIf="!company"
+            class="flex flex-col items-center justify-center py-16 text-center"
+          >
             <div class="bg-gray-100 rounded-full p-6 mb-6">
               <mat-icon class="text-5xl text-gray-400">business</mat-icon>
             </div>
-            <p class="text-gray-500 mb-6 max-w-md">Сначала сохраните информацию о компании, чтобы размещать вакансии.</p>
+            <p class="text-gray-500 mb-6 max-w-md">
+              Сначала сохраните информацию о компании, чтобы размещать вакансии.
+            </p>
           </div>
 
-          <div *ngIf="company && !vacancies.length" class="flex flex-col items-center justify-center py-16 text-center">
+          <div
+            *ngIf="company && !vacancies.length"
+            class="flex flex-col items-center justify-center py-16 text-center"
+          >
             <div class="bg-gray-100 rounded-full p-6 mb-6">
               <mat-icon class="text-5xl text-gray-400">work_outline</mat-icon>
             </div>
-            <p class="text-gray-500 mb-6 max-w-md">У вас пока нет вакансий. Создайте первую вакансию, чтобы начать получать отклики!</p>
-            <button class="btn btn-primary flex items-center" (click)="createVacancy()">
+            <p class="text-gray-500 mb-6 max-w-md">
+              У вас пока нет вакансий. Создайте первую вакансию, чтобы начать
+              получать отклики!
+            </p>
+            <button
+              class="btn btn-primary flex items-center"
+              (click)="createVacancy()"
+            >
               <mat-icon class="mr-2">add</mat-icon>
               <span>Создать вакансию</span>
             </button>
           </div>
 
           <div *ngIf="vacancies.length" class="space-y-4">
-            <div *ngFor="let vacancy of vacancies" class="bg-gray-50 p-5 rounded-lg hover:shadow-md transition">
+            <div
+              *ngFor="let vacancy of vacancies"
+              class="bg-gray-50 p-5 rounded-lg hover:shadow-md transition"
+            >
               <div class="flex justify-between items-start">
                 <div>
-                  <h3 class="text-xl font-semibold text-gray-800">{{ vacancy.title }}</h3>
-                  <p class="text-gray-600">{{ vacancy.salary && vacancy.salary.min || 'Не указано' }} - {{ vacancy.salary && vacancy.salary.max || 'Не указано' }} $</p>
+                  <h3 class="text-xl font-semibold text-gray-800">
+                    {{ vacancy.title }}
+                  </h3>
+                  <p class="text-gray-600">
+                    {{
+                      (vacancy.salary && vacancy.salary.min) || "Не указано"
+                    }}
+                    -
+                    {{
+                      (vacancy.salary && vacancy.salary.max) || "Не указано"
+                    }}
+                    ₽
+                  </p>
                 </div>
                 <div class="flex gap-2">
-                  <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
-                    (click)="editVacancy(vacancy.id)" 
-                    title="Редактировать вакансию">
+                  <button
+                    class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
+                    (click)="editVacancy(vacancy.id)"
+                    title="Редактировать вакансию"
+                  >
                     <mat-icon class="text-lg">edit</mat-icon>
                   </button>
-                  <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
-                    (click)="archiveVacancy(vacancy.id)" 
-                    title="Архивировать вакансию">
+                  <button
+                    class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
+                    (click)="archiveVacancy(vacancy.id)"
+                    title="Архивировать вакансию"
+                  >
                     <mat-icon class="text-lg">archive</mat-icon>
                   </button>
-                  <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
-                    (click)="viewApplications(vacancy.id)" 
-                    title="Отклики">
+                  <button
+                    class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
+                    (click)="viewApplications(vacancy.id)"
+                    title="Отклики"
+                  >
                     <mat-icon class="text-lg">assignment_ind</mat-icon>
                   </button>
-                  <button class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2" 
-                    (click)="viewVacancy(vacancy.id)" 
-                    title="Подробнее о вакансии">
+                  <button
+                    class="btn-sm rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 p-2"
+                    (click)="viewVacancy(vacancy.id)"
+                    title="Подробнее о вакансии"
+                  >
                     <mat-icon class="text-lg">visibility</mat-icon>
                   </button>
                 </div>
               </div>
-              <p class="mt-2 text-gray-700 line-clamp-2">{{ vacancy.requirements && vacancy.requirements.join(', ') || 'Требования не указаны' }}</p>
+              <p class="mt-2 text-gray-700 line-clamp-2">
+                {{
+                  (vacancy.requirements && vacancy.requirements.join(", ")) ||
+                    "Требования не указаны"
+                }}
+              </p>
               <div class="mt-2 flex flex-wrap gap-2">
-                <span *ngFor="let tag of vacancy.tags" 
-                      class="badge badge-primary">
+                <span
+                  *ngFor="let tag of vacancy.tags"
+                  class="badge badge-primary"
+                >
                   {{ tag }}
                 </span>
               </div>

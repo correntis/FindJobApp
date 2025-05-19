@@ -62,8 +62,6 @@ export class VacanciesRepository {
   async search(filters: any): Promise<VacancyDocument[]> {
     const query: any = {};
 
-    console.log("filter", filters);
-
     if (filters.minSalary || filters.maxSalary) {
       query["$and"] = query["$and"] || [];
 
@@ -133,8 +131,6 @@ export class VacanciesRepository {
     const page = Math.max(1, filters.page || 1);
     const limit = Math.max(1, filters.limit || 10);
     const skip = (page - 1) * limit;
-
-    console.log("Generated Query:", JSON.stringify(query, null, 2));
 
     return this.vacancyModel
       .find(query)
