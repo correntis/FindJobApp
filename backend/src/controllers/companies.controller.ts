@@ -20,7 +20,7 @@ import { RolesGuard } from "src/guards/roles-auth.guard";
 import { CompanyDocument, Company } from "src/schemas/company.schema";
 import { CompaniesService } from "src/services/companies.service";
 
-@Controller("companies")
+@Controller("api/companies")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}

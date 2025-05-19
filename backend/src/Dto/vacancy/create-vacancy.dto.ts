@@ -4,17 +4,37 @@ import { ExperienceLevelDto } from "./experience-level.dto";
 import { LanguageDto } from "./language.dto";
 
 export class CreateVacancyDto {
-  @ApiProperty({ example: "65f8e3b5f3a2c7b9e1d5a7c3", description: "ID компании" })
+  @ApiProperty({
+    example: "65f8e3b5f3a2c7b9e1d5a7c3",
+    description: "ID компании",
+  })
   companyId: string;
 
-  @ApiProperty({ example: "Software Engineer", description: "Название вакансии" })
+  @ApiProperty({
+    example: "Software Engineer",
+    description: "Название вакансии",
+  })
   title: string;
 
   @ApiProperty({ example: "Full-time", description: "Тип занятости" })
   empl_type: string;
 
-  @ApiProperty({ example: false, description: "Флаг архивности вакансии", default: false })
+  @ApiProperty({
+    example: false,
+    description: "Флаг архивности вакансии",
+    default: false,
+  })
   is_archived?: boolean;
+
+  @ApiProperty({ example: false, description: "Для инвалидов", default: false })
+  for_invalids: boolean;
+
+  @ApiProperty({
+    example: 18,
+    description: "Минимальный возраст соискателя",
+    default: 18,
+  })
+  min_age: number;
 
   @ApiProperty({
     example: ["JavaScript", "TypeScript", "NestJS"],
@@ -37,7 +57,10 @@ export class CreateVacancyDto {
   @ApiProperty({ description: "Диапазон зарплаты", type: SalaryDto })
   salary: SalaryDto;
 
-  @ApiProperty({ description: "Требуемый уровень опыта", type: ExperienceLevelDto })
+  @ApiProperty({
+    description: "Требуемый уровень опыта",
+    type: ExperienceLevelDto,
+  })
   experience_level: ExperienceLevelDto;
 
   @ApiProperty({

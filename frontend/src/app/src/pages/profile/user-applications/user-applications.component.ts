@@ -195,7 +195,7 @@ export class UserApplicationsComponent implements OnInit {
   getStatusText(status: ApplicationStatus): string {
     switch (status) {
       case ApplicationStatus.Pending:
-        return 'В ожидании';
+        return 'Ожидание';
       case ApplicationStatus.Applied:
         return 'Принят';
       case ApplicationStatus.Rejected:

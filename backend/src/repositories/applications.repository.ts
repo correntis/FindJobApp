@@ -34,11 +34,11 @@ export class ApplicationsRepository {
   }
 
   async findByUserId(userId: string): Promise<ApplicationDocument[]> {
-    return this.applicationModel.find({ userId }).exec();
+    return this.applicationModel.find({ userId }).sort({ createdAt: -1 }).exec();
   }
 
   async findByVacancyId(vacancyId: string): Promise<ApplicationDocument[]> {
-    return this.applicationModel.find({ vacancyId }).exec();
+    return this.applicationModel.find({ vacancyId }).sort({ createdAt: -1 }).exec();
   }
 
   async findByVacancyAndUser(

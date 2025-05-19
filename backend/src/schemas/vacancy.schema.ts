@@ -38,6 +38,12 @@ export class Vacancy {
 
   @Prop({ default: false })
   is_archived: boolean;
+  
+  @Prop({ default: false })
+  for_invalids: boolean;
+
+  @Prop()
+  min_age: number;
 
   @Prop({ type: [String] })
   requirements: string[];
@@ -56,6 +62,7 @@ export class Vacancy {
 
   @Prop({ type: [Language], required: true })
   languages: Language[];
+
 }
 
 export const VacancySchema = SchemaFactory.createForClass(Vacancy);

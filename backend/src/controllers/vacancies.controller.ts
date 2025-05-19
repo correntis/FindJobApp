@@ -21,10 +21,20 @@ import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { RolesGuard } from "src/guards/roles-auth.guard";
 import { UserRole } from "src/enums/user-role.enum";
 
-@Controller("vacancies")
+@Controller("api/vacancies")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class VacanciesController {
   constructor(private readonly vacanciesService: VacanciesService) {}
+
+  @Get("languages")
+  @Roles(UserRole.User, UserRole.Company)
+  @ApiOperation({ summary: "Get all existing languages" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  async getAllLanguages(): Promise<unknown[]> {
+    return this.vacanciesService.findAllLanguages();
+  }
 
   @Post()
   @Roles(UserRole.Company, UserRole.User)
@@ -84,10 +94,7 @@ export class VacanciesController {
     status: HttpStatus.FORBIDDEN,
     description: "Forbidden: You can only archive your own vacancies",
   })
-  async archive(
-    @Param("vacancyId") vacancyId: string,
-    @Request() req: any
-  ) {
+  async archive(@Param("vacancyId") vacancyId: string, @Request() req: any) {
     const userId = req.user.id;
     return this.vacanciesService.archive(vacancyId, userId);
   }
@@ -138,7 +145,12 @@ export class VacanciesController {
   })
   async searchVacancies(
     @Body() searchDto: SearchVacancyDto
-  ): Promise<VacancyDocument[]> {
-    return this.vacanciesService.search(searchDto);
+  ): Promise<VacancyDocument[] | null> {
+    try {
+      return this.vacanciesService.search(searchDto);
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   }
 }

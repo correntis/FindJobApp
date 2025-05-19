@@ -83,7 +83,7 @@
               'bg-red-100 text-red-800': application.status === applicationStatus.Rejected
             }" class="px-3 py-1 rounded-full text-sm inline-block">
               <ng-container [ngSwitch]="application.status">
-                <span *ngSwitchCase="applicationStatus.Pending">В ожидании</span>
+                <span *ngSwitchCase="applicationStatus.Pending">Ожиданиe</span>
                 <span *ngSwitchCase="applicationStatus.Applied">Принят</span>
                 <span *ngSwitchCase="applicationStatus.Rejected">Отклонен</span>
                 <span *ngSwitchDefault>{{application.status}}</span>

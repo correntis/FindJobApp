@@ -12,12 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-compact-vacancy',
   standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    CommonModule,
-    MatButtonModule
-  ],
+  imports: [MatIconModule, MatCardModule, CommonModule, MatButtonModule],
   templateUrl: './compact-vacancy.component.html',
 })
 export class CompactVacancyComponent {
@@ -44,6 +39,9 @@ export class CompactVacancyComponent {
   }
 
   redirectToVacancyPage(): void {
-    this.router.navigate(['/vacancy', this.vacancy?.id]);
+    const tree = this.router.createUrlTree(['/vacancy', this.vacancy?.id]);
+    const url = this.router.serializeUrl(tree);
+
+    window.open(url, '_blank');
   }
 }

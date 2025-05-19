@@ -29,11 +29,11 @@ export class VacanciesRepository {
   }
 
   async findAllByCompany(companyId: string): Promise<VacancyDocument[]> {
-    return this.vacancyModel.find({ companyId }).exec();
+    return this.vacancyModel.find({ companyId }).sort({ createdAt: -1 }).exec();
   }
 
   async findAllByUser(userId: string): Promise<VacancyDocument[]> {
-    return this.vacancyModel.find({ userId }).exec();
+    return this.vacancyModel.find({ userId }).sort({ createdAt: -1 }).exec();
   }
 
   async archive(vacancyId: string): Promise<VacancyDocument | null> {
@@ -44,12 +44,19 @@ export class VacanciesRepository {
     );
   }
 
-  async toggleArchive(vacancyId: string, isArchived: boolean): Promise<VacancyDocument | null> {
+  async toggleArchive(
+    vacancyId: string,
+    isArchived: boolean
+  ): Promise<VacancyDocument | null> {
     return this.vacancyModel.findByIdAndUpdate(
       vacancyId,
       { is_archived: isArchived },
       { new: true }
     );
+  }
+
+  async findAllLanguages(): Promise<unknown[]> {
+    return this.vacancyModel.distinct("languages.name").exec();
   }
 
   async search(filters: any): Promise<VacancyDocument[]> {
@@ -85,9 +92,19 @@ export class VacanciesRepository {
       }
     }
 
+    if (filters.min_age) {
+      query["$and"] = query["$and"] || [];
+      query["$and"].push({
+        min_age: { $lte: filters.min_age },
+      });
+    }
+
     if (filters.empl_type) query.empl_type = filters.empl_type;
-    if (filters.is_archived !== undefined)
-      query.is_archived = filters.is_archived;
+
+    query.is_archived = false;
+
+    if (filters.for_invalids !== undefined)
+      query.for_invalids = filters.for_invalids;
 
     if (filters.skills && filters.skills.length > 0) {
       query.skills = { $in: filters.skills };
@@ -101,7 +118,16 @@ export class VacanciesRepository {
     }
 
     if (filters.title) {
-      query.title = { $regex: filters.title, $options: 'i' };
+      const words = filters.title.trim().split(/\s+/).filter(Boolean);
+
+      if (words.length > 0) {
+        query.$or = words.map((word) => ({
+          title: {
+            $regex: word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+            $options: "i",
+          },
+        }));
+      }
     }
 
     const page = Math.max(1, filters.page || 1);
@@ -110,6 +136,11 @@ export class VacanciesRepository {
 
     console.log("Generated Query:", JSON.stringify(query, null, 2));
 
-    return this.vacancyModel.find(query).skip(skip).limit(limit).exec();
+    return this.vacancyModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
   }
 }

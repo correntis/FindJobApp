@@ -1,8 +1,7 @@
-import { User } from './../models/user.model';
+import { endpoints } from './../../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { endpoints } from '../../config/api.config';
 import { Vacancy } from '../models/vacancy.model';
 import { SearchVacancyDto } from '../dto/vacancy/search-vacancy.dto';
 
@@ -40,5 +39,10 @@ export class VacanciesService {
   search(searchDto: Partial<SearchVacancyDto>): Observable<Vacancy[]> {
     const endpoint = endpoints.vacancies.search();
     return this.httpClient.post<Vacancy[]>(endpoint, searchDto);
+  }
+
+  getAllLanguages(): Observable<string[]> {
+    const endpoint = endpoints.vacancies.languages();
+    return this.httpClient.get<string[]>(endpoint);
   }
 }

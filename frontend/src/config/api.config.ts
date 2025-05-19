@@ -37,6 +37,7 @@ const vacanciesEndpoints = {
   archiveById: (vacancyId: string) =>
     `${apiPath.vacancies}/${vacancyId}/archive`,
   search: () => `${apiPath.vacancies}/search`,
+  languages: () => `${apiPath.vacancies}/languages`
 };
 
 const resumesEndpoints = {

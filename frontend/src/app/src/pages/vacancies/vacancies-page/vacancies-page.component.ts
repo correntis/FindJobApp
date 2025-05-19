@@ -1,4 +1,11 @@
-import { Component, HostListener, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -17,7 +24,7 @@ import {
 } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -26,13 +33,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { HeaderComponent } from "../../../shared/header/header.component";
+import { HeaderComponent } from '../../../shared/header/header.component';
 import { CompactVacancyComponent } from '../../../shared/compact-vacancy/compact-vacancy.component';
 import { UserStateService } from '../../../../../core/services/user-state.service';
 import { ApplicationsService } from '../../../../../core/services/applications.service';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { User } from '../../../../../core/models/user.model';
 import { UserRoles } from '../../../../../core/enums/user-roles.enum';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-vacancies',
@@ -46,6 +54,7 @@ import { UserRoles } from '../../../../../core/enums/user-roles.enum';
     MatOptionModule,
     MatIconModule,
     MatChipsModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatCardModule,
     MatPaginatorModule,
@@ -53,21 +62,32 @@ import { UserRoles } from '../../../../../core/enums/user-roles.enum';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
-    CompactVacancyComponent
-],
+    CompactVacancyComponent,
+  ],
 })
 export class VacanciesPageComponent implements OnInit, AfterViewInit {
   form: FormGroup;
 
+  languages: string[] = [];
   vacancies: Vacancy[] = [];
   loading = false;
   currentPage = 1;
   currentLimit = 5;
   hasMore = true;
-  employmentTypes = ['Full-time', 'Part-time', 'Contract', 'Freelance'];
+  employmentTypes = [
+    'Полное',
+    'Пол ставки',
+    'Контракт',
+    'Стажировка',
+    'Удаленно',
+  ];
   currentUser: User | null = null;
   showArchivedOption = false;
   userApplications: string[] = [];
+
+  @ViewChild('languageInput') languageInput!: ElementRef<HTMLInputElement>;
+  languageCtrl = new FormControl('');
+  filteredLanguages: string[] = [];
 
   @ViewChild('filtersContainer') filtersContainer?: ElementRef;
 
@@ -88,16 +108,19 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
       skills: new FormControl([]),
       languages: new FormControl([]),
       tags: new FormControl([]),
-      is_archived: [false],
+      for_invalids: [false],
+      min_age: [null],
     });
   }
 
   ngOnInit() {
-    this.userStateService.authUser$.subscribe(authUser => {
+    this.loadLanguages();
+
+    this.userStateService.authUser$.subscribe((authUser) => {
       this.currentUser = authUser?.user || null;
-      
+
       this.showArchivedOption = this.currentUser?.role === UserRoles.Company;
-      
+
       if (this.currentUser?.role === UserRoles.User && this.currentUser?.id) {
         this.loadUserApplications(this.currentUser.id);
       } else {
@@ -112,10 +135,29 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
       });
   }
 
+  loadLanguages() {
+    this.vacancyService.getAllLanguages().subscribe((languages) => {
+      this.languages = languages;
+      this.filteredLanguages = [...this.languages];
+
+      this.languageCtrl.valueChanges
+        .pipe(debounceTime(200), distinctUntilChanged())
+        .subscribe((val) => {
+          const filter = (val || '').toLowerCase();
+          this.filteredLanguages = this.languages.filter(
+            (l) =>
+              l.toLowerCase().includes(filter) &&
+              !(this.form.controls['languages'].value as string[]).includes(l)
+          );
+        });
+    });
+  }
+
   loadUserApplications(userId: string) {
-    this.applicationsService.getByUserId(userId)
+    this.applicationsService
+      .getByUserId(userId)
       .pipe(
-        map(applications => applications.map(app => app.vacancyId)),
+        map((applications) => applications.map((app) => app.vacancyId)),
         catchError(() => of([]))
       )
       .subscribe({
@@ -125,7 +167,7 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.resetAndLoad();
-        }
+        },
       });
   }
 
@@ -135,23 +177,31 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
 
   setupFiltersScroll() {
     setTimeout(() => {
-      const filterElements = document.querySelectorAll('.filters-scroll-container');
+      const filterElements = document.querySelectorAll(
+        '.filters-scroll-container'
+      );
       if (filterElements && filterElements.length > 0) {
-        filterElements.forEach(container => {
-          container.addEventListener('wheel', (event: any) => {
-            const el = container as HTMLElement;
-            const scrollTop = el.scrollTop;
-            const scrollHeight = el.scrollHeight;
-            const height = el.clientHeight;
-            const delta = event.deltaY;
-            
-            if ((scrollTop <= 0 && delta < 0) || 
-                (scrollTop + height >= scrollHeight && delta > 0)) {
-            } else {
-              event.preventDefault();
-              el.scrollTop = scrollTop + delta;
-            }
-          }, { passive: false });
+        filterElements.forEach((container) => {
+          container.addEventListener(
+            'wheel',
+            (event: any) => {
+              const el = container as HTMLElement;
+              const scrollTop = el.scrollTop;
+              const scrollHeight = el.scrollHeight;
+              const height = el.clientHeight;
+              const delta = event.deltaY;
+
+              if (
+                (scrollTop <= 0 && delta < 0) ||
+                (scrollTop + height >= scrollHeight && delta > 0)
+              ) {
+              } else {
+                event.preventDefault();
+                el.scrollTop = scrollTop + delta;
+              }
+            },
+            { passive: false }
+          );
         });
       }
     }, 500);
@@ -166,13 +216,13 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
 
   searchVacancies() {
     if (this.loading) return;
-    
-    const params = {...this.form.value};
-    
+
+    const params = { ...this.form.value };
+
     if (this.currentUser?.role !== UserRoles.Company && !params.is_archived) {
       params.is_archived = false;
     }
-    
+
     this.loading = true;
     this.vacancyService
       .search({
@@ -183,14 +233,15 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res) => {
           let filteredVacancies = res;
-          
+
           if (params.is_archived && this.currentUser?.role === UserRoles.User) {
-            filteredVacancies = res.filter(vacancy => 
-              !vacancy.is_archived ||
-              this.userApplications.includes(vacancy.id)
+            filteredVacancies = res.filter(
+              (vacancy) =>
+                !vacancy.is_archived ||
+                this.userApplications.includes(vacancy.id)
             );
           }
-          
+
           if (this.vacancies.length > 0) {
             setTimeout(() => {
               this.vacancies = [...this.vacancies, ...filteredVacancies];
@@ -209,18 +260,18 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.loading = false;
-        }
+        },
       });
   }
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
     if (!this.hasMore || this.loading) return;
-    
+
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    
+
     if (scrollTop + windowHeight > documentHeight * 0.8) {
       this.searchVacancies();
     }
@@ -249,15 +300,45 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
     this.form.controls['skills'].setValue(skills);
   }
 
-  addLanguage(event: any) {
+ addLanguageFromInput(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
-    if (value) {
+
+    if (
+      value &&
+      this.languages.includes(value) &&
+      !(this.form.controls['languages'].value as string[]).includes(value)
+    ) {
       this.form.controls['languages'].setValue([
         ...this.form.controls['languages'].value,
         value,
       ]);
-      event.chipInput!.clear();
+      this.resetAndLoad();
     }
+
+    // очистка поля MatChipInput  
+    event.chipInput!.clear();
+    this.languageCtrl.setValue('');
+  }
+
+  /** Обработка выбора из autocomplete */
+  addLanguageFromAutocomplete(event: MatAutocompleteSelectedEvent) {
+    const value = event.option.value as string;
+
+    if (
+      value &&
+      this.languages.includes(value) &&
+      !(this.form.controls['languages'].value as string[]).includes(value)
+    ) {
+      this.form.controls['languages'].setValue([
+        ...this.form.controls['languages'].value,
+        value,
+      ]);
+      this.resetAndLoad();
+    }
+
+    // очистка поля ввода и автокомплита  
+    this.languageInput.nativeElement.value = '';
+    this.languageCtrl.setValue('');
   }
 
   removeLanguage(language: string) {
@@ -267,7 +348,7 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
     this.form.controls['languages'].setValue(languages);
   }
 
-  redirectToVacancyPage(vacancy: Vacancy){
-    this.router.navigate(['vacancy', vacancy.id])
+  redirectToVacancyPage(vacancy: Vacancy) {
+    this.router.navigate(['vacancy', vacancy.id]);
   }
 }

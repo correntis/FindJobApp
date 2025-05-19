@@ -16,7 +16,11 @@ export class SearchVacancyDto {
   @ApiProperty({ required: false, example: "Full-time" })
   empl_type?: string;
 
-  @ApiProperty({ required: false, type: [String], example: ["NestJS", "MongoDB"] })
+  @ApiProperty({
+    required: false,
+    type: [String],
+    example: ["NestJS", "MongoDB"],
+  })
   skills?: string[];
 
   @ApiProperty({ required: false, type: [String], example: ["English"] })
@@ -28,8 +32,15 @@ export class SearchVacancyDto {
   @ApiProperty({ required: false, example: "65f8e3b5f3a2c7b9e1d5a7c3" })
   companyId?: string;
 
-  @ApiProperty({ required: false, example: false })
-  is_archived?: boolean;
+  @ApiProperty({ example: false, description: "Для инвалидов", default: false })
+  for_invalids?: boolean;
+
+  @ApiProperty({
+    example: 18,
+    description: "Минимальный возраст соискателя",
+    default: 18,
+  })
+  min_age?: number;
 
   @ApiProperty({ required: false, example: 1 })
   page: number = 1;
@@ -37,6 +48,6 @@ export class SearchVacancyDto {
   @ApiProperty({ required: false, example: 10 })
   limit: number = 10;
 
-  @ApiProperty({ required: false, example: 'Разработчик' })
+  @ApiProperty({ required: false, example: "Разработчик" })
   title?: string;
 }

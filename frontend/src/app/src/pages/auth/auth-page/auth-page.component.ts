@@ -65,11 +65,11 @@ export class AuthPageComponent {
 
   appRoles: { text: string; roleName: string }[] = [
     {
-      text: '🚀 I\'m seeking exciting career opportunities.',
+      text: '🚀 Я ищу новые карьерные возможности.',
       roleName: UserRoles.User,
     },
     {
-      text: '🏢 I\'m looking to hire exceptional talent for my company.',
+      text: '🏢 Я в поисках талантов для своей компании. ',
       roleName: UserRoles.Company,
     },
   ];
@@ -98,15 +98,17 @@ export class AuthPageComponent {
     });
 
     this.registrationForm = this.fb.group({
-      firstName: [Faker.generateRandomString(), Validators.required],
-      lastName: [Faker.generateRandomString(), Validators.required],
+      firstName: [/*Faker.generateRandomString()*/ null, Validators.required],
+      lastName: [/*Faker.generateRandomString()*/ null, Validators.required],
       email: [
         // Faker.generateRandomEmail(),
-        'user@example.com',
+        // 'user@example.com',
+        null,
         [(Validators.required, Validators.email)],
       ],
       password: [
-        Faker.generateValidPassword(),
+        // Faker.generateValidPassword(),
+        null,
         [
           Validators.required,
           Validators.minLength(6),
@@ -116,16 +118,17 @@ export class AuthPageComponent {
         ],
       ],
       confirmPassword: [
-        Faker.generateValidPassword(),
+        null,
+        // Faker.generateValidPassword(),
         [Validators.required, this.confirmPasswordValidator.bind(this)],
       ],
       choosedRole: ['', Validators.required],
     });
 
     this.companyForm = this.fb.group({
-      companyName: [Faker.generateRandomString(), Validators.required],
-      companyIndustry: [Faker.generateRandomString(), Validators.required],
-      companyEmail: [Faker.generateRandomEmail(), Validators.email],
+      companyName: [ /*Faker.generateRandomString()*/, Validators.required],
+      companyIndustry: [/*Faker.generateRandomString()*/, Validators.required],
+      companyEmail: [/*Faker.generateRandomEmail()*/, Validators.email],
       companyPhone: ['', [Validators.pattern(/^\d{10}$/)]],
       companyCity: [''],
       companyDescription: [''],
@@ -146,7 +149,13 @@ export class AuthPageComponent {
     this.authService.login(loginUserDto).subscribe({
       next: (authUser: AuthUser) => {
         this.addAuthUserInLocalStorage(authUser);
-        this.router.navigate(['vacancies']);
+        if(authUser.user.role === UserRoles.User){
+          this.router.navigate(['vacancies']);
+
+        }else if (authUser.user.role === UserRoles.Company){
+          this.router.navigate(['profile/company'])
+        }
+
       },
       error: (err: HttpErrorResponse) => {
         switch (err.status) {

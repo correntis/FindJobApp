@@ -23,7 +23,7 @@ import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { RolesGuard } from "src/guards/roles-auth.guard";
 import { ApplicationsService } from "src/services/application.service";
 
-@Controller("applications")
+@Controller("api/applications")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}

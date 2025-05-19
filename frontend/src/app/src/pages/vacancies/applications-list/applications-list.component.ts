@@ -131,7 +131,7 @@ export class ApplicationsListComponent implements OnInit {
       autoFocus: 'dialog',
       restoreFocus: true,
       data: {
-        title: `Reply to ${this.getFullName(application.user)}`,
+        title: `Сообщение для ${this.getFullName(application.user)}`,
         message: ''
       },
       disableClose: true

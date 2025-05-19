@@ -29,7 +29,7 @@ async function bootstrap() {
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("swag", app, documentFactory, {
+  SwaggerModule.setup("api/swag", app, documentFactory, {
     swaggerOptions: {
       persistAuthorization: true,
     },

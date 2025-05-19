@@ -3,7 +3,8 @@
   <div class="p-5 border-b border-gray-100">
     <div class="flex justify-between items-start">
       <div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-1">{{ vacancy?.title }}</h3>
+        <p *ngIf="vacancy?.for_invalids" class="relative text-xs text-red-600 top-[-5px] left-[-5px]">Подходит для людей с инвалидностью</p>
+        <h3  style="font-size: 23px;" class="text-3xl font-extrabold text-gray-800 mb-1">{{ vacancy?.title }}</h3>
         <p class="text-gray-600 font-medium">{{ company?.name }}</p>
       </div>
       <div *ngIf="vacancy?.is_archived" class="ml-2 badge badge-error flex items-center">
@@ -15,7 +16,7 @@
 
   <!-- Main information -->
   <div class="p-5 flex-grow flex flex-col gap-4">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-3 gap-4">
       <!-- Work experience -->
       <div class="bg-gray-50 p-3 rounded-lg flex items-center">
         <div class="bg-primary/10 rounded-full p-2 mr-3">
@@ -43,6 +44,17 @@
         <div>
           <p class="text-xs text-gray-500 uppercase">Тип занятости</p>
           <p class="font-medium">{{ vacancy?.empl_type || 'Не указан' }}</p>
+        </div>
+      </div>
+
+      <!-- Age -->
+      <div *ngIf="vacancy?.min_age" class="bg-gray-50 p-3 rounded-lg flex items-center">
+        <div class="bg-yellow-100 rounded-full p-2 mr-3">
+          <mat-icon class="text-yellow-600">child_care</mat-icon>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase">Возраст</p>
+          <p class="font-medium">{{'от ' + vacancy?.min_age}}</p>
         </div>
       </div>
     </div>

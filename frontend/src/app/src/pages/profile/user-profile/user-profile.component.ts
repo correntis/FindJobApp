@@ -156,6 +156,14 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/profile/resume/create']);
   }
 
+  deleteResume(): void {
+    if(this.resume){
+      this.resumesService.delete(this.resume.id).subscribe((next) => {
+        this.resume = null;
+      })
+    }
+  }
+
   editResume(): void {
     if (this.resume) {
       this.router.navigate(['/profile/resume/edit', this.resume.id]);

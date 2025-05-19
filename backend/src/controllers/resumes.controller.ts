@@ -18,7 +18,7 @@ import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { RolesGuard } from "src/guards/roles-auth.guard";
 import { ResumesService } from "src/services/resumes.service";
 
-@Controller("resumes")
+@Controller("api/resumes")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ResumesController {
   constructor(private readonly resumesService: ResumesService) {}

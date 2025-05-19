@@ -13,7 +13,7 @@ import { RegisterUserDto } from "src/dto/user/register-user.dto";
 import { User } from "src/schemas/user.schema";
 import { AuthService } from "src/services/auth.service";
 
-@Controller("auth")
+@Controller("api/auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

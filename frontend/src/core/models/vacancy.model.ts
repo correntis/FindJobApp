@@ -8,6 +8,8 @@ export interface Vacancy {
   title: string;
   empl_type: string;
   is_archived: boolean;
+  for_invalids: boolean;
+  min_age: number;
   requirements: string[];
   skills: string[];
   tags: string[];
