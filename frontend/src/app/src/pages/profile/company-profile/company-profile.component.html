@@ -326,17 +326,19 @@
             >
               <div class="flex justify-between items-start">
                 <div>
+                  <span
+                    *ngIf="vacancy?.is_archived"
+                    class="badge badge-error flex items-center w-[90px]"
+                  >
+                    В архиве
+                  </span>
                   <h3 class="text-xl font-semibold text-gray-800">
                     {{ vacancy.title }}
                   </h3>
                   <p class="text-gray-600">
-                    {{
-                      (vacancy.salary && vacancy.salary.min) || "Не указано"
-                    }}
+                    {{ (vacancy.salary && vacancy.salary.min) || "Не указано" }}
                     -
-                    {{
-                      (vacancy.salary && vacancy.salary.max) || "Не указано"
-                    }}
+                    {{ (vacancy.salary && vacancy.salary.max) || "Не указано" }}
                     ₽
                   </p>
                 </div>

@@ -52,19 +52,16 @@ export class VacanciesService {
       throw new NotFoundException("Vacancy not found");
     }
 
-    // Получаем компанию, которой принадлежит вакансия
     const company = await this.companiesRepository.findById(vacancy.companyId);
 
     if (!company) {
       throw new NotFoundException("Company not found");
     }
 
-    // Проверяем, принадлежит ли компания текущему пользователю
     if (company.userId !== userId) {
       throw new ForbiddenException("You can only archive your own vacancies");
     }
 
-    // Инвертируем текущее состояние архивации
     const isCurrentlyArchived = vacancy.is_archived || false;
     return this.vacanciesRepository.toggleArchive(
       vacancyId,

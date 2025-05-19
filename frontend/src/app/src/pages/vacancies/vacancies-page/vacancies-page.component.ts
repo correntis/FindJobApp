@@ -315,12 +315,10 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
       this.resetAndLoad();
     }
 
-    // очистка поля MatChipInput  
     event.chipInput!.clear();
     this.languageCtrl.setValue('');
   }
 
-  /** Обработка выбора из autocomplete */
   addLanguageFromAutocomplete(event: MatAutocompleteSelectedEvent) {
     const value = event.option.value as string;
 
@@ -336,7 +334,6 @@ export class VacanciesPageComponent implements OnInit, AfterViewInit {
       this.resetAndLoad();
     }
 
-    // очистка поля ввода и автокомплита  
     this.languageInput.nativeElement.value = '';
     this.languageCtrl.setValue('');
   }

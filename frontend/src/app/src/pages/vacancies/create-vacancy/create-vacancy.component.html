@@ -9,57 +9,162 @@
   <div *ngIf="!loading && company">
     <div class="custom-card">
       <div class="custom-card-header">
-        <h2 class="custom-card-title">{{ isEditMode ? 'Редактировать вакансию' : 'Создать вакансию' }}</h2>
+        <h2 class="custom-card-title">
+          {{ isEditMode ? "Редактировать вакансию" : "Создать вакансию" }}
+        </h2>
       </div>
       <div class="custom-card-content">
-        <form [formGroup]="vacancyForm" (ngSubmit)="saveVacancy()" class="space-y-6">
+        <form
+          [formGroup]="vacancyForm"
+          (ngSubmit)="saveVacancy()"
+          class="space-y-6"
+        >
           <!-- Basic Information -->
           <div class="form-section">
-            <h3 class="text-lg font-medium mb-4 text-gray-800">Основная информация</h3>
-            
+            <h3 class="text-lg font-medium mb-4 text-gray-800">
+              Основная информация
+            </h3>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="custom-form-field md:col-span-2">
-                <label class="custom-label" for="title">Название вакансии</label>
-                <input id="title" class="custom-input" 
-                  [ngClass]="{'error': vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched}"
-                  type="text" formControlName="title" placeholder="например, Старший разработчик ПО">
-                <p class="custom-error" *ngIf="vacancyForm.get('title')?.invalid && vacancyForm.get('title')?.touched">
+                <label class="custom-label" for="title"
+                  >Название вакансии</label
+                >
+                <input
+                  id="title"
+                  class="custom-input"
+                  [ngClass]="{
+                    error:
+                      vacancyForm.get('title')?.invalid &&
+                      vacancyForm.get('title')?.touched
+                  }"
+                  type="text"
+                  formControlName="title"
+                  placeholder="например, Старший разработчик ПО"
+                />
+                <p
+                  class="custom-error"
+                  *ngIf="
+                    vacancyForm.get('title')?.invalid &&
+                    vacancyForm.get('title')?.touched
+                  "
+                >
                   Название вакансии обязательно
                 </p>
               </div>
 
               <div class="custom-form-field">
-                <label class="custom-label" for="empl_type">Тип занятости</label>
-                <select id="empl_type" class="custom-select" formControlName="empl_type">
-                  <option *ngFor="let type of employmentTypes" [value]="type">{{ type }}</option>
+                <label class="custom-label" for="empl_type"
+                  >Тип занятости</label
+                >
+                <select
+                  id="empl_type"
+                  class="custom-select"
+                  formControlName="empl_type"
+                >
+                  <option *ngFor="let type of employmentTypes" [value]="type">
+                    {{ type }}
+                  </option>
                 </select>
               </div>
+            </div>
+
+            <div class="custom-form-field">
+              <label class="custom-label" for="min_age"
+                >Минимальный возраст</label
+              >
+              <input
+                id="min_age"
+                type="number"
+                class="custom-input"
+                formControlName="min_age"
+                placeholder="например, 18"
+                min="0"
+              />
+              <p
+                class="custom-error"
+                *ngIf="
+                  vacancyForm.get('min_age')?.invalid &&
+                  vacancyForm.get('min_age')?.touched
+                "
+              >
+                Введите корректный возраст
+              </p>
+            </div>
+
+            <!-- Новое поле for_invalids -->
+            <div class="custom-form-field flex items-center">
+              <input
+                id="for_invalids"
+                type="checkbox"
+                class="mr-2 w-3"
+                formControlName="for_invalids"
+              />
+              <label class="custom-label mb-0" for="for_invalids">
+                Подходит для людей с инвалидностью
+              </label>
             </div>
           </div>
 
           <!-- Salary and Experience -->
           <div class="form-section">
-            <h3 class="text-lg font-medium mb-4 text-gray-800">Зарплата и опыт</h3>
-            
+            <h3 class="text-lg font-medium mb-4 text-gray-800">
+              Зарплата и опыт
+            </h3>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div formGroupName="salary">
-                <h4 class="text-md font-medium mb-2 text-gray-700">Диапазон зарплаты (₽)</h4>
+                <h4 class="text-md font-medium mb-2 text-gray-700">
+                  Диапазон зарплаты (₽)
+                </h4>
                 <div class="grid grid-cols-2 gap-4">
                   <div class="custom-form-field">
                     <label class="custom-label" for="salary-min">Минимум</label>
-                    <input id="salary-min" class="custom-input" 
-                      [ngClass]="{'error': vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched}"
-                      type="number" formControlName="min" min="0">
-                    <p class="custom-error" *ngIf="vacancyForm.get('salary.min')?.invalid && vacancyForm.get('salary.min')?.touched">
+                    <input
+                      id="salary-min"
+                      class="custom-input"
+                      [ngClass]="{
+                        error:
+                          vacancyForm.get('salary.min')?.invalid &&
+                          vacancyForm.get('salary.min')?.touched
+                      }"
+                      type="number"
+                      formControlName="min"
+                      min="0"
+                    />
+                    <p
+                      class="custom-error"
+                      *ngIf="
+                        vacancyForm.get('salary.min')?.invalid &&
+                        vacancyForm.get('salary.min')?.touched
+                      "
+                    >
                       Введите корректную минимальную зарплату
                     </p>
                   </div>
                   <div class="custom-form-field">
-                    <label class="custom-label" for="salary-max">Максимум</label>
-                    <input id="salary-max" class="custom-input" 
-                      [ngClass]="{'error': vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched}"
-                      type="number" formControlName="max" min="0">
-                    <p class="custom-error" *ngIf="vacancyForm.get('salary.max')?.invalid && vacancyForm.get('salary.max')?.touched">
+                    <label class="custom-label" for="salary-max"
+                      >Максимум</label
+                    >
+                    <input
+                      id="salary-max"
+                      class="custom-input"
+                      [ngClass]="{
+                        error:
+                          vacancyForm.get('salary.max')?.invalid &&
+                          vacancyForm.get('salary.max')?.touched
+                      }"
+                      type="number"
+                      formControlName="max"
+                      min="0"
+                    />
+                    <p
+                      class="custom-error"
+                      *ngIf="
+                        vacancyForm.get('salary.max')?.invalid &&
+                        vacancyForm.get('salary.max')?.touched
+                      "
+                    >
                       Введите корректную максимальную зарплату
                     </p>
                   </div>
@@ -67,23 +172,55 @@
               </div>
 
               <div formGroupName="experience_level">
-                <h4 class="text-md font-medium mb-2 text-gray-700">Требуемый опыт (лет)</h4>
+                <h4 class="text-md font-medium mb-2 text-gray-700">
+                  Требуемый опыт (лет)
+                </h4>
                 <div class="grid grid-cols-2 gap-4">
                   <div class="custom-form-field">
                     <label class="custom-label" for="exp-min">Минимум</label>
-                    <input id="exp-min" class="custom-input" 
-                      [ngClass]="{'error': vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched}"
-                      type="number" formControlName="min" min="0">
-                    <p class="custom-error" *ngIf="vacancyForm.get('experience_level.min')?.invalid && vacancyForm.get('experience_level.min')?.touched">
+                    <input
+                      id="exp-min"
+                      class="custom-input"
+                      [ngClass]="{
+                        error:
+                          vacancyForm.get('experience_level.min')?.invalid &&
+                          vacancyForm.get('experience_level.min')?.touched
+                      }"
+                      type="number"
+                      formControlName="min"
+                      min="0"
+                    />
+                    <p
+                      class="custom-error"
+                      *ngIf="
+                        vacancyForm.get('experience_level.min')?.invalid &&
+                        vacancyForm.get('experience_level.min')?.touched
+                      "
+                    >
                       Введите корректный минимальный опыт
                     </p>
                   </div>
                   <div class="custom-form-field">
                     <label class="custom-label" for="exp-max">Максимум</label>
-                    <input id="exp-max" class="custom-input" 
-                      [ngClass]="{'error': vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched}"
-                      type="number" formControlName="max" min="0">
-                    <p class="custom-error" *ngIf="vacancyForm.get('experience_level.max')?.invalid && vacancyForm.get('experience_level.max')?.touched">
+                    <input
+                      id="exp-max"
+                      class="custom-input"
+                      [ngClass]="{
+                        error:
+                          vacancyForm.get('experience_level.max')?.invalid &&
+                          vacancyForm.get('experience_level.max')?.touched
+                      }"
+                      type="number"
+                      formControlName="max"
+                      min="0"
+                    />
+                    <p
+                      class="custom-error"
+                      *ngIf="
+                        vacancyForm.get('experience_level.max')?.invalid &&
+                        vacancyForm.get('experience_level.max')?.touched
+                      "
+                    >
                       Введите корректный максимальный опыт
                     </p>
                   </div>
@@ -96,25 +233,46 @@
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-medium text-gray-800">Требования</h3>
-              <button type="button" class="btn btn-sm btn-primary" (click)="addRequirement()">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="addRequirement()"
+              >
                 <mat-icon class="mr-1">add</mat-icon>
                 Добавить требование
               </button>
             </div>
-            
+
             <div formArrayName="requirements" class="space-y-3">
-              <div *ngFor="let requirement of requirementsArray.controls; let i=index" class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+              <div
+                *ngFor="
+                  let requirement of requirementsArray.controls;
+                  let i = index
+                "
+                class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg"
+              >
                 <div class="flex-grow">
-                  <input class="custom-input" 
+                  <input
+                    class="custom-input"
                     [formControlName]="i"
-                    [ngClass]="{'error': requirement.invalid && requirement.touched}"
-                    placeholder="Введите требование">
-                  <p class="custom-error" *ngIf="requirement.invalid && requirement.touched">
+                    [ngClass]="{
+                      error: requirement.invalid && requirement.touched
+                    }"
+                    placeholder="Введите требование"
+                  />
+                  <p
+                    class="custom-error"
+                    *ngIf="requirement.invalid && requirement.touched"
+                  >
                     Требование обязательно
                   </p>
                 </div>
-                <button type="button" class="btn btn-sm btn-error" (click)="removeRequirement(i)" 
-                  *ngIf="requirementsArray.length > 1">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-error"
+                  (click)="removeRequirement(i)"
+                  *ngIf="requirementsArray.length > 1"
+                >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -124,26 +282,44 @@
           <!-- Skills -->
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-medium text-gray-800">Необходимые навыки</h3>
-              <button type="button" class="btn btn-sm btn-primary" (click)="addSkill()">
+              <h3 class="text-lg font-medium text-gray-800">
+                Необходимые навыки
+              </h3>
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="addSkill()"
+              >
                 <mat-icon class="mr-1">add</mat-icon>
                 Добавить навык
               </button>
             </div>
-            
+
             <div formArrayName="skills" class="space-y-3">
-              <div *ngFor="let skill of skillsArray.controls; let i=index" class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+              <div
+                *ngFor="let skill of skillsArray.controls; let i = index"
+                class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg"
+              >
                 <div class="flex-grow">
-                  <input class="custom-input" 
+                  <input
+                    class="custom-input"
                     [formControlName]="i"
-                    [ngClass]="{'error': skill.invalid && skill.touched}"
-                    placeholder="Введите навык">
-                  <p class="custom-error" *ngIf="skill.invalid && skill.touched">
+                    [ngClass]="{ error: skill.invalid && skill.touched }"
+                    placeholder="Введите навык"
+                  />
+                  <p
+                    class="custom-error"
+                    *ngIf="skill.invalid && skill.touched"
+                  >
                     Навык обязателен
                   </p>
                 </div>
-                <button type="button" class="btn btn-sm btn-error" (click)="removeSkill(i)" 
-                  *ngIf="skillsArray.length > 1">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-error"
+                  (click)="removeSkill(i)"
+                  *ngIf="skillsArray.length > 1"
+                >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -154,25 +330,38 @@
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-medium text-gray-800">Теги</h3>
-              <button type="button" class="btn btn-sm btn-primary" (click)="addTag()">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="addTag()"
+              >
                 <mat-icon class="mr-1">add</mat-icon>
                 Добавить тег
               </button>
             </div>
-            
+
             <div formArrayName="tags" class="space-y-3">
-              <div *ngFor="let tag of tagsArray.controls; let i=index" class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+              <div
+                *ngFor="let tag of tagsArray.controls; let i = index"
+                class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg"
+              >
                 <div class="flex-grow">
-                  <input class="custom-input" 
+                  <input
+                    class="custom-input"
                     [formControlName]="i"
-                    [ngClass]="{'error': tag.invalid && tag.touched}"
-                    placeholder="Введите тег">
+                    [ngClass]="{ error: tag.invalid && tag.touched }"
+                    placeholder="Введите тег"
+                  />
                   <p class="custom-error" *ngIf="tag.invalid && tag.touched">
                     Тег обязателен
                   </p>
                 </div>
-                <button type="button" class="btn btn-sm btn-error" (click)="removeTag(i)" 
-                  *ngIf="tagsArray.length > 1">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-error"
+                  (click)="removeTag(i)"
+                  *ngIf="tagsArray.length > 1"
+                >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -183,21 +372,42 @@
           <div class="form-section">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-medium text-gray-800">Требуемые языки</h3>
-              <button type="button" class="btn btn-sm btn-primary" (click)="addLanguage()">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="addLanguage()"
+              >
                 <mat-icon class="mr-1">add</mat-icon>
                 Добавить язык
               </button>
             </div>
-            
+
             <div formArrayName="languages" class="space-y-3">
-              <div *ngFor="let language of languagesArray.controls; let i=index" [formGroupName]="i" class="bg-gray-50 p-3 rounded-lg">
+              <div
+                *ngFor="let language of languagesArray.controls; let i = index"
+                [formGroupName]="i"
+                class="bg-gray-50 p-3 rounded-lg"
+              >
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="custom-form-field">
                     <label class="custom-label">Язык</label>
-                    <input class="custom-input" 
-                      [ngClass]="{'error': language.get('name')?.invalid && language.get('name')?.touched}"
-                      formControlName="name" placeholder="например, Английский">
-                    <p class="custom-error" *ngIf="language.get('name')?.invalid && language.get('name')?.touched">
+                    <input
+                      class="custom-input"
+                      [ngClass]="{
+                        error:
+                          language.get('name')?.invalid &&
+                          language.get('name')?.touched
+                      }"
+                      formControlName="name"
+                      placeholder="например, Английский"
+                    />
+                    <p
+                      class="custom-error"
+                      *ngIf="
+                        language.get('name')?.invalid &&
+                        language.get('name')?.touched
+                      "
+                    >
                       Название языка обязательно
                     </p>
                   </div>
@@ -216,8 +426,12 @@
                   </div>
                 </div>
                 <div class="flex justify-end mt-2">
-                  <button type="button" class="btn btn-sm btn-error" (click)="removeLanguage(i)" 
-                    *ngIf="languagesArray.length > 1">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-error"
+                    (click)="removeLanguage(i)"
+                    *ngIf="languagesArray.length > 1"
+                  >
                     <mat-icon>delete</mat-icon>
                     Удалить язык
                   </button>
@@ -228,14 +442,24 @@
 
           <!-- Form Actions -->
           <div class="flex justify-end gap-4">
-            <button type="button" class="btn btn-secondary" (click)="cancel()">Отмена</button>
-            <button type="submit" class="btn btn-primary" [disabled]="vacancyForm.invalid || saving">
-              <mat-spinner *ngIf="saving" diameter="20" class="mr-2"></mat-spinner>
-              {{ isEditMode ? 'Обновить вакансию' : 'Создать вакансию' }}
+            <button type="button" class="btn btn-secondary" (click)="cancel()">
+              Отмена
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="vacancyForm.invalid || saving"
+            >
+              <mat-spinner
+                *ngIf="saving"
+                diameter="20"
+                class="mr-2"
+              ></mat-spinner>
+              {{ isEditMode ? "Обновить вакансию" : "Создать вакансию" }}
             </button>
           </div>
         </form>
       </div>
     </div>
   </div>
-</div> 
+</div>

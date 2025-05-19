@@ -67,6 +67,8 @@ export class CreateVacancyComponent implements OnInit {
       requirements: this.fb.array([]),
       skills: this.fb.array([]),
       tags: this.fb.array([]),
+      min_age: [null],
+      for_invalids: [false],
       salary: this.fb.group({
         min: [0, [Validators.required, Validators.min(0)]],
         max: [0, [Validators.required, Validators.min(0)]],
@@ -118,6 +120,8 @@ export class CreateVacancyComponent implements OnInit {
         min: vacancy.experience_level?.min || 0,
         max: vacancy.experience_level?.max || 0,
       },
+      for_invalids: vacancy?.for_invalids,
+      min_age: vacancy?.min_age,
     });
 
     if (vacancy.requirements) {
