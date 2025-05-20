@@ -350,7 +350,6 @@ async function seed() {
   );
   console.log("Connected to MongoDB");
 
-  // Очистка
   await Promise.all([
     ApplicationModel.deleteMany(),
     VacancyModel.deleteMany(),
@@ -380,7 +379,6 @@ async function seed() {
   users.push(await defaultUser.save());
   users.push(await defaultCompanyUser.save());
 
-  // 1) Генерируем пользователей с ролями User/Company
   const totalUsers = 150;
   for (let i = 0; i < totalUsers; i++) {
     const role = faker.helpers.arrayElement(["User", "Company"]);
@@ -394,11 +392,9 @@ async function seed() {
     users.push(await user.save());
   }
 
-  // Разделяем по ролям
   const userRoleUsers = users.filter((u) => u.role === "User");
   const userRoleCompanies = users.filter((u) => u.role === "Company");
 
-  // 2) Генерируем компании: одна компания на пользователя с ролью Company
   const companies = [];
   for (const owner of userRoleCompanies) {
     const company = new CompanyModel({
@@ -414,8 +410,7 @@ async function seed() {
     });
     companies.push(await company.save());
   }
-
-  // 3) Генерируем резюме: одно резюме на пользователя с ролью User
+ 
   const resumes = [];
   for (const user of userRoleUsers) {
     const exps = Array.from(
@@ -450,12 +445,6 @@ async function seed() {
     });
     resumes.push(await resume.save());
   }
-
-  // 4) Генерируем вакансии для компаний
-
-
-
-
 
   const vacancies = [];
   const totalVacancies = 500;

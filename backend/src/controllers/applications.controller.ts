@@ -29,7 +29,7 @@ export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Post()
-  @Roles(UserRole.User, UserRole.Company)
+  @Roles(UserRole.User)
   @ApiOperation({ summary: "Submit an application" })
   @ApiBody({ type: CreateApplicationDto })
   @ApiResponse({
@@ -46,7 +46,7 @@ export class ApplicationsController {
   }
 
   @Put(":applicationId")
-  @Roles(UserRole.User, UserRole.Company)
+  @Roles(UserRole.Company)
   @ApiOperation({ summary: "Update application status" })
   @ApiParam({
     name: "applicationId",

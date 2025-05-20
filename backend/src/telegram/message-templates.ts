@@ -5,19 +5,19 @@ export class MessagesTemplates {
   static profile(user: UserDocument | undefined) {
     if (!user) {
       return `
-      🧑‍💼 **This chat is not linked to an account in the application. You may have disabled notifications!**
+      🧑‍💼 **Этот чат не связан ни с одним акканутом. Навреное вы отключили уведомления!**
       `;
     }
 
     return `
-            🧑‍💼 **Your Profile:**
+            🧑‍💼 **Ваш профиль:**
         
-            **First Name:** ${user?.firstName || "Not specified"}
-            **Last Name:** ${user?.lastName || "Not specified"}
-            **Email:** ${user?.email || "Not specified"}
-            **Role:** ${user?.role || "Not specified"}
+            **Имя:** ${user?.firstName || "Не указано"}
+            **Фамилия:** ${user?.lastName || "Не указано"}
+            **Email:** ${user?.email || "Не указано"}
+            **Роль:** ${user?.role || "Не указано"}
         
-            📅 **Registration Date:** ${user?.createdAt.toLocaleDateString() || "Not specified"}
+            📅 **Дата регистрации:** ${user?.createdAt.toLocaleDateString() || "Не указано"}
             `;
   }
 }

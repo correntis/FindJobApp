@@ -1,5 +1,5 @@
-const baseUrl = 'http://host.docker.internal/api';
-// const baseUrl = 'http://localhost/api';
+// const baseUrl = 'http://host.docker.internal/api';
+const baseUrl = 'http://localhost/api';
 const apiPath = {
   auth: `${baseUrl}/auth`,
   users: `${baseUrl}/users`,

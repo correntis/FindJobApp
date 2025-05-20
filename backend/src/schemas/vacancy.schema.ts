@@ -54,13 +54,13 @@ export class Vacancy {
   @Prop({ type: [String] })
   tags: string[];
 
-  @Prop({ type: Salary, required: true })
+  @Prop({ type: Salary})
   salary: Salary;
 
-  @Prop({ type: ExperienceLevel, required: true })
+  @Prop({ type: ExperienceLevel })
   experience_level: ExperienceLevel;
 
-  @Prop({ type: [Language], required: true })
+  @Prop({ type: [Language] })
   languages: Language[];
 
 }

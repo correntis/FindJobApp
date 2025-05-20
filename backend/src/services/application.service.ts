@@ -15,6 +15,7 @@ import { TelegramService } from "./telegram.service";
 import { ApplicationStatus } from "src/enums/applications-status.enum";
 import { CompaniesRepository } from "src/repositories/companies.repository";
 import { Company } from "src/schemas/company.schema";
+import { AlreadyExistException } from "src/exceptions/already-exist.exception";
 
 @Injectable()
 export class ApplicationsService {
@@ -32,6 +33,16 @@ export class ApplicationsService {
     const user = await this.usersRepository.findById(
       createApplicationDto.userId
     );
+    const existingApplication =
+      await this.applicationsRepository.findByVacancyAndUser(
+        createApplicationDto.userId,
+        createApplicationDto.vacancyId
+      );
+
+    if (existingApplication) {
+      throw new AlreadyExistException(Application);
+    }
+
     if (!user) {
       throw new NotFoundException(User);
     }

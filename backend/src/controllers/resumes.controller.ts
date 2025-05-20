@@ -24,7 +24,7 @@ export class ResumesController {
   constructor(private readonly resumesService: ResumesService) {}
 
   @Post()
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.User)
   @ApiOperation({ summary: "Create resume" })
   @ApiBody({ type: CreateResumeDto })
   @ApiResponse({
@@ -41,7 +41,7 @@ export class ResumesController {
   }
 
   @Put(":resumeId")
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.User)
   @ApiOperation({ summary: "Update resume" })
   @ApiParam({
     name: "resumeId",
@@ -65,7 +65,7 @@ export class ResumesController {
   }
 
   @Delete(":resumeId")
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.User)
   @ApiOperation({ summary: "Delete resume" })
   @ApiParam({
     name: "resumeId",

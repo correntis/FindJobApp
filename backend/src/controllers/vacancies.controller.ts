@@ -37,7 +37,7 @@ export class VacanciesController {
   }
 
   @Post()
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.Company)
   @ApiOperation({ summary: "Create vacancy" })
   @ApiBody({ type: CreateVacancyDto })
   @ApiResponse({
@@ -50,7 +50,7 @@ export class VacanciesController {
   }
 
   @Put(":vacancyId")
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.Company)
   @ApiOperation({ summary: "Update vacancy" })
   @ApiParam({
     name: "vacancyId",

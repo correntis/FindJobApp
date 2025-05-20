@@ -26,7 +26,7 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.Company)
   @ApiOperation({ summary: "Create company" })
   @ApiBody({ type: CreateCompanyDto })
   @ApiResponse({ status: HttpStatus.OK, description: "Ok." })
@@ -43,7 +43,7 @@ export class CompaniesController {
   }
 
   @Put(":companyId")
-  @Roles(UserRole.Company, UserRole.User)
+  @Roles(UserRole.Company)
   @ApiOperation({ summary: "Update company" })
   @ApiParam({ name: "companyId", example: "67cd909a4b8b3b90655c09de" })
   @ApiBody({ type: UpdateCompanyDto })
